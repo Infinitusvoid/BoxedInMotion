@@ -196,9 +196,8 @@ void capture_framebuffer()
 	if (frame_number < 10)
 	{
 		std::cout << "Framebuffer capture \n";
-		std::cout << "frame number :"<< frame_number <<" \n";
+		std::cout << "frame number : "<< frame_number <<" \n";
 		Boxes_engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_color_" + std::to_string(frame_number) + ".png").c_str());
-		Boxes_engine::captureAndSaveDepthBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_depth_" + std::to_string(frame_number) + ".png").c_str());
 	}
 	
 }
