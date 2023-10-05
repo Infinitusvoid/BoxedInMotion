@@ -18,6 +18,9 @@
 
 #include <vector>
 
+#include <thread>
+#include <mutex>
+
 namespace Boxes_engine
 {
 	glm::vec3 g_background_color = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -553,9 +556,10 @@ namespace Boxes_engine
 
 		glm::vec3 backround;
 
-
+		
 		bool init()
 		{
+
 			// glfw: initialize and configure
 			// ------------------------------
 			glfwInit();
@@ -762,7 +766,12 @@ namespace Boxes_engine
 		{
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
+
 	}
+
+	
+
+
 
 	// Function to capture and save the framebuffer to a file
 	void captureAndSaveFramebuffer(const std::string& filename, int width, int height)
@@ -1171,7 +1180,9 @@ namespace Boxes_engine
 			g_frame++;
 		}
 
+		
 		glfwTerminate();
+
 
 		return 0;
 	}
