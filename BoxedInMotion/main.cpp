@@ -177,6 +177,10 @@ void left_click()
 void left_relese()
 {
 	std::cout << "left relese\n";
+
+	int frame_number = Boxes_engine::get_frame();
+	Boxes_engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_color_" + std::to_string(frame_number) + ".png").c_str());
+
 }
 
 void right_click()
@@ -193,7 +197,7 @@ void capture_framebuffer()
 {
 	
 	int frame_number = Boxes_engine::get_frame();
-	if (frame_number < 10)
+	if (frame_number < 2)
 	{
 		std::cout << "Framebuffer capture \n";
 		std::cout << "frame number : "<< frame_number <<" \n";
@@ -222,9 +226,6 @@ int main()
 
 /*
 
-than you should add a optional callback after you render the scene that you can use to capture the framebuffer,
-find out if you can capture also the depth map may be usefull in post create a method that you can call to capture
-
 add an option to override the default vertex and fragment shader
 
 send into the vertex shader and somehow to fragment shader the frame and t uniforms
@@ -245,10 +246,13 @@ Than it comes I will create an github repository with the engine the engine need
 /*
 next version
 than you should have a callback all keybord events use primitive build in data types seems usefull to triger certain actions on some key
+find out if you can capture also the depth map may be usefull in post create a method that you can call to capture
 */
 
 /*
 DONE
+
+than you should add a optional callback after you render the scene that you can use to capture the framebuffer,
 
 lock camera controls
 
