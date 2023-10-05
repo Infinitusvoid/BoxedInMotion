@@ -105,10 +105,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)External_libs\GLEW\glew-2.1.0\include;$(SolutionDir)External_libs\GLFW\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)External_libs\glm_0_9_9_7\glm\;$(SolutionDir)External_libs\ASSIMP\include;$(SolutionDir)External_libs\glad\include;$(SolutionDir)External_libs\stb;$(SolutionDir)External_libs\miniaudio;$(SolutionDir)External_libs\tinyply-master\tinyply-master\source;$(SolutionDir)External_libs\plog\include;$(SolutionDir)External_libs\imgui-docking;$(SolutionDir)External_libs\FastNoiseLite;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)External_libs\GLEW\glew-2.1.0\lib\Release\x64;$(SolutionDir)External_libs\GLFW\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)External_libs\ASSIMP\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,7 +131,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Boxes_engine.cpp" />
+    <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Boxes_engine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
