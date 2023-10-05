@@ -18,9 +18,6 @@
 
 #include <vector>
 
-#include <thread>
-#include <mutex>
-
 namespace Boxes_engine
 {
 	glm::vec3 g_background_color = glm::vec3(0.0f, 0.0f, 0.0f);
