@@ -197,7 +197,8 @@ void capture_framebuffer()
 	{
 		std::cout << "Framebuffer capture \n";
 		std::cout << "frame number :"<< frame_number <<" \n";
-		Boxes_engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/frame_" + std::to_string(frame_number) + ".png").c_str());
+		Boxes_engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_color_" + std::to_string(frame_number) + ".png").c_str());
+		Boxes_engine::captureAndSaveDepthBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_depth_" + std::to_string(frame_number) + ".png").c_str());
 	}
 	
 }
@@ -222,7 +223,8 @@ int main()
 
 /*
 
-than you should add a optional callback after you render the scene that you can use to capture the framebuffer, find out if you can capture also the depth map may be usefull in post create a method that you can call to capture
+than you should add a optional callback after you render the scene that you can use to capture the framebuffer,
+find out if you can capture also the depth map may be usefull in post create a method that you can call to capture
 
 add an option to override the default vertex and fragment shader
 

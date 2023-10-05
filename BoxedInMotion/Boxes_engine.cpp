@@ -796,6 +796,41 @@ namespace Boxes_engine
 		delete[] pixels;
 	}
 
+
+
+
+	// Function to capture and save the depth buffer as a grayscale image
+	void captureAndSaveDepthBuffer(const char* filename, int width, int height)
+	{
+		// Create an array to store the depth values
+		float* depthBuffer = new float[width * height];
+
+		// Read the depth values from the depth buffer
+		glReadPixels(0, 0, width, height, GL_DEPTH_COMPONENT, GL_FLOAT, depthBuffer);
+
+		// Flip the depth values vertically
+		for (int i = 0; i < height / 2; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				std::swap(depthBuffer[i * width + j], depthBuffer[(height - i - 1) * width + j]);
+			}
+		}
+
+		// Save the depth values to a grayscale image file using stb_image_write
+		if (stbi_write_png(filename, width, height, 1, depthBuffer, 0) == 0)
+		{
+			std::cerr << "Error saving depth image to file: " << filename << std::endl;
+		}
+		else
+		{
+			std::cout << "Depth buffer captured and saved to " << filename << std::endl;
+		}
+
+		// Clean up memory
+		delete[] depthBuffer;
+	}
+
 	glm::vec3 generate_random_glm_vec3(const glm::vec3& min_value, const glm::vec3& max_value)
 	{
 		glm::vec3 result;
@@ -1178,6 +1213,11 @@ namespace Boxes_engine
 	void captureAndSaveFrameBuffer(const char* path)
 	{
 		captureAndSaveFramebuffer(path, SCR_WIDTH, SCR_HEIGHT);
+	}
+
+	void captureAndSaveDepthBuffer(const char* path)
+	{
+		captureAndSaveDepthBuffer(path, SCR_WIDTH, SCR_HEIGHT);
 	}
 
 	void set_callback_on_finish_render_callback(void(*f)(void))
