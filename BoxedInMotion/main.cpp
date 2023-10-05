@@ -2,6 +2,7 @@
 #include "Boxes_engine.h"
 
 #include <iostream>
+#include <string>
 
 
 const int amount = 100000;
@@ -188,6 +189,19 @@ void right_relese()
 	std::cout << "right relese\n";
 }
 
+void capture_framebuffer()
+{
+	
+	int frame_number = Boxes_engine::get_frame();
+	if (frame_number < 10)
+	{
+		std::cout << "Framebuffer capture \n";
+		std::cout << "frame number :"<< frame_number <<" \n";
+		Boxes_engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/frame_" + std::to_string(frame_number) + ".png").c_str());
+	}
+	
+}
+
 int main()
 {
 	std::cout << "BoxedInMotion\n";
@@ -196,7 +210,7 @@ int main()
 	Boxes_engine::set_callback_mouse_button_left_relese(left_relese);
 	Boxes_engine::set_callback_mouse_button_right_click(right_click);
 	Boxes_engine::set_callback_mouse_button_right_relese(right_relese);
-
+	Boxes_engine::set_callback_on_finish_render_callback(capture_framebuffer);
 
 	Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
 
@@ -243,4 +257,8 @@ this will enable by repositioning camera at origin 0,0,0 to to have infinite spa
 
 */
 
-
+// Graphic description
+// rotating cube inside the cube there are some simple object like a smaller wireframe cube or ball hitting the walls and bounding of it
+// while the object are leaving a train in 3d space
+// the camera can be stationary and the big cube can be slowly rotating around
+// the graphiy style should be glowing with wireframe vibe

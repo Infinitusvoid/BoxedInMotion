@@ -24,7 +24,7 @@ namespace Boxes_engine
 
 	void(*f_loop_callback)(Instance_data*);
 	void(*f_init_callback)(Instance_data*);
-
+	void(*f_on_finish_render_callback)(void);
 	bool g_camera_locked = false;
 
 	int g_frame = 0;
@@ -1149,6 +1149,12 @@ namespace Boxes_engine
 			shaderBloomFinal.setFloat("exposure", g_exposure);
 			renderQuad();
 
+
+			if (f_on_finish_render_callback != nullptr)
+			{
+				f_on_finish_render_callback();
+			}
+
 			if (false)
 			{
 				captureAndSaveFramebuffer(("C:/Users/Cosmos/Desktop/output/output_" + std::to_string(g_frame) + ".png").c_str(), SCR_WIDTH, SCR_HEIGHT);
@@ -1169,6 +1175,15 @@ namespace Boxes_engine
 		return 0;
 	}
 
+	void captureAndSaveFrameBuffer(const char* path)
+	{
+		captureAndSaveFramebuffer(path, SCR_WIDTH, SCR_HEIGHT);
+	}
+
+	void set_callback_on_finish_render_callback(void(*f)(void))
+	{
+		f_on_finish_render_callback = f;
+	}
 
 
 	void set_callback_mouse_button_left_click(void(*f)(void))

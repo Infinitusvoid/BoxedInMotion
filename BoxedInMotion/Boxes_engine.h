@@ -36,4 +36,7 @@ namespace Boxes_engine
 	void set_callback_mouse_button_left_relese(void(*f)(void));
 	void set_callback_mouse_button_right_click(void(*f)(void));
 	void set_callback_mouse_button_right_relese(void(*f)(void));
+
+	void set_callback_on_finish_render_callback(void(*f)(void));
+	void captureAndSaveFrameBuffer(const char* path);
 }
