@@ -222,47 +222,13 @@ int main()
 	return 0;
 }
 
-/*
-
-int num_cubes = 2000;
-		std::vector<glm::vec3> colors_cubes(num_cubes);
-		float factor = 1.0f / num_cubes;
-
-		for (int i = 0; i < num_cubes; i++)
-		{
-			colors_cubes[i] = generate_random_glm_vec3(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0)) * 10.0f * glm::vec3(0.002f, 0.7f, 0.5f);
-		}
-
-*/
 
 
 /*
-// finally show all the light sources as bright cubes
-			shaderLight.use();
-			shaderLight.setMat4("projection", projection);
-			shaderLight.setMat4("view", view);
 
-			for (unsigned int i = 0; i < num_cubes; i++)
-			{
-				model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3(cos(i * factor * 3.1415f * 2.0f + win.timer.total * 0.04210f + i * 2.1717) * 25, sin(i * factor * 3.1415f * 2.0f + win.timer.total * 0.0025f + i * 1.2) * 25, 25 * sin(i * factor * 3.1415f * 2.0f + win.timer.total * 0.012 + i * 1.7)));
-				model = glm::scale(model, glm::vec3(0.25f));
-				shaderLight.setMat4("model", model);
 
-				//glm::vec3 color = generate_random_glm_vec3(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 10.0f * glm::vec3(0.2f, 1.0f, 1.0f);
-				glm::vec3 color = colors_cubes[i];
-				shaderLight.setVec3("lightColor", color);
-				renderCube();
-			}
 
-*/
 
-/*
-What are the things that I should add to engine ?
-
-void set_camera_position(glm::vec3 position);
-
-this will enable by repositioning camera at origin 0,0,0 to to have infinite space we can explore
 
 than you should have a callback all keybord events use primitive build in data types seems usefull to triger certain actions on some key
 
@@ -284,5 +250,13 @@ set camera all parameters
 
 Than it comes I will create an github repository with the engine the engine needs a name than one thing that sould create is in youtube channel, gmail, instagram, tiktok where I will publish this videos ane link to the youtube channel and a patreon page
 
+
+*/
+
+/*
+DONE
+
+void set_camera_position(glm::vec3 position);
+this will enable by repositioning camera at origin 0,0,0 to to have infinite space we can explore
 
 */

@@ -649,22 +649,37 @@ namespace Boxes_engine
 		void process_input()
 		{
 			if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			{
 				glfwSetWindowShouldClose(window, true);
+			}
+				
 
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			{
 				camera.ProcessKeyboard(FORWARD, timer.deltaTime);
+			}
+				
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			{
 				camera.ProcessKeyboard(BACKWARD, timer.deltaTime);
+			}
+
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			{
 				camera.ProcessKeyboard(LEFT, timer.deltaTime);
+			}
+
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			{
 				camera.ProcessKeyboard(RIGHT, timer.deltaTime);
+			}
 
 			if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !bloomKeyPressed)
 			{
 				bloom = !bloom;
 				bloomKeyPressed = true;
 			}
+
 			if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
 			{
 				bloomKeyPressed = false;
@@ -673,9 +688,14 @@ namespace Boxes_engine
 			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 			{
 				if (g_exposure > 0.0f)
+				{
 					g_exposure -= 0.001f;
+				}
 				else
+				{
 					g_exposure = 0.0f;
+				}
+					
 			}
 			else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 			{
@@ -954,6 +974,11 @@ namespace Boxes_engine
 	float get_camera_zoom()
 	{
 		return camera.Zoom;
+	}
+
+	void set_camera_position(glm::vec3 position)
+	{
+		camera.Position = position;
 	}
 
 

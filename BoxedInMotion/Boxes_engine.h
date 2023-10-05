@@ -26,6 +26,8 @@ namespace Boxes_engine
 	glm::vec3 get_camera_up();
 	float get_camera_zoom();
 
+	void set_camera_position(glm::vec3 position);
+
 	int play(unsigned int number_of_boxes, void(*f_init)(Instance_data*), void(*f_loop)(Instance_data*), float fov = 45.0f, float view_distance = 1000.0f);
 
 	void set_callback_mouse_button_left_click(void(*f)(void));
