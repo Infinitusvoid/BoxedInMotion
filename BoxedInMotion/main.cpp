@@ -1,21 +1,3 @@
-//#include "example_hello_trinagle.h"
-//#include "example_hello_triangle_indexed.h"
-//#include "example_shaders_uniform.h"
-//#include "example_shaders_interpolation.h"
-//#include "example_ssao.h"
-//#include "example_ibl_specular_textured.h"
-//#include "example_deferred_shading_volumes.h"
-//#include "example_bloom.h"
-//#include "example_point_shadows_soft.h"
-
-//#include "graphic_bloom_abstract.h"
-
-
-// Graphic description
-// rotating cube inside the cube there are some simple object like a smaller wireframe cube or ball hitting the walls and bounding of it
-// while the object are leaving a train in 3d space
-// the camera can be stationary and the big cube can be slowly rotating around
-// the graphiy style should be glowing with wireframe vibe
 
 #include "Boxes_engine.h"
 
@@ -260,3 +242,5 @@ void set_camera_position(glm::vec3 position);
 this will enable by repositioning camera at origin 0,0,0 to to have infinite space we can explore
 
 */
+
+
