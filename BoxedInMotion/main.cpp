@@ -226,12 +226,6 @@ int main()
 
 /*
 
-
-
-
-
-than you should have a callback all keybord events use primitive build in data types seems usefull to triger certain actions on some key
-
 than you should add a optional callback after you render the scene that you can use to capture the framebuffer, find out if you can capture also the depth map may be usefull in post create a method that you can call to capture
 
 add an option to override the default vertex and fragment shader
@@ -251,6 +245,11 @@ set camera all parameters
 Than it comes I will create an github repository with the engine the engine needs a name than one thing that sould create is in youtube channel, gmail, instagram, tiktok where I will publish this videos ane link to the youtube channel and a patreon page
 
 
+*/
+
+/*
+next version
+than you should have a callback all keybord events use primitive build in data types seems usefull to triger certain actions on some key
 */
 
 /*
