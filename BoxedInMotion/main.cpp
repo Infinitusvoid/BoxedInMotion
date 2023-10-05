@@ -236,8 +236,6 @@ try to get the world space and object space position in fragment shader of cube
 
 there is the amount somewhere in the loop find out what it does and enable to set it's value maybe it may be usefull
 
-lock camera controls
-
 set camera all parameters
 
 ----
@@ -254,6 +252,9 @@ than you should have a callback all keybord events use primitive build in data t
 
 /*
 DONE
+
+lock camera controls
+
 
 void set_camera_position(glm::vec3 position);
 this will enable by repositioning camera at origin 0,0,0 to to have infinite space we can explore

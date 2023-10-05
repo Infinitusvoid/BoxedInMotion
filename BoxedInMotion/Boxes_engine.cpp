@@ -981,6 +981,16 @@ namespace Boxes_engine
 		camera.Position = position;
 	}
 
+	void lock_camera()
+	{
+		g_camera_locked = true;
+	}
+
+	void unlock_camera()
+	{
+		g_camera_locked = false;
+	}
+
 
 
 
