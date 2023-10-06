@@ -239,7 +239,7 @@ int main()
 		"\n"
 		"void main()\n"
 		"{\n"
-		"	FragColor = Color + sin(time + FragWorldPos.x * 10.0) * 0.5;\n"
+		"	FragColor = Color + sin(time + FragWorldPos.x * 10.0) * 0.5 + vec4(vec3(sin(FragObjectPos.x * 100), 0.0, 0.0), 1.0);\n"
 		"}\n"
 		;
 
@@ -268,6 +268,7 @@ int main()
 		"\n"
 		"void main()\n"
 		"{\n"
+		"int id = gl_InstanceID;\n"
 		"FragObjectPos = aPos; // Store the object space position\n"
 		"FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position\n"
 		"Color = instanceData.color;\n"
