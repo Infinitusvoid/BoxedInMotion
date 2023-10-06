@@ -118,7 +118,7 @@ namespace Engine
 		{
 			namespace Vertex
 			{
-				const char* build_in_vertex_shader_path = "build_in_vertex_shader.vs";
+				const char* build_in_vertex_shader_path = "build_in_vertex_shader_vs.txt";
 				const char* build_in_vertex_shader_source =
 					"#version 330 core\n"
 					"layout (location = 0) in vec3 aPos;\n"
@@ -159,7 +159,7 @@ namespace Engine
 
 			namespace Fragment
 			{
-				const char* build_in_fragment_shader_path = "build_in_fragment_shader.fs";
+				const char* build_in_fragment_shader_path = "build_in_fragment_shader_fs.txt";
 				const char* build_in_fragment_shader_source =
 					"#version 330 core\n"
 					"layout (location = 0) out vec4 FragColor;\n"
@@ -1154,10 +1154,10 @@ namespace Engine
 
 		void init()
 		{
-			Shader_sources_build_in::write_them_if_if_they_dont_exist();
-
+			
 			if (shader_source_code == nullptr)
 			{
+				Shader_sources_build_in::write_them_if_if_they_dont_exist();
 				shader = new Shader(Shader_sources_build_in::Box::Vertex::build_in_vertex_shader_path, Shader_sources_build_in::Box::Fragment::build_in_fragment_shader_path);
 			}
 			else
@@ -1332,7 +1332,7 @@ namespace Engine
 
 	int play(unsigned int number_of_boxes, void(*f_init)(Instance_data*), void(*f_loop)(Instance_data*), float fov, float view_distance, ShaderSourceCode* shader_source_code)
 	{
-		std::cout << "f_boxes_engine_start\n";
+		std::cout << "BoxedInMotion engine start\n";
 
 		f_init_callback = f_init;
 		f_loop_callback = f_loop;

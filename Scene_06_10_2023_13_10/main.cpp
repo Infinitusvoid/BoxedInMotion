@@ -218,7 +218,7 @@ int main()
 	Engine::set_callback_on_finish_render_callback(capture_framebuffer);
 
 	Engine::set_bloom_iteration(10);
-	Engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
+	//Engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
 	
 	//camera_position
 	//frame
@@ -300,7 +300,7 @@ int main()
 	source.geometry = nullptr;
 
 	Engine::set_camera_parameters(glm::vec3(0.0f, 0.0f, 0.0f), 2.5f, 0.1f, 45.0f);
-	//Engine::play(amount, f_init, f_loop, 45.0f, 1000.0f, &source);
+	Engine::play(amount, f_init, f_loop, 45.0f, 1000.0f, &source);
 
 	return 0;
 }
