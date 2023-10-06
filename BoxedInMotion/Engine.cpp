@@ -786,6 +786,103 @@ namespace Engine
 		
 		bool init()
 		{
+			{
+				{
+					std::string source = "#version 330 core\n"
+						"layout(location = 0) in vec3 aPos;\n"
+						"layout(location = 1) in vec2 aTexCoords;\n"
+						"\n"
+						"out vec2 TexCoords;\n"
+						"\n"
+						"void main()\n"
+						"{\n"
+						"TexCoords = aTexCoords;\n"
+						"gl_Position = vec4(aPos, 1.0);\n"
+						"}\n";
+					File::writeFileIfNotExists("bloom_final_vs.txt", source);
+				}
+
+				{
+					std::string source = "#version 330 core\n"
+						"out vec4 FragColor;\n"
+						"\n"
+						"in vec2 TexCoords;\n"
+						"\n"
+						"uniform sampler2D scene;\n"
+						"uniform sampler2D bloomBlur;\n"
+						"uniform bool bloom;\n"
+						"uniform float exposure;\n"
+						"\n"
+						"void main()\n"
+						"{\n"
+						"const float gamma = 2.2;\n"
+						"vec3 hdrColor = texture(scene, TexCoords).rgb;\n"
+						"vec3 bloomColor = texture(bloomBlur, TexCoords).rgb;\n"
+						"if (bloom)\n"
+						"hdrColor += bloomColor; // additive blending\n"
+						"// tone mapping\n"
+						"vec3 result = vec3(1.0) - exp(-hdrColor * exposure);\n"
+						"// also gamma correct while we're at it       \n"
+						"result = pow(result, vec3(1.0 / gamma));\n"
+						"FragColor = vec4(result, 1.0);\n"
+						"}\n";
+					File::writeFileIfNotExists("bloom_final_fs.txt", source);
+				}
+
+				
+
+				{
+					std::string source = "#version 330 core\n"
+						"layout(location = 0) in vec3 aPos;\n"
+					"layout(location = 1) in vec2 aTexCoords;\n"
+						"\n"
+					"out vec2 TexCoords;\n"
+						"\n"
+					"void main()\n"
+					"{\n"
+						"TexCoords = aTexCoords;\n"
+						"gl_Position = vec4(aPos, 1.0);\n"
+					"}\n";
+					File::writeFileIfNotExists("blur_vs.txt", source);
+				}
+
+				{
+					std::string source = "#version 330 core\n"
+						"out vec4 FragColor;\n"
+						"\n"
+					"in vec2 TexCoords;\n"
+						"\n"
+					"uniform sampler2D image;\n"
+						"\n"
+					"uniform bool horizontal;\n"
+					"uniform float weight[5] = float[](0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);\n"
+						"\n"
+					"void main()\n"
+					"{\n"
+						"vec2 tex_offset = 1.0 / textureSize(image, 0); // gets size of single texel\n"
+						"vec3 result = texture(image, TexCoords).rgb * weight[0];\n"
+						"if (horizontal)\n"
+						"{\n"
+							"for (int i = 1; i < 5; ++i)\n"
+							"{\n"
+								"result += texture(image, TexCoords + vec2(tex_offset.x * i, 0.0)).rgb * weight[i];\n"
+								"result += texture(image, TexCoords - vec2(tex_offset.x * i, 0.0)).rgb * weight[i];\n"
+							"}\n"
+						"}\n"
+						"else\n"
+						"{\n"
+							"for (int i = 1; i < 5; ++i)\n"
+							"{\n"
+								"result += texture(image, TexCoords + vec2(0.0, tex_offset.y * i)).rgb * weight[i];\n"
+								"result += texture(image, TexCoords - vec2(0.0, tex_offset.y * i)).rgb * weight[i];\n"
+							"}\n"
+						"}\n"
+						"FragColor = vec4(result, 1.0);\n"
+					"}\n";
+					File::writeFileIfNotExists("blur_fs.txt", source);
+				}
+			}
+
 
 			// glfw: initialize and configure
 			// ------------------------------
@@ -1269,9 +1366,9 @@ namespace Engine
 		// build and compile shaders
 		// -------------------------
 		//Shader shaderLight("7.bloom.vs", "7.light_box.fs");
-		Shader shaderBlur("blur.vs", "blur.fs");
+		Shader shaderBlur("blur_vs.txt", "blur_fs.txt");
 		
-		Shader shaderBloomFinal("bloom_final.vs", "bloom_final.fs");
+		Shader shaderBloomFinal("bloom_final_vs.txt", "bloom_final_fs.txt");
 
 		// configure (floating point) framebuffers
 		// ---------------------------------------
