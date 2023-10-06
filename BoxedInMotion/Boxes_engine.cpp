@@ -480,7 +480,6 @@ namespace Boxes_engine
 		}
 	};
 
-	//unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
 
 	class Model
 	{
@@ -789,8 +788,6 @@ namespace Boxes_engine
 
 	};
 
-
-
 	Window win;
 
 	struct Framebuffer
@@ -816,10 +813,6 @@ namespace Boxes_engine
 		}
 
 	}
-
-	
-
-
 
 	// Function to capture and save the framebuffer to a file
 	void captureAndSaveFramebuffer(const std::string& filename, int width, int height)
@@ -853,7 +846,6 @@ namespace Boxes_engine
 		delete[] pixels;
 	}
 
-
 	glm::vec3 generate_random_glm_vec3(const glm::vec3& min_value, const glm::vec3& max_value)
 	{
 		glm::vec3 result;
@@ -869,8 +861,6 @@ namespace Boxes_engine
 	}
 
 	// https://gist.github.com/Infinitusvoid/00d0fb2e7209f26db0a15e563e95f162/revisions
-
-
 
 	struct Boxes
 	{
@@ -903,8 +893,6 @@ namespace Boxes_engine
 
 			f_init_callback(instance_data);
 
-
-
 			// configure instanced array
 			// -------------------------
 
@@ -912,11 +900,6 @@ namespace Boxes_engine
 			glBindBuffer(GL_ARRAY_BUFFER, buffer);
 			glBufferData(GL_ARRAY_BUFFER, g_num_boxes * sizeof(Instance_data), &instance_data[0], GL_STATIC_DRAW);
 
-			// set transformation matrices as an instance vertex attribute (with divisor 1)
-		// note: we're cheating a little by taking the, now publicly declared, VAO of the model's mesh(es) and adding new vertexAttribPointers
-		// normally you'd want to do this in a more organized fashion, but for learning purposes this will do.
-		// -----------------------------------------------------------------------------------------------------------------------------------
-			//for (unsigned int i = 0; i < model->meshes.size(); i++)
 			{
 				unsigned int VAO = model->mesh->VAO;
 				glBindVertexArray(VAO);
@@ -943,7 +926,6 @@ namespace Boxes_engine
 				glBindVertexArray(0);
 			}
 
-
 		}
 
 		void free()
@@ -968,9 +950,7 @@ namespace Boxes_engine
 			shader->setFloat("time", win.timer.total);
 
 			glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, model->textures_loaded[0].id); // note: we also made the textures_loaded vector public (instead of private) from the model class.
-
-			//for (unsigned int i = 0; i < model->meshes.size(); i++)
+			
 			{
 				glBindVertexArray(model->mesh->VAO);
 				glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(model->mesh->indices.size()), GL_UNSIGNED_INT, 0, g_num_boxes);
@@ -979,11 +959,9 @@ namespace Boxes_engine
 
 			update();
 
-
 		}
 
 	private:
-
 
 		void update()
 		{
@@ -995,9 +973,6 @@ namespace Boxes_engine
 				glBufferData(GL_ARRAY_BUFFER, g_num_boxes * sizeof(Instance_data), &instance_data[0], GL_STATIC_DRAW);
 			}
 		}
-
-
-
 
 	};
 
@@ -1070,9 +1045,6 @@ namespace Boxes_engine
 	{
 		g_camera_locked = false;
 	}
-
-
-
 
 	int play(unsigned int number_of_boxes, void(*f_init)(Instance_data*), void(*f_loop)(Instance_data*), float fov, float view_distance, ShaderSourceCode* shader_source_code)
 	{
