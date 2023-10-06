@@ -948,13 +948,16 @@ namespace Boxes_engine
 			delete model;
 		}
 
-
 		void draw(glm::mat4 projection, glm::mat4 view)
 		{
-
+			camera.Position;
+			
 			shader->use();
 			shader->setMat4("projection", projection);
 			shader->setMat4("view", view);
+			shader->setVec3("camera_position", camera.Position);
+			shader->setInt("frame", g_frame);
+			shader->setFloat("time", win.timer.total);
 
 			glActiveTexture(GL_TEXTURE0);
 			//glBindTexture(GL_TEXTURE_2D, model->textures_loaded[0].id); // note: we also made the textures_loaded vector public (instead of private) from the model class.
@@ -1179,6 +1182,8 @@ namespace Boxes_engine
 			glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, view_distance);
 			glm::mat4 view = camera.GetViewMatrix();
 			//glm::mat4 model = glm::mat4(1.0f);
+
+			
 
 			boxes.draw(projection, view);
 

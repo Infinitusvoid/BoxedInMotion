@@ -266,7 +266,7 @@ int main()
 
 /*
 
-add an option to override the default vertex and fragment shader
+
 
 send into the vertex shader and somehow to fragment shader the frame and t uniforms
 
@@ -291,6 +291,7 @@ find out if you can capture also the depth map may be usefull in post create a m
 
 /*
 DONE
+add an option to override the default vertex and fragment shader
 
 than you should add a optional callback after you render the scene that you can use to capture the framebuffer,
 
