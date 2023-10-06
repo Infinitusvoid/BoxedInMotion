@@ -1,4 +1,4 @@
-#include "../BoxedInMotion/Boxes_engine.h"
+#include "../BoxedInMotion/Engine.h"
 
 #include <iostream>
 #include <string>
@@ -33,12 +33,12 @@ float generate_random_float(const float min_value, const float max_value)
 	return min_value + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (max_value - min_value);
 }
 
-void f_loop(Boxes_engine::Instance_data* data)
+void f_loop(Engine::Instance_data* data)
 {
 	float radius = 150.0;
 	float offset = 25.0f;
 
-	float the_offset = Boxes_engine::get_total_time();
+	float the_offset = Engine::get_total_time();
 
 
 	{
@@ -54,7 +54,7 @@ void f_loop(Boxes_engine::Instance_data* data)
 		else
 		{
 			float factor = 1.0f / size_a;
-			float total_t = Boxes_engine::get_total_time();
+			float total_t = Engine::get_total_time();
 
 			for (unsigned int i = index_a; i < (index_a + size_a); i++)
 			{
@@ -75,7 +75,7 @@ void f_loop(Boxes_engine::Instance_data* data)
 
 
 	{
-		if (Boxes_engine::get_frame() < 10)
+		if (Engine::get_frame() < 10)
 		{
 			for (unsigned int i = index_b; i < (index_b + size_b); i++)
 			{
@@ -117,7 +117,7 @@ void f_loop(Boxes_engine::Instance_data* data)
 
 }
 
-void f_init(Boxes_engine::Instance_data* data)
+void f_init(Engine::Instance_data* data)
 {
 	float radius = 150.0;
 	float offset = 25.0f;
@@ -177,8 +177,8 @@ void left_relese()
 {
 	std::cout << "left relese\n";
 
-	int frame_number = Boxes_engine::get_frame();
-	Boxes_engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_color_" + std::to_string(frame_number) + ".png").c_str());
+	int frame_number = Engine::get_frame();
+	Engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_color_" + std::to_string(frame_number) + ".png").c_str());
 
 }
 
@@ -195,12 +195,12 @@ void right_relese()
 void capture_framebuffer()
 {
 
-	int frame_number = Boxes_engine::get_frame();
+	int frame_number = Engine::get_frame();
 	if (false)
 	{
 		std::cout << "Framebuffer capture \n";
 		std::cout << "frame number : " << frame_number << " \n";
-		Boxes_engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_color_" + std::to_string(frame_number) + ".png").c_str());
+		Engine::captureAndSaveFrameBuffer(("C:/Users/Cosmos/Desktop/output/framebuffer_color_" + std::to_string(frame_number) + ".png").c_str());
 	}
 
 }
@@ -209,22 +209,22 @@ int main()
 {
 	std::cout << "BoxedInMotion\n";
 
-	Boxes_engine::set_background_color(glm::vec3(0.0007f, 0.002f, 0.0017f));
+	Engine::set_background_color(glm::vec3(0.0007f, 0.002f, 0.0017f));
 
-	Boxes_engine::set_callback_mouse_button_left_click(left_click);
-	Boxes_engine::set_callback_mouse_button_left_relese(left_relese);
-	Boxes_engine::set_callback_mouse_button_right_click(right_click);
-	Boxes_engine::set_callback_mouse_button_right_relese(right_relese);
-	Boxes_engine::set_callback_on_finish_render_callback(capture_framebuffer);
+	Engine::set_callback_mouse_button_left_click(left_click);
+	Engine::set_callback_mouse_button_left_relese(left_relese);
+	Engine::set_callback_mouse_button_right_click(right_click);
+	Engine::set_callback_mouse_button_right_relese(right_relese);
+	Engine::set_callback_on_finish_render_callback(capture_framebuffer);
 
-	Boxes_engine::set_bloom_iteration(10);
+	Engine::set_bloom_iteration(10);
 	//Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
 
 	//camera_position
 	//frame
 	//time
 
-	Boxes_engine::ShaderSourceCode source;
+	Engine::ShaderSourceCode source;
 
 	source.fragment =
 		"#version 330 core\n"
@@ -287,8 +287,8 @@ int main()
 
 	source.geometry = nullptr;
 
-	Boxes_engine::set_camera_parameters(glm::vec3(0.0f, 0.0f, 0.0f), 2.5f, 0.1f, 45.0f);
-	Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f, &source);
+	Engine::set_camera_parameters(glm::vec3(0.0f, 0.0f, 0.0f), 2.5f, 0.1f, 45.0f);
+	Engine::play(amount, f_init, f_loop, 45.0f, 1000.0f, &source);
 
 	return 0;
 }

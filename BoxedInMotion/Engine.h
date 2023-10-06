@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Boxes_engine
+namespace Engine
 {
 	struct Instance_data
 	{
