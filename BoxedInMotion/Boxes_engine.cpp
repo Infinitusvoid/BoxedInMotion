@@ -956,6 +956,10 @@ namespace Boxes_engine
 			shader->setMat4("projection", projection);
 			shader->setMat4("view", view);
 			shader->setVec3("camera_position", camera.Position);
+			shader->setVec3("camera_front", camera.Front);
+			shader->setVec3("camera_right", camera.Right);
+			shader->setVec3("camera_up", camera.Up);
+			shader->setFloat("camera_zoom", camera.Zoom);
 			shader->setInt("frame", g_frame);
 			shader->setFloat("time", win.timer.total);
 

@@ -5,7 +5,7 @@
 #include <string>
 
 
-const int amount = 100000;
+const int amount = 1000000;
 
 //const int index_a = 0;
 //const int size_a = 2000;
@@ -234,6 +234,10 @@ int main()
 		"\n"
 		"\n"
 		"uniform vec3 camera_position;\n"
+		"uniform vec3 camera_front;\n"
+		"uniform vec3 camera_right;\n"
+		"uniform vec3 camera_up;\n"
+		"uniform float camera_zoom;\n"
 		"uniform int frame;\n"
 		"uniform float time;\n"
 		"\n"
@@ -263,6 +267,10 @@ int main()
 		"uniform mat4 view;\n"
 		"\n"
 		"uniform vec3 camera_position;\n"
+		"uniform vec3 camera_front;\n"
+		"uniform vec3 camera_right;\n"
+		"uniform vec3 camera_up;\n"
+		"uniform float camera_zoom;\n"
 		"uniform int frame;\n"
 		"uniform float time;\n"
 		"\n"
