@@ -18,7 +18,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="example_main.md">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">

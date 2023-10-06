@@ -50,6 +50,5 @@ namespace Boxes_engine
 	void set_callback_on_finish_render_callback(void(*f)(void));
 	void captureAndSaveFrameBuffer(const char* path);
 
-	
 
 }
