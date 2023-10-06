@@ -1,6 +1,6 @@
 # example project
 
-'''
+```
 #include "Boxes_engine.h"
 
 #include <iostream>
@@ -355,4 +355,4 @@ const float YAW = -90.0f;
 		const float SENSITIVITY = 0.1f;
 		const float ZOOM = 45.0f;
 */
-'''
+```
