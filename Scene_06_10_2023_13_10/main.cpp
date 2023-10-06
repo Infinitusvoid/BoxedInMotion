@@ -218,8 +218,8 @@ int main()
 	Engine::set_callback_on_finish_render_callback(capture_framebuffer);
 
 	Engine::set_bloom_iteration(10);
-	//Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
-
+	Engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
+	
 	//camera_position
 	//frame
 	//time
@@ -247,21 +247,21 @@ int main()
 		"void main()\n"
 		"{\n"
 		"   vec4 result = Color + sin(time + FragWorldPos.x * 10.0) * 0.7 + vec4(vec3(sin(FragObjectPos.x * 100), 0.0, 0.0), 1.0);\n"
-		"	FragColor = result * 0.7;\n"
+		"	FragColor = result;\n"
 		"   float factor_brightnes = dot(vec3(result), vec3(0.2126, 0.7152, 0.0722));\n"
 		"   if(factor_brightnes > 1.0) // transhold usually set at 1.0\n" 
 		"   {\n"
-		"     BrightColor = vec4(result.x * 10.0, result.y * 10.0, result.z * 10.0, 1.0);\n"
+		"     BrightColor = vec4(result.x * 100.0, result.y * 100.0, result.z * 100.0, 1.0);\n"
 		"   }\n"
 		"   else\n"
 		"   {\n"
 		"     BrightColor = vec4(0.0, 0.0, 0.0, 1.0);\n"
 		"   }\n"
 		"\n"
-		"}\n"
-		;
+		"}\n";
 
-	source.vertex = "#version 330 core\n"
+	source.vertex = 
+		"#version 330 core\n"
 		"layout (location = 0) in vec3 aPos;\n"
 		"\n"
 		"// Define the instance data struct\n"
@@ -300,7 +300,7 @@ int main()
 	source.geometry = nullptr;
 
 	Engine::set_camera_parameters(glm::vec3(0.0f, 0.0f, 0.0f), 2.5f, 0.1f, 45.0f);
-	Engine::play(amount, f_init, f_loop, 45.0f, 1000.0f, &source);
+	//Engine::play(amount, f_init, f_loop, 45.0f, 1000.0f, &source);
 
 	return 0;
 }

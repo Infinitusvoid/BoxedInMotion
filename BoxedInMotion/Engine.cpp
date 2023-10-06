@@ -17,6 +17,7 @@
 #include <iostream>
 
 #include <vector>
+#include <filesystem>
 
 namespace Engine
 {
@@ -43,6 +44,168 @@ namespace Engine
 	void(*f_callback_mouse_button_right_click)(void);
 	void(*f_callback_mouse_button_right_relese)(void);
 
+	namespace File
+	{
+		bool searchFileByName(const std::string& directory, const std::string& targetFileName)
+		{
+			std::filesystem::path dirPath(directory);
+
+			if (!std::filesystem::is_directory(dirPath))
+			{
+				std::cerr << "Error: The specified directory does not exist." << std::endl;
+				return false;
+			}
+
+			for (const auto& entry : std::filesystem::directory_iterator(dirPath))
+			{
+				if (std::filesystem::is_regular_file(entry) && entry.path().filename() == targetFileName)
+				{
+					std::cout << "File found: " << entry.path() << std::endl;
+					return true;
+				}
+			}
+
+			std::cout << "File not found: " << targetFileName << std::endl;
+			return false;
+		}
+
+		void writeFileIfNotExists(const std::string& filename, const std::string& content)
+		{
+			std::ifstream file(filename);
+
+			if (file.good()) {
+				std::cout << "File '" << filename << "' already exists. Not overwriting." << std::endl;
+				return; // File already exists, do not overwrite
+			}
+
+			std::ofstream newFile(filename);
+
+			if (!newFile.is_open()) {
+				std::cerr << "Error: Unable to create the file." << std::endl;
+				return;
+			}
+
+			newFile << content;
+			newFile.close();
+			std::cout << "File '" << filename << "' has been created and written." << std::endl;
+		}
+
+		void writeFileIfNotExists(const char* filename, const char* content)
+		{
+			std::ifstream file(filename);
+
+			if (file.good()) {
+				std::cout << "File '" << filename << "' already exists. Not overwriting." << std::endl;
+				return; // File already exists, do not overwrite
+			}
+
+			std::ofstream newFile(filename);
+
+			if (!newFile.is_open()) {
+				std::cerr << "Error: Unable to create the file." << std::endl;
+				return;
+			}
+
+			newFile << content;
+			newFile.close();
+			std::cout << "File '" << filename << "' has been created and written." << std::endl;
+		}
+	}
+
+	namespace Shader_sources_build_in
+	{
+		namespace Box
+		{
+			namespace Vertex
+			{
+				const char* build_in_vertex_shader_path = "build_in_vertex_shader.vs";
+				const char* build_in_vertex_shader_source =
+					"#version 330 core\n"
+					"layout (location = 0) in vec3 aPos;\n"
+					"\n"
+					"// Define the instance data struct\n"
+					"struct Instance_data\n"
+					"{\n"
+					"	mat4 model;\n"
+					"	vec4 color;\n"
+					"};\n"
+					"\n"
+					"layout(location = 3) in Instance_data instanceData;\n"
+					"\n"
+					"out vec4 Color;\n"
+					"out vec3 FragWorldPos; // World space position\n"
+					"out vec3 FragObjectPos; // Object space position\n"
+					"\n"
+					"uniform mat4 projection;\n"
+					"uniform mat4 view;\n"
+					"\n"
+					"uniform vec3 camera_position;\n"
+					"uniform vec3 camera_front;\n"
+					"uniform vec3 camera_right;\n"
+					"uniform vec3 camera_up;\n"
+					"uniform float camera_zoom;\n"
+					"uniform int frame;\n"
+					"uniform float time;\n"
+					"\n"
+					"void main()\n"
+					"{\n"
+					"	int id = gl_InstanceID;\n"
+					"	FragObjectPos = aPos; // Store the object space position\n"
+					"	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position\n"
+					"	Color = instanceData.color;\n"
+					"	gl_Position = projection * view * instanceData.model * vec4(aPos + sin(time) * 10.0, 1.0f);\n"
+					"}\n";
+			}
+
+			namespace Fragment
+			{
+				const char* build_in_fragment_shader_path = "build_in_fragment_shader.fs";
+				const char* build_in_fragment_shader_source =
+					"#version 330 core\n"
+					"layout (location = 0) out vec4 FragColor;\n"
+					"layout (location = 1) out vec4 BrightColor;"
+					"\n"
+					"in vec4 Color;\n"
+					"in vec3 FragWorldPos; // Input world space position\n"
+					"in vec3 FragObjectPos; // Input object space position\n"
+					"\n"
+					"\n"
+					"uniform vec3 camera_position;\n"
+					"uniform vec3 camera_front;\n"
+					"uniform vec3 camera_right;\n"
+					"uniform vec3 camera_up;\n"
+					"uniform float camera_zoom;\n"
+					"uniform int frame;\n"
+					"uniform float time;\n"
+					"\n"
+					"void main()\n"
+					"{\n"
+					"   vec4 result = Color + sin(time + FragWorldPos.x * 10.0) * 0.7 + vec4(vec3(sin(FragObjectPos.x * 100), 0.0, 0.0), 1.0);\n"
+					"	FragColor = result * 0.7;\n"
+					"   float factor_brightnes = dot(vec3(result), vec3(0.2126, 0.7152, 0.0722));\n"
+					"   if(factor_brightnes > 1.0) // transhold usually set at 1.0\n"
+					"   {\n"
+					"     BrightColor = vec4(result.x * 10.0, result.y * 10.0, result.z * 10.0, 1.0);\n"
+					"   }\n"
+					"   else\n"
+					"   {\n"
+					"     BrightColor = vec4(0.0, 0.0, 0.0, 1.0);\n"
+					"   }\n"
+					"\n"
+					"}\n";
+			}
+		}
+		
+		
+		
+		void write_them_if_if_they_dont_exist()
+		{
+			File::writeFileIfNotExists(Box::Vertex::build_in_vertex_shader_path, Box::Vertex::build_in_vertex_shader_source);
+			File::writeFileIfNotExists(Box::Fragment::build_in_fragment_shader_path, Box::Fragment::build_in_fragment_shader_source);
+		}
+
+
+	}
 
 	class Shader
 	{
@@ -894,9 +1057,11 @@ namespace Engine
 
 		void init()
 		{
+			Shader_sources_build_in::write_them_if_if_they_dont_exist();
+
 			if (shader_source_code == nullptr)
 			{
-				shader = new Shader("../BoxedInMotion/boxes_engine_shader_boxes_0.vs", "../BoxedInMotion/boxes_engine_shader_boxes_0.fs");
+				shader = new Shader(Shader_sources_build_in::Box::Vertex::build_in_vertex_shader_path, Shader_sources_build_in::Box::Fragment::build_in_fragment_shader_path);
 			}
 			else
 			{
