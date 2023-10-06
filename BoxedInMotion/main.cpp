@@ -210,6 +210,8 @@ int main()
 {
 	std::cout << "BoxedInMotion\n";
 
+	Boxes_engine::set_background_color(glm::vec3(0.0007f, 0.002f, 0.0017f));
+
 	Boxes_engine::set_callback_mouse_button_left_click(left_click);
 	Boxes_engine::set_callback_mouse_button_left_relese(left_relese);
 	Boxes_engine::set_callback_mouse_button_right_click(right_click);
