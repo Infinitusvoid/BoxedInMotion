@@ -288,7 +288,7 @@ int main()
 
 
 
-send into the vertex shader and somehow to fragment shader the frame and t uniforms
+
 
 try to get the world space and object space position in fragment shader of cube
 
@@ -311,6 +311,8 @@ find out if you can capture also the depth map may be usefull in post create a m
 
 /*
 DONE
+send into the vertex shader and somehow to fragment shader the frame and t uniforms
+
 add an option to override the default vertex and fragment shader
 
 than you should add a optional callback after you render the scene that you can use to capture the framebuffer,
