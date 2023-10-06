@@ -148,6 +148,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BoxedInMotion\BoxedInMotion.vcxproj">
       <Project>{15f71ab1-4eb8-45a6-aa4c-e890c8ab7172}</Project>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

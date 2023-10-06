@@ -1093,6 +1093,8 @@ namespace Boxes_engine
 		std::cout << " q     : exposure decrise \n";
 		std::cout << " e     : exposure incrise \n";
 		std::cout << " space : blook on / off   \n";
+		std::cout << "--------------------------\n";
+		std::cout << "\n";
 
 		if (!win.init())
 		{
