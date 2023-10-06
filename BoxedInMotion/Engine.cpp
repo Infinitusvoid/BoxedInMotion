@@ -1269,8 +1269,9 @@ namespace Engine
 		// build and compile shaders
 		// -------------------------
 		//Shader shaderLight("7.bloom.vs", "7.light_box.fs");
-		Shader shaderBlur("../BoxedInMotion/7.blur.vs", "../BoxedInMotion/7.blur.fs");
-		Shader shaderBloomFinal("../BoxedInMotion/7.bloom_final.vs", "../BoxedInMotion/7.bloom_final.fs");
+		Shader shaderBlur("blur.vs", "blur.fs");
+		
+		Shader shaderBloomFinal("bloom_final.vs", "bloom_final.fs");
 
 		// configure (floating point) framebuffers
 		// ---------------------------------------
