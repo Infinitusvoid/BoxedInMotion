@@ -218,6 +218,10 @@ int main()
 
 	//Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
 
+	//camera_position
+	//frame
+	//time
+
 	Boxes_engine::ShaderSourceCode source;
 
 	source.fragment = 
@@ -249,10 +253,14 @@ int main()
 		"uniform mat4 projection;\n"
 		"uniform mat4 view;\n"
 		"\n"
+		"uniform vec3 camera_position;\n"
+		"uniform int frame;\n"
+		"uniform float time;\n"
+		"\n"
 		"void main()\n"
 		"{\n"
 		"Color = instanceData.color;\n"
-		"gl_Position = projection * view * instanceData.model * vec4(aPos, 1.0f);\n"
+		"gl_Position = projection * view * instanceData.model * vec4(aPos + sin(time) * 10.0, 1.0f);\n"
 		"}\n";
 
 	source.geometry = nullptr;
