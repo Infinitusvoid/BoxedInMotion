@@ -786,6 +786,7 @@ namespace Engine
 		
 		bool init()
 		{
+			// writing build in shaders to files later will be read from files
 			{
 				{
 					std::string source = "#version 330 core\n"
@@ -906,6 +907,8 @@ namespace Engine
 			// --------------------
 			// Use the monitor's resolution for full screen
 			window = glfwCreateWindow(mode->width, mode->height, "LearnOpenGL", primaryMonitor, NULL);
+
+			std::cout << "window width : " << mode->width << " height : " << mode->height << "\n";
 
 			if (window == NULL)
 			{
