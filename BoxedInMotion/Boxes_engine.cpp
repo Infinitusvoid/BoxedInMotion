@@ -98,6 +98,8 @@ namespace Boxes_engine
 		// ------------------------------------------------------------------------
 		Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
 		{
+			std::cout << "reading vertexPath : " << vertexPath << "\n";
+			std::cout << "reading fragmentPath : " << fragmentPath << "\n";
 			// 1. retrieve the vertex/fragment source code from filePath
 			std::string vertexCode;
 			std::string fragmentCode;
@@ -894,7 +896,7 @@ namespace Boxes_engine
 		{
 			if (shader_source_code == nullptr)
 			{
-				shader = new Shader("boxes_engine_shader_boxes_0.vs", "boxes_engine_shader_boxes_0.fs");
+				shader = new Shader("../BoxedInMotion/boxes_engine_shader_boxes_0.vs", "../BoxedInMotion/boxes_engine_shader_boxes_0.fs");
 			}
 			else
 			{
@@ -1100,8 +1102,8 @@ namespace Boxes_engine
 		// build and compile shaders
 		// -------------------------
 		//Shader shaderLight("7.bloom.vs", "7.light_box.fs");
-		Shader shaderBlur("7.blur.vs", "7.blur.fs");
-		Shader shaderBloomFinal("7.bloom_final.vs", "7.bloom_final.fs");
+		Shader shaderBlur("../BoxedInMotion/7.blur.vs", "../BoxedInMotion/7.blur.fs");
+		Shader shaderBloomFinal("../BoxedInMotion/7.bloom_final.vs", "../BoxedInMotion/7.bloom_final.fs");
 
 		// configure (floating point) framebuffers
 		// ---------------------------------------
