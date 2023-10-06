@@ -310,11 +310,21 @@ int main()
 /*
 
 ----
+In the case thay are no shaders at default path
+create new files, this way you can copy paste
+the exe files and it will work
+
+find out the screen resolution and set that as
+SCR_WIDTH, SCR_HEIGHT print the values
+you did set so that it will work on other
+computers
+
+
 
 Than it comes I will create an github repository with the engine the engine needs a name than one thing that sould create is in youtube channel,
 gmail, instagram, tiktok where I will publish this videos ane link to the youtube channel and a patreon page
 
-
+----
 */
 
 /*
