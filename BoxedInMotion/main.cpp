@@ -229,6 +229,8 @@ int main()
 		"out vec4 FragColor;\n"
 		"\n"
 		"in vec4 Color;\n"
+		"in vec3 FragWorldPos; // Input world space position\n"
+		"in vec3 FragObjectPos; // Input object space position\n"
 		"\n"
 		"\n"
 		"uniform vec3 camera_position;\n"
@@ -237,7 +239,7 @@ int main()
 		"\n"
 		"void main()\n"
 		"{\n"
-		"	FragColor = Color + sin(time) * 0.5;\n"
+		"	FragColor = Color + sin(time + FragWorldPos.x * 10.0) * 0.5;\n"
 		"}\n"
 		;
 
@@ -254,6 +256,8 @@ int main()
 		"layout(location = 3) in Instance_data instanceData;\n"
 		"\n"
 		"out vec4 Color;\n"
+		"out vec3 FragWorldPos; // World space position\n"
+		"out vec3 FragObjectPos; // Object space position\n"
 		"\n"
 		"uniform mat4 projection;\n"
 		"uniform mat4 view;\n"
@@ -264,6 +268,8 @@ int main()
 		"\n"
 		"void main()\n"
 		"{\n"
+		"FragObjectPos = aPos; // Store the object space position\n"
+		"FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position\n"
 		"Color = instanceData.color;\n"
 		"gl_Position = projection * view * instanceData.model * vec4(aPos + sin(time) * 10.0, 1.0f);\n"
 		"}\n";
