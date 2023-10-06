@@ -23,6 +23,8 @@ namespace Boxes_engine
 
 	void set_exposure(float value);
 
+	void set_bloom_iteration(int num_iterations);
+
 	float get_dt();
 	float get_total_time();
 	int get_frame();
@@ -46,5 +48,7 @@ namespace Boxes_engine
 
 	void set_callback_on_finish_render_callback(void(*f)(void));
 	void captureAndSaveFrameBuffer(const char* path);
+
+	
 
 }

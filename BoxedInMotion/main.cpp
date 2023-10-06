@@ -5,7 +5,7 @@
 #include <string>
 
 
-const int amount = 1000000;
+const int amount = 100000;
 
 //const int index_a = 0;
 //const int size_a = 2000;
@@ -216,6 +216,7 @@ int main()
 	Boxes_engine::set_callback_mouse_button_right_relese(right_relese);
 	Boxes_engine::set_callback_on_finish_render_callback(capture_framebuffer);
 
+	Boxes_engine::set_bloom_iteration(10);
 	//Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
 
 	//camera_position
@@ -295,14 +296,8 @@ int main()
 /*
 
 
-
-
-
-try to get the world space and object space position in fragment shader of cube
-
-there is the amount somewhere in the loop find out what it does and enable to set it's value maybe it may be usefull
-
 set camera all parameters
+
 
 ----
 
@@ -313,12 +308,19 @@ Than it comes I will create an github repository with the engine the engine need
 
 /*
 next version
+
 than you should have a callback all keybord events use primitive build in data types seems usefull to triger certain actions on some key
 find out if you can capture also the depth map may be usefull in post create a method that you can call to capture
 */
 
 /*
 DONE
+
+there is the amount somewhere in the loop find out what it does and enable to set it's value maybe it may be usefull
+
+try to get the world space and object space position in fragment shader of cube
+
+
 send into the vertex shader and somehow to fragment shader the frame and t uniforms
 
 add an option to override the default vertex and fragment shader

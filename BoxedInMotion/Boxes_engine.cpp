@@ -20,6 +20,8 @@
 
 namespace Boxes_engine
 {
+	
+	
 	glm::vec3 g_background_color = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	void(*f_loop_callback)(Instance_data*);
@@ -28,6 +30,8 @@ namespace Boxes_engine
 	bool g_camera_locked = false;
 
 	int g_frame = 0;
+
+	unsigned int g_bloom_iterations_amount = 10;
 
 	unsigned int g_num_boxes = 0;
 
@@ -1007,6 +1011,11 @@ namespace Boxes_engine
 		g_exposure = value;
 	}
 
+	void set_bloom_iteration(int num_iterations)
+	{
+		g_bloom_iterations_amount = num_iterations;
+	}
+
 	float get_dt()
 	{
 		return win.timer.deltaTime;
@@ -1197,9 +1206,8 @@ namespace Boxes_engine
 			// 2. blur bright fragments with two-pass Gaussian Blur 
 			// --------------------------------------------------
 			bool horizontal = true, first_iteration = true;
-			unsigned int amount = 10;
 			shaderBlur.use();
-			for (unsigned int i = 0; i < amount; i++)
+			for (unsigned int i = 0; i < g_bloom_iterations_amount; i++)
 			{
 				glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
 				shaderBlur.setInt("horizontal", horizontal);
