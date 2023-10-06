@@ -88,5 +88,5 @@ Be sure that inherit from parent of project default is checked
 
 
 
-# You should change the way you think about video ? 
+
 
