@@ -1137,8 +1137,6 @@ namespace Engine
 		return min_value + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (max_value - min_value);
 	}
 
-	// https://gist.github.com/Infinitusvoid/00d0fb2e7209f26db0a15e563e95f162/revisions
-
 	struct Boxes
 	{
 		float factor = 0.0f;
