@@ -230,9 +230,14 @@ int main()
 		"\n"
 		"in vec4 Color;\n"
 		"\n"
+		"\n"
+		"uniform vec3 camera_position;\n"
+		"uniform int frame;\n"
+		"uniform float time;\n"
+		"\n"
 		"void main()\n"
 		"{\n"
-		"	FragColor = Color;\n"
+		"	FragColor = Color + sin(time) * 0.5;\n"
 		"}\n"
 		;
 
