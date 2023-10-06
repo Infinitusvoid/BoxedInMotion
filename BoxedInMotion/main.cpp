@@ -286,6 +286,7 @@ int main()
 
 	source.geometry = nullptr;
 
+	Boxes_engine::set_camera_parameters(glm::vec3(0.0f, 0.0f, 0.0f), 2.5f, 0.1f, 45.0f);
 	Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f, &source);
 
 	return 0;
@@ -295,13 +296,10 @@ int main()
 
 /*
 
-
-set camera all parameters
-
-
 ----
 
-Than it comes I will create an github repository with the engine the engine needs a name than one thing that sould create is in youtube channel, gmail, instagram, tiktok where I will publish this videos ane link to the youtube channel and a patreon page
+Than it comes I will create an github repository with the engine the engine needs a name than one thing that sould create is in youtube channel,
+gmail, instagram, tiktok where I will publish this videos ane link to the youtube channel and a patreon page
 
 
 */
@@ -315,6 +313,8 @@ find out if you can capture also the depth map may be usefull in post create a m
 
 /*
 DONE
+
+set camera all parameters
 
 there is the amount somewhere in the loop find out what it does and enable to set it's value maybe it may be usefull
 
@@ -340,3 +340,14 @@ this will enable by repositioning camera at origin 0,0,0 to to have infinite spa
 // while the object are leaving a train in 3d space
 // the camera can be stationary and the big cube can be slowly rotating around
 // the graphiy style should be glowing with wireframe vibe
+
+
+// default constants
+/*
+// Default camera values
+const float YAW = -90.0f;
+		const float PITCH = 0.0f;
+		const float SPEED = 2.5f;
+		const float SENSITIVITY = 0.1f;
+		const float ZOOM = 45.0f;
+*/

@@ -34,6 +34,7 @@ namespace Boxes_engine
 	glm::vec3 get_camera_right();
 	glm::vec3 get_camera_up();
 	float get_camera_zoom();
+	void set_camera_parameters(glm::vec3 set_position, float set_speed, float set_sensitivy, float set_zoom);
 
 	void set_camera_position(glm::vec3 position);
 	void lock_camera();

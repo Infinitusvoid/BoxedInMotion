@@ -305,7 +305,7 @@ namespace Boxes_engine
 		float MovementSpeed;
 		float MouseSensitivity;
 		float Zoom;
-
+		
 		// constructor with vectors
 		Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = Constants::YAW, float pitch = Constants::PITCH) :
 			Front(glm::vec3(0.0f, 0.0f, -1.0f)),
@@ -319,6 +319,21 @@ namespace Boxes_engine
 			Pitch = pitch;
 			updateCameraVectors();
 		}
+
+		void set_camera_parameters(glm::vec3 set_position, float set_speed, float set_sensitivy, float set_zoom)
+		{
+			Position = set_position;
+			WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+			Yaw = Constants::YAW;
+			Pitch = Constants::PITCH;
+
+			Front = glm::vec3(0.0f, 0.0f, -1.0f);
+			MovementSpeed = set_speed;
+			MouseSensitivity = set_sensitivy;
+			Zoom = set_zoom;
+			updateCameraVectors();
+		}
+
 		// constructor with scalar values
 		Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) :
 			Front(glm::vec3(0.0f, 0.0f, -1.0f)),
@@ -1029,6 +1044,11 @@ namespace Boxes_engine
 	float get_camera_zoom()
 	{
 		return camera.Zoom;
+	}
+
+	void set_camera_parameters(glm::vec3 set_position, float set_speed, float set_sensitivy, float set_zoom)
+	{
+		camera.set_camera_parameters(set_position, set_speed, set_sensitivy, set_zoom);
 	}
 
 	void set_camera_position(glm::vec3 position)
