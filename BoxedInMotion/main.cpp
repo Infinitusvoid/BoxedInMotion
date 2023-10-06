@@ -197,7 +197,7 @@ void capture_framebuffer()
 {
 	
 	int frame_number = Boxes_engine::get_frame();
-	if (frame_number < 2)
+	if(false)
 	{
 		std::cout << "Framebuffer capture \n";
 		std::cout << "frame number : "<< frame_number <<" \n";
@@ -216,8 +216,48 @@ int main()
 	Boxes_engine::set_callback_mouse_button_right_relese(right_relese);
 	Boxes_engine::set_callback_on_finish_render_callback(capture_framebuffer);
 
-	Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
+	//Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f);
 
+	Boxes_engine::ShaderSourceCode source;
+
+	source.fragment = 
+		"#version 330 core\n"
+		"out vec4 FragColor;\n"
+		"\n"
+		"in vec4 Color;\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"	FragColor = Color;\n"
+		"}\n"
+		;
+
+	source.vertex = "#version 330 core\n"
+		"layout (location = 0) in vec3 aPos;\n"
+		"\n"
+		"// Define the instance data struct\n"
+		"struct Instance_data\n"
+		"{\n"
+		"mat4 model;\n"
+		"vec4 color;\n"
+		"};\n"
+		"\n"
+		"layout(location = 3) in Instance_data instanceData;\n"
+		"\n"
+		"out vec4 Color;\n"
+		"\n"
+		"uniform mat4 projection;\n"
+		"uniform mat4 view;\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"Color = instanceData.color;\n"
+		"gl_Position = projection * view * instanceData.model * vec4(aPos, 1.0f);\n"
+		"}\n";
+
+	source.geometry = nullptr;
+
+	Boxes_engine::play(amount, f_init, f_loop, 45.0f, 1000.0f, &source);
 
 	return 0;
 }

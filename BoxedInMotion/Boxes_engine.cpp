@@ -39,10 +39,57 @@ namespace Boxes_engine
 	void(*f_callback_mouse_button_right_click)(void);
 	void(*f_callback_mouse_button_right_relese)(void);
 
+
 	class Shader
 	{
 	public:
 		unsigned int ID;
+
+		Shader(const ShaderSourceCode* source)
+		{
+			
+			// 2. compile shaders
+			unsigned int vertex, fragment;
+			// vertex shader
+			vertex = glCreateShader(GL_VERTEX_SHADER);
+			glShaderSource(vertex, 1, &source->vertex, NULL);
+			glCompileShader(vertex);
+			checkCompileErrors(vertex, "VERTEX");
+			// fragment Shader
+			fragment = glCreateShader(GL_FRAGMENT_SHADER);
+			glShaderSource(fragment, 1, &source->fragment, NULL);
+			glCompileShader(fragment);
+			checkCompileErrors(fragment, "FRAGMENT");
+			// if geometry shader is given, compile geometry shader
+			unsigned int geometry;
+			if (source->geometry != nullptr)
+			{
+				geometry = glCreateShader(GL_GEOMETRY_SHADER);
+				glShaderSource(geometry, 1, &source->geometry, NULL);
+				glCompileShader(geometry);
+				checkCompileErrors(geometry, "GEOMETRY");
+			}
+			// shader Program
+			ID = glCreateProgram();
+			glAttachShader(ID, vertex);
+			glAttachShader(ID, fragment);
+			if (source->geometry != nullptr)
+			{
+				glAttachShader(ID, geometry);
+			}
+				
+			glLinkProgram(ID);
+			checkCompileErrors(ID, "PROGRAM");
+			// delete the shaders as they're linked into our program now and no longer necessary
+			glDeleteShader(vertex);
+			glDeleteShader(fragment);
+			if (source->geometry != nullptr)
+			{
+				glDeleteShader(geometry);
+			}
+				
+		}
+
 		// constructor generates the shader on the fly
 		// ------------------------------------------------------------------------
 		Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
@@ -825,17 +872,27 @@ namespace Boxes_engine
 	{
 		float factor = 0.0f;
 
-		Instance_data* instance_data;
+		Instance_data* instance_data = nullptr;
 
-		Shader* shader;
-		Model* model;
+		Shader* shader = nullptr;
+		Model* model = nullptr;
+		ShaderSourceCode* shader_source_code = nullptr;
 
 		unsigned int buffer;
 	public:
 
 		void init()
 		{
-			shader = new Shader("boxes_engine_shader_boxes_0.vs", "boxes_engine_shader_boxes_0.fs");
+			if (shader_source_code == nullptr)
+			{
+				shader = new Shader("boxes_engine_shader_boxes_0.vs", "boxes_engine_shader_boxes_0.fs");
+			}
+			else
+			{
+				shader = new Shader(shader_source_code);
+			}
+
+			
 			model = new Model();
 			instance_data = new Instance_data[g_num_boxes];
 			factor = 1.0f / g_num_boxes;
@@ -1001,7 +1058,7 @@ namespace Boxes_engine
 
 
 
-	int play(unsigned int number_of_boxes, void(*f_init)(Instance_data*), void(*f_loop)(Instance_data*), float fov, float view_distance)
+	int play(unsigned int number_of_boxes, void(*f_init)(Instance_data*), void(*f_loop)(Instance_data*), float fov, float view_distance, ShaderSourceCode* shader_source_code)
 	{
 		std::cout << "f_boxes_engine_start\n";
 
@@ -1034,7 +1091,7 @@ namespace Boxes_engine
 
 		// build and compile shaders
 		// -------------------------
-		Shader shaderLight("7.bloom.vs", "7.light_box.fs");
+		//Shader shaderLight("7.bloom.vs", "7.light_box.fs");
 		Shader shaderBlur("7.blur.vs", "7.blur.fs");
 		Shader shaderBloomFinal("7.bloom_final.vs", "7.bloom_final.fs");
 
@@ -1104,6 +1161,7 @@ namespace Boxes_engine
 
 
 		Boxes boxes;
+		boxes.shader_source_code = shader_source_code;
 		boxes.init();
 
 		// render loop

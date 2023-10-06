@@ -12,6 +12,13 @@ namespace Boxes_engine
 		glm::vec4 color;
 	};
 
+	struct ShaderSourceCode
+	{
+		const char* vertex;
+		const char* fragment;
+		const char* geometry;
+	};
+
 	void set_background_color(glm::vec3 background_color);
 
 	void set_exposure(float value);
@@ -30,8 +37,8 @@ namespace Boxes_engine
 	void lock_camera();
 	void unlock_camera();
 
-	int play(unsigned int number_of_boxes, void(*f_init)(Instance_data*), void(*f_loop)(Instance_data*), float fov = 45.0f, float view_distance = 1000.0f);
-
+	int play(unsigned int number_of_boxes, void(*f_init)(Instance_data*), void(*f_loop)(Instance_data*), float fov = 45.0f, float view_distance = 1000.0f, ShaderSourceCode* source = nullptr);
+	
 	void set_callback_mouse_button_left_click(void(*f)(void));
 	void set_callback_mouse_button_left_relese(void(*f)(void));
 	void set_callback_mouse_button_right_click(void(*f)(void));
