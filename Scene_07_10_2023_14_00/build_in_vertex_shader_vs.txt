@@ -28,8 +28,13 @@ uniform float time;
 void main()
 {
 	int id = gl_InstanceID;
-	FragObjectPos = aPos; // Store the object space position
-	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
+	float d = length(FragWorldPos) + sin(time * 0.2 + id * 0.1);
+	float tfak = 0.01;
+	float v0 = 10.0 * (1 + 0.7 * sin(FragWorldPos.x * 100.0f));
+	float v1 = 10.0 * (1 + 0.7 * sin(FragWorldPos.z * 100.0f));
+	vec3 loc = aPos + (0.1 + 0.05 * sin(time + id)) * vec3(1.0 * sin(d + time * 1.172 * tfak + id * 0.1) * 10.0f, sin(v0) * cos(v1) *  sin(d + time * 1.124 * tfak + id * 0.1) * 10.0f, 10.0 * sin(d +time * 1.1 * tfak) * 10.0f + id * 0.1);
+	FragObjectPos = loc; // Store the object space position
+	FragWorldPos = vec3(instanceData.model * vec4(loc, 1.0)); // Calculate world space position
 	Color = instanceData.color;
-	gl_Position = projection * view * instanceData.model * vec4(aPos + sin(time) * 10.0, 1.0f);
+	gl_Position = projection * view * instanceData.model * vec4(loc + vec3(0.0, 0.0, 0.0), 1.0f);
 }
