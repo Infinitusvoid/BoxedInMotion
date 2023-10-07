@@ -175,7 +175,13 @@ int main()
 {
 	Engine::set_background_color(glm::vec3(0.0004f, 0.002f, 0.0017f));
 	//Engine::set_bloom_iteration(20);
-	Engine::set_bloom_iteration(20);
+	// variations
+	Engine::set_bloom_iteration(100);
+	Engine::set_bloom_iteration(74);
+	Engine::set_bloom_iteration(42);
+	//Engine::set_bloom_iteration(24);
+	//Engine::set_bloom_iteration(10);
+	//Engine::set_bloom_iteration(4);
 
 	//Engine::ShaderSourceCode source;
 
