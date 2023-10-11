@@ -177,8 +177,8 @@ int main()
 	//Engine::set_bloom_iteration(20);
 	// variations
 	Engine::set_bloom_iteration(100);
-	Engine::set_bloom_iteration(74);
-	Engine::set_bloom_iteration(42);
+	//Engine::set_bloom_iteration(74);
+	//Engine::set_bloom_iteration(42);
 	//Engine::set_bloom_iteration(24);
 	//Engine::set_bloom_iteration(10);
 	//Engine::set_bloom_iteration(4);
