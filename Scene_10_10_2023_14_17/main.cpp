@@ -258,7 +258,7 @@ namespace Scene
 
 	void init(Engine::Instance_data* data)
 	{
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 1000; i++)
 		{
 			dls.emplace_back(DynamicLineSegment());
 			dls[i].init();
@@ -300,7 +300,7 @@ namespace Scene
 			auto& ls = dls[line_index];
 			ls.update(dt, t, i);
 			glm::vec3 positon = Line3d_::point_at(ls.line, Utils::generate_random_float(0.0f, 1.0f));
-			positon += Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 0.1f;
+			positon += Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 0.024f;
 
 			data[index].color = ls.color;
 
