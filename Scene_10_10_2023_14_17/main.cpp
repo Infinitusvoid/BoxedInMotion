@@ -75,7 +75,7 @@ namespace Line3d_
 
 	glm::vec3 midpoint(const Line3d& line)
 	{
-		return 0.5f * (line.start - line.end);
+		return line.start + 0.5f * (line.end - line.start);
 	}
 
 	float angle_beteen(const Line3d& line, const Line3d& other)
@@ -251,9 +251,58 @@ namespace Scene
 		{
 
 		}
+
 	};
 
 	std::vector<DynamicLineSegment> dls;
+
+	void update_DynamicLineSegments(std::vector<DynamicLineSegment>& l, float t, float dt)
+	{
+		int num_segments = l.size();
+
+		int draw_what = Utils::generate_random_int(0, 100);
+		
+		
+
+		//glm::vec3 v0 = Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0, -1.0), glm::vec3(1.0f, 1.0f, 1.0f));
+		//v0 *= 0.1f;
+		//v0 += glm::vec3(0.0, -10.0f, 0.0f);
+
+		//glm::vec3 v1 = Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0, -1.0), glm::vec3(1.0f, 1.0f, 1.0f));
+		//v1 *= 0.1f;
+		//v1 += glm::vec3(10.0f, 10.0f, 0.0f);
+
+		glm::vec3 v0 = glm::vec3(0.0f,  -10.0f, 0.0f);
+		glm::vec3 v1 = glm::vec3(0.0f,   10.0f, 0.0f);
+
+
+
+		auto& lt = l[Utils::generate_random_int(0, num_segments)];
+
+
+		if (draw_what < 50)
+		{
+			
+			lt.line.start = v0;
+			lt.line.end = v1;
+		}
+		else
+		{
+			Line3d line = Line3d(v0, v1);
+			glm::vec3 vcmp = Line3d_::midpoint(line);
+			//glm::vec3 vcmp = Line3d_::point_at(line, 0.5f);
+			
+			//glm::vec3 v_0 = glm::normalize(glm::cross(vcmp, glm::vec3(0.0f, 1.0f, 0.0f)));
+			
+			//lt.line.start = vcmp;
+			//lt.line.end = vcmp + v_0 * glm::length(vcmp);
+			lt.line.start = vcmp;
+			lt.line.end = vcmp + glm::vec3(10.0f, 0.0f, 0.0f);//Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0, -1.0), glm::vec3(1.0f, 1.0f, 1.0f));
+			lt.color = glm::vec4(1.0f, 2.0f, 1.1f, 1.0f);
+		}
+
+
+	}
 	
 
 	void init(Engine::Instance_data* data)
@@ -287,6 +336,9 @@ namespace Scene
 	{
 		float dt = Engine::get_dt();
 		float t = Engine::get_total_time();
+
+		update_DynamicLineSegments(dls, t, dt);
+
 		for (int i = 0; i < 10000; i++)
 		{
 			index++;
