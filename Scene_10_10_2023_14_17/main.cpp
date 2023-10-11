@@ -229,7 +229,7 @@ namespace Utils
 
 namespace Constants
 {
-	const int num_boxes = 120 * 1000;
+	const int num_boxes = 1200 * 1000;
 }
 
 
