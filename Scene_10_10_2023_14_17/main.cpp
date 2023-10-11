@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <optional>
 
 //#include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/rapidjson.h"
 #include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/document.h"
@@ -16,6 +17,74 @@
 #include <fstream>
 #include <iostream>
 
+#include <cstdlib>
+
+struct Line3d
+{
+	glm::vec3 start;
+	glm::vec3 end;
+};
+
+namespace Line3d_
+{
+	float length(const Line3d& line)
+	{
+		return glm::length(line.end - line.start);
+	}
+
+	glm::vec3 direction(const Line3d& line)
+	{
+		return glm::normalize(line.end - line.start);
+	}
+
+	glm::vec3 point_at(const Line3d& line, float t)
+	{
+		return line.start + glm::clamp(t, 0.0f, 1.0f) * (line.end - line.start);
+	}
+
+	std::optional<glm::vec3> Intersects(const Line3d& line, const Line3d& other)
+	{
+		glm::vec3 dir1 = line.end - line.start;
+		glm::vec3 dir2 = other.end - other.start;
+		glm::vec3 start2_start1 = other.start - line.start;
+
+		glm::vec3 cross = glm::cross(dir1, dir2);
+		if (glm::length(cross) < 1e-6) {
+			// The lines are either parallel or collinear, so they don't intersect.
+			return std::nullopt;
+		}
+
+		float t = glm::dot(glm::cross(start2_start1, dir2), cross) / glm::length(cross) / glm::length(cross);
+		float s = glm::dot(glm::cross(start2_start1, dir1), cross) / glm::length(cross) / glm::length(cross);
+
+		if (t >= 0.0f && t <= 1.0f && s >= 0.0f && s <= 1.0f) {
+			// Calculate the intersection point.
+			glm::vec3 intersection = line.start + t * dir1;
+			return intersection;
+		}
+
+		return std::nullopt;
+	}
+
+	float distance_to_point(const Line3d& line, const glm::vec3& position)
+	{
+		glm::vec3 line_direction = line.end - line.start;
+		glm::vec3 point_to_start = line.start - position;
+		return glm::length(glm::cross(line_direction, point_to_start)) / glm::length(line_direction);
+	}
+
+	glm::vec3 midpoint(const Line3d& line)
+	{
+		return 0.5f * (line.start - line.end);
+	}
+
+	float angle_beteen(const Line3d& line, const Line3d& other)
+	{
+		glm::vec3 dir1 = glm::normalize(line.end - line.start);
+		glm::vec3 dir2 = glm::normalize(other.end - other.start);
+		return acos(glm::dot(dir1, dir2));
+	}
+}
 
 
 namespace Json
@@ -137,6 +206,11 @@ namespace Json
 
 namespace Utils
 {
+	int generate_random_int(const int min_value, const int max_value)
+	{
+		return min_value + rand() % (max_value - min_value + 1);
+	}
+
 	float generate_random_float(const float min_value, const float max_value)
 	{
 		return min_value + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (max_value - min_value);
@@ -161,100 +235,33 @@ namespace Constants
 
 namespace Scene
 {
-	struct Agent
+	struct DynamicLineSegment
 	{
-		glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 velocity = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0, 1.0f);
-		static constexpr float box_side = 2.0f;
-		static constexpr float half_box_side = box_side * 0.5f;
-		static constexpr float the_velocity_scaling = 0.1f;
+		Line3d line;
+		glm::vec4 color;
 
 		void init()
 		{
-
-			position = Utils::generate_random_glm_vec3(glm::vec3(-half_box_side, -half_box_side, -half_box_side), glm::vec3(half_box_side, half_box_side, half_box_side));
-
-
-			velocity = glm::normalize(Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0f, -1.0), glm::vec3(1.0f, 1.0f, 1.0f))) * the_velocity_scaling;
-
-			color *= 1.1f;
+			line.start = Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 10.0f;
+			line.end = Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 10.0f;
+			color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
-
-
-		void update(const float dt, const float t, const float id)
+		void update(float dt, float t, float num)
 		{
-
-
-			position += velocity;
-
-			float fak_0 = 0.9;
-			float fak_1 = 1.0f - fak_0;
-
-			float color_fak = 4.0f;
-			float color_fak2 = 0.5f;
-
-
-			if (Utils::generate_random_float(0.0f, 1.0f) > 0.5f)
-			{
-				if (glm::length(position) > half_box_side)
-				{
-
-					float fak = 1.0 + 0.5f * sinf(t * 0.1f);
-					float fak2 = 1.0f - fak;
-
-					float value = sin(position.y * 10.0f + t * 0.2f) * fak + sin(position.y * 24.0f - t * 0.47f) * fak2;
-
-					glm::vec4 color_lerped = glm::mix(glm::vec4(0.0f, 0.2f, 0.2f, 1.0f), glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), value);
-
-					position = glm::normalize(position) * half_box_side * (0.76f + 0.24f * value);
-					velocity *= 0.9;
-					color = glm::vec4(Utils::generate_random_float(0.0f, 0.5f), Utils::generate_random_float(0.0f, 1.0f), Utils::generate_random_float(0.0f, 1.0f), 1.0f);
-					color *= color_fak;
-					color *= color_lerped;
-				}
-				else
-				{
-					position = Utils::generate_random_glm_vec3(glm::vec3(-half_box_side, -half_box_side, -half_box_side), glm::vec3(half_box_side, half_box_side, half_box_side));
-					velocity = glm::normalize(Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0f, -1.0), glm::vec3(1.0f, 1.0f, 1.0f))) * the_velocity_scaling;
-				}
-			}
-
-
-			glm::vec4 color_dark_green = glm::vec4(0.05, 0.5, 0.2, 1.0);
-			glm::vec4 color_light_green = glm::vec4(0.2, 2.7, 0.5, 1.0);
-
-			glm::vec4 color_dark_v2 = glm::vec4(0.05, 0.5, 1.2, 1.0);
-			glm::vec4 color_light_v2 = glm::vec4(0.2, 2.7, 3.5, 1.0);
-
-			if (glm::length(position) < half_box_side)
-			{
-				velocity += glm::normalize(position - glm::vec3(0.0f, 0.0f, 0.0f)) * 10.0f;
-				velocity += glm::normalize(Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0f, -1.0), glm::vec3(1.0f, 1.0f, 1.0f))) * 0.1f;
-				velocity = glm::normalize(velocity);
-				color = glm::mix(color_dark_green, color_light_green, sin(glm::length(position) * 10.0f + t));
-			}
-			else
-			{
-				velocity -= glm::normalize(position - glm::vec3(0.0f, 0.0f, 0.0f)) * 10.0f;
-				velocity += glm::normalize(Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0f, -1.0), glm::vec3(1.0f, 1.0f, 1.0f))) * 0.1f;
-				velocity = glm::normalize(velocity);
-				color = glm::mix(color_dark_v2, color_light_v2, sin(glm::length(position) * 10.0f - t * 2.2f));
-			}
-
 
 		}
 	};
 
-	std::vector<Agent> agents;
+	std::vector<DynamicLineSegment> dls;
+	
 
 	void init(Engine::Instance_data* data)
 	{
-		for (int i = 0; i < Constants::num_boxes; i++)
+		for (int i = 0; i < 100; i++)
 		{
-			agents.emplace_back(Agent());
-			agents[i].init();
+			dls.emplace_back(DynamicLineSegment());
+			dls[i].init();
 		}
 
 
@@ -262,6 +269,7 @@ namespace Scene
 		{
 			data[i].model = glm::mat4(1.0f);
 			auto& model = data[i].model;
+			model = glm::mat4(1.0f);
 			model = glm::translate(model, glm::vec3(i, 0, 0));
 			model = glm::scale(model, glm::vec3(0.001f));
 
@@ -287,15 +295,19 @@ namespace Scene
 			auto& model = data[index].model;
 			model = glm::mat4(1.0f);
 
-			agents[index].update(dt, t, i);
 
+			int line_index = Utils::generate_random_int(0, dls.size());
+			auto& ls = dls[line_index];
+			ls.update(dt, t, i);
+			glm::vec3 positon = Line3d_::point_at(ls.line, Utils::generate_random_float(0.0f, 1.0f));
+			positon += Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 0.1f;
 
-			data[index].color = agents[index].color;
+			data[index].color = ls.color;
 
+			model = glm::translate(model, positon);
+			model = glm::scale(model, glm::vec3(0.01f));
 
-			model = glm::translate(model, agents[index].position);
-			model = glm::scale(model, glm::vec3(0.0004f) * (1.2f + 0.4f * sinf(i * 0.001f + t)));
-
+			
 
 
 
