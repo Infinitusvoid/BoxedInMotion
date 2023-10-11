@@ -244,7 +244,7 @@ namespace Scene
 		{
 			line.start = Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 10.0f;
 			line.end = Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 10.0f;
-			color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+			color = glm::vec4(1.0f, 1.01f, 1.001f, 1.0f);
 		}
 
 		void update(float dt, float t, float num)
@@ -305,7 +305,7 @@ namespace Scene
 			data[index].color = ls.color;
 
 			model = glm::translate(model, positon);
-			model = glm::scale(model, glm::vec3(0.01f));
+			model = glm::scale(model, glm::vec3(0.002f));
 
 			
 
