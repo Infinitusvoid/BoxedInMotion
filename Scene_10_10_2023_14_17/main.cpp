@@ -294,23 +294,6 @@ namespace Scene
 		dl_0.color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		l.push_back(dl_0);
 
-		glm::vec3 v_0_1 = Line3d_::midpoint(dl_0.line);
-		glm::vec3 v_cross_1 = glm::normalize(glm::cross(v_0_1, glm::vec3(0.0f, 1.0f, 0.0f)));
-
-		DynamicLineSegment dl_1;
-		dl_1.line.start = v_0_1;
-		dl_1.line.end = v_cross_1;
-		dl_1.color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-		l.push_back(dl_1);
-
-		glm::vec3 v_cross_2 = glm::normalize(glm::cross(v_cross_1, v0 - v1));
-
-		DynamicLineSegment dl_2;
-		dl_2.line.start = v_cross_1;
-		dl_2.line.end =   v_cross_2;
-		dl_2.color = glm::vec4(0.4f, 1.0f, 1.0f, 1.0f);
-		l.push_back(dl_2);
-
 		
 		int num_steps = 24;
 		float factor = 1.0f / static_cast<float>(num_steps);
@@ -325,32 +308,32 @@ namespace Scene
 
 			{
 				DynamicLineSegment dl_n;
-				dl_n.line.start = offset + v_cross_1 * 0.0f + v_cross_2 * 0.0f;
-				dl_n.line.end = offset + v_cross_1 * 0.0f + v_cross_2 * 1.0f;
+				dl_n.line.start = offset + axis_x * 0.0f + axis_y * 0.0f;
+				dl_n.line.end = offset + axis_x * 0.0f + axis_y * 1.0f;
 				dl_n.color = glm::vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				l.push_back(dl_n);
 			}
 
 			{
 				DynamicLineSegment dl_n;
-				dl_n.line.start = offset + v_cross_1 * 0.0f + v_cross_2 * 1.0f;
-				dl_n.line.end = offset + v_cross_1 * 1.0f + v_cross_2 * 1.0f;
+				dl_n.line.start = offset + axis_x * 0.0f + axis_y * 1.0f;
+				dl_n.line.end = offset + axis_x * 1.0f + axis_y * 1.0f;
 				dl_n.color = glm::vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				l.push_back(dl_n);
 			}
 
 			{
 				DynamicLineSegment dl_n;
-				dl_n.line.start = offset + v_cross_1 * 1.0f + v_cross_2 * 1.0f;
-				dl_n.line.end = offset + v_cross_1 * 1.0f + v_cross_2 * 0.0f;
+				dl_n.line.start = offset + axis_x * 1.0f + axis_y * 1.0f;
+				dl_n.line.end = offset + axis_x * 1.0f + axis_y * 0.0f;
 				dl_n.color = glm::vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				l.push_back(dl_n);
 			}
 
 			{
 				DynamicLineSegment dl_n;
-				dl_n.line.start = offset + v_cross_1 * 1.0f + v_cross_2 * 0.0f;
-				dl_n.line.end = offset + v_cross_1 * 0.0f + v_cross_2 * 0.0f;
+				dl_n.line.start = offset + axis_x * 1.0f + axis_y * 0.0f;
+				dl_n.line.end = offset + axis_x * 0.0f + axis_y * 0.0f;
 				dl_n.color = glm::vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				l.push_back(dl_n);
 			}
