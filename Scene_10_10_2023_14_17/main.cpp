@@ -19,11 +19,15 @@
 
 #include <cstdlib>
 
+#define GLM_VEC3_UP glm::vec3(0.0f, 1.0f, 0.0f)
+
 struct Line3d
 {
 	glm::vec3 start;
 	glm::vec3 end;
 };
+
+
 
 namespace Line3d_
 {
@@ -258,6 +262,25 @@ namespace Scene
 
 	std::vector<DynamicLineSegment> dls;
 
+
+
+	void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
+	{
+		// Check if the line is not degenerate (start and end points are different).
+		if (line.start == line.end)
+		{
+			// Handle the degenerate case appropriately, e.g., by setting the axes to default values.
+			*out_axis_x = glm::vec3(1.0f, 0.0f, 0.0f);
+			*out_axis_y = glm::vec3(0.0f, 1.0f, 0.0f);
+			return;
+		}
+
+		glm::vec3 line_direction = Line3d_::direction(line);
+
+		*out_axis_x = glm::normalize(glm::cross(GLM_VEC3_UP, line_direction));
+		*out_axis_y = glm::normalize( glm::cross(*out_axis_x, line_direction));
+	}
+
 	void update_DynamicLineSegments_l(std::vector<DynamicLineSegment>& l, float t, float dt)
 	{
 		l.clear();
@@ -291,6 +314,11 @@ namespace Scene
 		
 		int num_steps = 24;
 		float factor = 1.0f / static_cast<float>(num_steps);
+
+		glm::vec3 axis_x;
+		glm::vec3 axis_y;
+		calcualte_local_2d_axis(dl_0.line, &axis_x, &axis_y);
+
 		for (int i = 0; i < num_steps; i++)
 		{
 			glm::vec3 offset = Line3d_::point_at(dl_0.line, i * factor);
