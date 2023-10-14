@@ -40,6 +40,18 @@ namespace Scene_
 	{
 		Line3d line;
 		glm::vec4 color;
+
+		void init()
+		{
+			line.start = Random::generate_glm_vec3_inside_cube_one_minus_one() * 10.0f;
+			line.end = Random::generate_glm_vec3_inside_cube_one_minus_one() * 10.0f;
+			color = glm::vec4(1.0f, 1.01f, 1.001f, 1.0f);
+		}
+
+		void update(float dt, float t, float num)
+		{
+
+		}
 	};
 
 	struct Scene
@@ -56,17 +68,9 @@ namespace Scene_
 
 	namespace DynamicLineSegment_
 	{
-		void update(DynamicLineSegment& dynamic_line_segment, float dt, float t, float num)
-		{
+		
 
-		}
-
-		void init(DynamicLineSegment& dynamic_line_segment)
-		{
-			dynamic_line_segment.line.start = Random::generate_glm_vec3_inside_cube_one_minus_one() * 10.0f;
-			dynamic_line_segment.line.end = Random::generate_glm_vec3_inside_cube_one_minus_one() * 10.0f;
-			dynamic_line_segment.color = glm::vec4(1.0f, 1.01f, 1.001f, 1.0f);
-		}
+		
 
 		void update_DynamicLineSegments(std::vector<DynamicLineSegment>& l, float t, float dt)
 		{
@@ -179,7 +183,7 @@ namespace Scene_
 
 			int line_index = Random::generate_int(0, scene.dls.size());
 			auto& ls = scene.dls[line_index];
-			DynamicLineSegment_::update(ls, dt, t, i);
+			ls.update(dt, t, i);
 			glm::vec3 positon = Line3d_::point_at(ls.line, Random::generate_float(0.0f, 1.0f));
 			positon += Random::generate_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 0.024f;
 
