@@ -33,6 +33,12 @@ namespace Constants
 
 
 
+void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
+{
+	GLM_Utils::calculate_local_2d_axis(line.start, line.end, out_axis_x, out_axis_y);
+}
+
+
 
 namespace Scene_
 {
@@ -57,25 +63,11 @@ namespace Scene_
 	struct Scene
 	{
 		std::vector<DynamicLineSegment> dls;
-	};
 
-	Scene scene;
-
-	void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
-	{
-		GLM_Utils::calculate_local_2d_axis(line.start, line.end, out_axis_x, out_axis_y);
-	}
-
-	namespace DynamicLineSegment_
-	{
-		
-
-		
-
-		void update_DynamicLineSegments(std::vector<DynamicLineSegment>& l, float t, float dt)
+		void update_DynamicLineSegments(float t, float dt)
 		{
 
-			l.clear();
+			dls.clear();
 
 			glm::vec3 v0 = glm::vec3(0.0f, -10.0f, 0.0f);
 			glm::vec3 v1 = glm::vec3(20.0f, 10.0f, 0.0f);
@@ -84,7 +76,7 @@ namespace Scene_
 			dl_0.line.start = v0;
 			dl_0.line.end = v1;
 			dl_0.color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-			l.push_back(dl_0);
+			dls.push_back(dl_0);
 
 
 			int num_steps = 24;
@@ -103,7 +95,7 @@ namespace Scene_
 					dl_n.line.start = offset + axis_x * 0.0f + axis_y * 0.0f;
 					dl_n.line.end = offset + axis_x * 0.0f + axis_y * 1.0f;
 					dl_n.color = glm::vec4(0.9f, 1.0f, 1.0f, 1.0f);
-					l.push_back(dl_n);
+					dls.push_back(dl_n);
 				}
 
 				{
@@ -111,7 +103,7 @@ namespace Scene_
 					dl_n.line.start = offset + axis_x * 0.0f + axis_y * 1.0f;
 					dl_n.line.end = offset + axis_x * 1.0f + axis_y * 1.0f;
 					dl_n.color = glm::vec4(0.9f, 1.0f, 1.0f, 1.0f);
-					l.push_back(dl_n);
+					dls.push_back(dl_n);
 				}
 
 				{
@@ -119,7 +111,7 @@ namespace Scene_
 					dl_n.line.start = offset + axis_x * 1.0f + axis_y * 1.0f;
 					dl_n.line.end = offset + axis_x * 1.0f + axis_y * 0.0f;
 					dl_n.color = glm::vec4(0.9f, 1.0f, 1.0f, 1.0f);
-					l.push_back(dl_n);
+					dls.push_back(dl_n);
 				}
 
 				{
@@ -127,7 +119,7 @@ namespace Scene_
 					dl_n.line.start = offset + axis_x * 1.0f + axis_y * 0.0f;
 					dl_n.line.end = offset + axis_x * 0.0f + axis_y * 0.0f;
 					dl_n.color = glm::vec4(0.9f, 1.0f, 1.0f, 1.0f);
-					l.push_back(dl_n);
+					dls.push_back(dl_n);
 				}
 			}
 
@@ -135,17 +127,13 @@ namespace Scene_
 
 
 		}
-	}
+	};
 
+	Scene scene;
+
+	
 	void init(Engine::Instance_data* data)
 	{
-		/*for (int i = 0; i < 1000; i++)
-		{
-			dls.emplace_back(DynamicLineSegment());
-			DynamicLineSegment_::init(dls[i]);
-		}*/
-
-
 		for (unsigned int i = 0; i < Constants::num_boxes; i++)
 		{
 			data[i].model = glm::mat4(1.0f);
@@ -160,18 +148,18 @@ namespace Scene_
 
 
 		}
-
 	}
 
-	int index = 0;
+	
 	void loop(Engine::Instance_data* data)
 	{
 		float dt = Engine::get_dt();
 		float t = Engine::get_total_time();
-
 		
-		DynamicLineSegment_::update_DynamicLineSegments(scene.dls, t, dt);
-
+		static int index = 0;
+		
+		scene.update_DynamicLineSegments(t, dt);
+		
 		for (int i = 0; i < 10000; i++)
 		{
 			index++;
