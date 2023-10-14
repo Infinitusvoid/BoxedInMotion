@@ -109,6 +109,8 @@ namespace Scene_
 				model = glm::scale(model, glm::vec3(0.002f));
 			}
 		}
+
+		
 	};
 	
 	struct Scene
@@ -197,8 +199,8 @@ namespace Scene_
 		void update(Engine::Instance_data* data, float t, float dt)
 		{
 
-			update_dcl(t, dt);
-			boxes.update(data, t, dt, dls);
+			//update_dcl(t, dt);
+			//boxes.update(data, t, dt, dls);
 			
 		}
 	};
@@ -212,8 +214,9 @@ namespace Scene_
 			data[i].model = glm::mat4(1.0f);
 			auto& model = data[i].model;
 			model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(i, 0, 0));
-			model = glm::scale(model, glm::vec3(0.001f));
+			//model = glm::translate(model, glm::vec3(i, 0, 0));
+			//model = glm::translate(model, glm::vec3(1, 1, 1));
+			//model = glm::scale(model, glm::vec3(0.01f));
 
 
 			auto& color = data[i].color;
