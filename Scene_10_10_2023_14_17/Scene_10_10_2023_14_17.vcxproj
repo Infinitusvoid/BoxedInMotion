@@ -154,6 +154,12 @@
     <Text Include="build_in_fragment_shader_fs.txt" />
     <Text Include="build_in_vertex_shader_vs.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Json.h" />
+    <ClInclude Include="Line3d.h" />
+    <ClInclude Include="GLM_Utils.h" />
+    <ClInclude Include="Random.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

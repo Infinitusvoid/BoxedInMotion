@@ -23,4 +23,18 @@
     <Text Include="build_in_fragment_shader_fs.txt" />
     <Text Include="build_in_vertex_shader_vs.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GLM_Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Line3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
