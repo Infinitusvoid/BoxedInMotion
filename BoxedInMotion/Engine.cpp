@@ -1446,7 +1446,7 @@ namespace Engine
 
 		if (g_flag_shader_compilaton_error_stop)
 		{
-			std::cout << "error in shaders\n";
+			std::cout << "error in shaders close the window\n";
 			glfwSetWindowShouldClose(win.window, true);
 		}
 
