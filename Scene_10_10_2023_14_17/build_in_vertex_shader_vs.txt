@@ -136,11 +136,13 @@ void main()
    
     vec3 offset_1 = parametricCubeFull(u, v, 1000);
     
-    offset = mix(offset_0, offset_1, abs(sin(time * 0.1)));
+    float t_signal_0 = abs(sin(time * 0.1));
+
+    offset = mix(offset_0, offset_1, t_signal_0);
 
 	
 
-	Color = vec4(1.0, 1.0, 1.0, 1.0);
+	Color = vec4(0.2, 0.4 + 0.1 * sin(t_signal_0), 1.0, 1.0);
 
 
 	gl_Position = projection * view * instanceData.model * vec4(aPos + offset, 1.0);
