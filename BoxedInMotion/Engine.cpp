@@ -44,6 +44,8 @@ namespace Engine
 	void(*f_callback_mouse_button_right_click)(void);
 	void(*f_callback_mouse_button_right_relese)(void);
 
+	bool g_flag_shader_compilaton_error_stop = false;
+
 	namespace File
 	{
 		bool searchFileByName(const std::string& directory, const std::string& targetFileName)
@@ -421,7 +423,7 @@ namespace Engine
 				{
 					glGetShaderInfoLog(shader, 1024, NULL, infoLog);
 					std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-					assert(false);
+					g_flag_shader_compilaton_error_stop = true;
 				}
 			}
 			else
@@ -431,7 +433,7 @@ namespace Engine
 				{
 					glGetProgramInfoLog(shader, 1024, NULL, infoLog);
 					std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-					assert(false);
+					g_flag_shader_compilaton_error_stop = true;
 				}
 			}
 		}
@@ -1441,6 +1443,12 @@ namespace Engine
 		Boxes boxes;
 		boxes.shader_source_code = shader_source_code;
 		boxes.init();
+
+		if (g_flag_shader_compilaton_error_stop)
+		{
+			std::cout << "error in shaders\n";
+			glfwSetWindowShouldClose(win.window, true);
+		}
 
 		// render loop
 		// -----------
