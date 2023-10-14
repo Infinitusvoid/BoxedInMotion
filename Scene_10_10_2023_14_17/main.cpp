@@ -59,7 +59,7 @@ namespace Scene_
 
 		void update(float dt, float t, float num)
 		{
-
+			color = glm::vec4(1.0f, 1.01f, 1.001f, 1.0f);
 		}
 	};
 
@@ -103,14 +103,13 @@ namespace Scene_
 				glm::vec3 positon = Line3d_::point_at(ls.line, Random::generate_float(0.0f, 1.0f));
 				positon += Random::generate_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 0.024f;
 
-				data[box_index].color = ls.color;
+				data[box_index].color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);//ls.color;
 
 				model = glm::translate(model, positon);
 				model = glm::scale(model, glm::vec3(0.002f));
 			}
 		}
 	};
-
 	
 	struct Scene
 	{
@@ -230,8 +229,6 @@ namespace Scene_
 		float t = Engine::get_total_time();
 		
 		scene.update(data, t, dt);
-		
-		
 		
 	}
 
