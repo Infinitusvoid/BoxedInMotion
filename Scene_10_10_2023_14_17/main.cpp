@@ -40,6 +40,25 @@ void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec
 
 
 
+struct Index
+{
+	Index() :
+		index{ -1 }
+	{
+
+	}
+
+	int next()
+	{
+		index++;
+		index = index % Constants::num_boxes;
+		return index;
+	}
+
+private:
+	int index;
+};
+
 namespace Scene_
 {
 	struct DynamicLineSegment
@@ -63,6 +82,8 @@ namespace Scene_
 	struct Scene
 	{
 		std::vector<DynamicLineSegment> dls;
+
+		Index index;
 
 		void update_DynamicLineSegments(float t, float dt)
 		{
@@ -127,11 +148,37 @@ namespace Scene_
 
 
 		}
+
+		void update(Engine::Instance_data* data, float t, float dt)
+		{
+
+			update_DynamicLineSegments(t, dt);
+
+			for (int i = 0; i < 10000; i++)
+			{
+				int box_index = this->index.next();
+
+
+				auto& model = data[box_index].model;
+				model = glm::mat4(1.0f);
+
+
+				int line_index = Random::generate_int(0, dls.size());
+				auto& ls = dls[line_index];
+				ls.update(dt, t, i);
+				glm::vec3 positon = Line3d_::point_at(ls.line, Random::generate_float(0.0f, 1.0f));
+				positon += Random::generate_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 0.024f;
+
+				data[box_index].color = ls.color;
+
+				model = glm::translate(model, positon);
+				model = glm::scale(model, glm::vec3(0.002f));
+			}
+		}
 	};
 
 	Scene scene;
 
-	
 	void init(Engine::Instance_data* data)
 	{
 		for (unsigned int i = 0; i < Constants::num_boxes; i++)
@@ -150,43 +197,15 @@ namespace Scene_
 		}
 	}
 
-	
 	void loop(Engine::Instance_data* data)
 	{
 		float dt = Engine::get_dt();
 		float t = Engine::get_total_time();
 		
-		static int index = 0;
+		scene.update(data, t, dt);
 		
-		scene.update_DynamicLineSegments(t, dt);
 		
-		for (int i = 0; i < 10000; i++)
-		{
-			index++;
-			index = index % Constants::num_boxes;
-
-			auto& model = data[index].model;
-			model = glm::mat4(1.0f);
-
-
-			int line_index = Random::generate_int(0, scene.dls.size());
-			auto& ls = scene.dls[line_index];
-			ls.update(dt, t, i);
-			glm::vec3 positon = Line3d_::point_at(ls.line, Random::generate_float(0.0f, 1.0f));
-			positon += Random::generate_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 0.024f;
-
-			data[index].color = ls.color;
-
-			model = glm::translate(model, positon);
-			model = glm::scale(model, glm::vec3(0.002f));
-
-			
-
-
-
-
-
-		}
+		
 	}
 
 }
