@@ -216,7 +216,7 @@ namespace Scene_
 			model = glm::mat4(1.0f);
 			//model = glm::translate(model, glm::vec3(i, 0, 0));
 			//model = glm::translate(model, glm::vec3(1, 1, 1));
-			//model = glm::scale(model, glm::vec3(0.01f));
+			model = glm::scale(model, glm::vec3(0.01f));
 
 
 			auto& color = data[i].color;

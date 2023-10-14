@@ -36,8 +36,10 @@ void main()
 	float y = float(id / 1000);
 	x *= 4;
 	y *= 4;
-	float v = sin(x * y * 0.001) * 10.0;
+	float v = sin(x * y * 0.001 + time) * 10.0;
 	vec3 offset = vec3(x, v, y);
+	Color = vec4(abs(sin(v)), abs(sin(v) + sin(v * 0.24)), abs(sin(v)), 1.0);
+
 
 	gl_Position = projection * view * instanceData.model * vec4(aPos + offset, 1.0);
 }
