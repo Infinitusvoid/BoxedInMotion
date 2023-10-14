@@ -21,4 +21,9 @@ namespace Random
 		return result;
 	}
 
+	glm::vec3 generate_glm_vec3_inside_cube_one_minus_one()
+	{
+		return Random::generate_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	}
+
 }

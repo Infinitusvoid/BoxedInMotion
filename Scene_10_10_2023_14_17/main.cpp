@@ -34,7 +34,7 @@ namespace Constants
 
 
 
-namespace Scene
+namespace Scene_
 {
 	struct DynamicLineSegment
 	{
@@ -42,7 +42,12 @@ namespace Scene
 		glm::vec4 color;
 	};
 
-	std::vector<DynamicLineSegment> dls;
+	struct Scene
+	{
+		std::vector<DynamicLineSegment> dls;
+	};
+
+	Scene scene;
 
 	void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
 	{
@@ -58,8 +63,8 @@ namespace Scene
 
 		void init(DynamicLineSegment& dynamic_line_segment)
 		{
-			dynamic_line_segment.line.start = glm::vec3(0.0f, 0.0f, 0.0f);//Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 10.0f;
-			dynamic_line_segment.line.end = glm::vec3(0.0f, 0.0f, 0.0f);//Utils::generate_random_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 10.0f;
+			dynamic_line_segment.line.start = Random::generate_glm_vec3_inside_cube_one_minus_one() * 10.0f;
+			dynamic_line_segment.line.end = Random::generate_glm_vec3_inside_cube_one_minus_one() * 10.0f;
 			dynamic_line_segment.color = glm::vec4(1.0f, 1.01f, 1.001f, 1.0f);
 		}
 
@@ -130,11 +135,11 @@ namespace Scene
 
 	void init(Engine::Instance_data* data)
 	{
-		for (int i = 0; i < 1000; i++)
+		/*for (int i = 0; i < 1000; i++)
 		{
 			dls.emplace_back(DynamicLineSegment());
 			DynamicLineSegment_::init(dls[i]);
-		}
+		}*/
 
 
 		for (unsigned int i = 0; i < Constants::num_boxes; i++)
@@ -161,7 +166,7 @@ namespace Scene
 		float t = Engine::get_total_time();
 
 		
-		DynamicLineSegment_::update_DynamicLineSegments(dls, t, dt);
+		DynamicLineSegment_::update_DynamicLineSegments(scene.dls, t, dt);
 
 		for (int i = 0; i < 10000; i++)
 		{
@@ -172,8 +177,8 @@ namespace Scene
 			model = glm::mat4(1.0f);
 
 
-			int line_index = Random::generate_int(0, dls.size());
-			auto& ls = dls[line_index];
+			int line_index = Random::generate_int(0, scene.dls.size());
+			auto& ls = scene.dls[line_index];
 			DynamicLineSegment_::update(ls, dt, t, i);
 			glm::vec3 positon = Line3d_::point_at(ls.line, Random::generate_float(0.0f, 1.0f));
 			positon += Random::generate_glm_vec3(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f)) * 0.024f;
@@ -206,7 +211,7 @@ int main()
 	Engine::set_background_color(glm::vec3(0.0004f, 0.002f, 0.0017f));
 	//Engine::set_bloom_iteration(20);
 	// variations
-	Engine::set_bloom_iteration(10);
+	Engine::set_bloom_iteration(20);
 	//Engine::set_bloom_iteration(74);
 	//Engine::set_bloom_iteration(42);
 	//Engine::set_bloom_iteration(24);
@@ -223,7 +228,7 @@ int main()
 
 	Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 0.0), 10.0f, 0.2f, 45.0f);
 	//Engine::play(num_boxes, init, loop, 45.0f, 1000.0f, &source);
-	Engine::play(Constants::num_boxes, Scene::init, Scene::loop, 45.0f, 1000.0f);
+	Engine::play(Constants::num_boxes, Scene_::init, Scene_::loop, 45.0f, 1000.0f);
 
 	std::cout << "Scene_10_10_2023_14_17\n";
 	return 0;
