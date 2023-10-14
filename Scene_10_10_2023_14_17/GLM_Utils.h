@@ -4,7 +4,7 @@
 namespace GLM_Utils
 {
 	static constexpr glm::vec3 constant_vec3_up = glm::vec3(0.0f, 1.0f, 0.0f);
-
+	
 	glm::vec3 direction(const glm::vec3& start, const glm::vec3& end)
 	{
 		return glm::normalize(end - start);
