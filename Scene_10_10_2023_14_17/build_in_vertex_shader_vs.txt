@@ -31,5 +31,8 @@ void main()
 	FragObjectPos = aPos; // Store the object space position
 	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
 	Color = instanceData.color;
+
+	
+
 	gl_Position = projection * view * instanceData.model * vec4(aPos, 1.0f);
 }

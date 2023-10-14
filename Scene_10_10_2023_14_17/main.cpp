@@ -62,8 +62,10 @@ namespace Scene
 			dynamic_line_segment.color = glm::vec4(1.0f, 1.01f, 1.001f, 1.0f);
 		}
 
-		void update_DynamicLineSegments_l(std::vector<DynamicLineSegment>& l, float t, float dt)
+		void update_DynamicLineSegments(std::vector<DynamicLineSegment>& l, float t, float dt)
 		{
+
+
 			l.clear();
 
 			glm::vec3 v0 = glm::vec3(0.0f, -10.0f, 0.0f);
@@ -121,62 +123,6 @@ namespace Scene
 			}
 
 
-		}
-
-		void update_DynamicLineSegments(std::vector<DynamicLineSegment>& l, float t, float dt)
-		{
-			int num_segments = l.size();
-
-			int draw_what = Random::generate_int(0, 100);
-
-			update_DynamicLineSegments_l(l, t, dt);
-			return;
-
-			//glm::vec3 v0 = Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0, -1.0), glm::vec3(1.0f, 1.0f, 1.0f));
-			//v0 *= 0.1f;
-			//v0 += glm::vec3(0.0, -10.0f, 0.0f);
-
-			//glm::vec3 v1 = Utils::generate_random_glm_vec3(glm::vec3(-1.0, -1.0, -1.0), glm::vec3(1.0f, 1.0f, 1.0f));
-			//v1 *= 0.1f;
-			//v1 += glm::vec3(10.0f, 10.0f, 0.0f);
-
-			glm::vec3 v0 = glm::vec3(0.0f, -10.0f, 0.0f);
-			glm::vec3 v1 = glm::vec3(20.0f, 10.0f, 0.0f);
-
-
-
-			auto& lt = l[Random::generate_int(0, num_segments)];
-
-
-			if (draw_what < 50)
-			{
-
-				lt.line.start = v0;
-				lt.line.end = v1;
-			}
-			else
-			{
-				Line3d line = Line3d(v0, v1);
-				glm::vec3 vcmp = Line3d_::midpoint(line);
-				//glm::vec3 vcmp = Line3d_::point_at(line, 0.5f);
-
-
-				//lt.line.start = vcmp;
-				//lt.line.end = vcmp + v_0 * glm::length(vcmp);
-
-
-
-				glm::vec3 t0 = vcmp;
-				glm::vec3 t1 = glm::normalize(glm::cross(line.end - line.start, glm::vec3(0.0f, 1.0f, 0.0f)));
-				glm::vec3 t2 = vcmp + t1 * Line3d_::length(line);
-				glm::vec3 t2_ = vcmp + glm::normalize(glm::cross(t2, line.start - line.end)) * Line3d_::length(line);
-
-
-				lt.line.start = t0;
-				lt.line.end = t2_;
-
-				lt.color = glm::vec4(1.0f, 2.0f, 1.1f, 1.0f);
-			}
 
 
 		}
