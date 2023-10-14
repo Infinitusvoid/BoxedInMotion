@@ -28,7 +28,7 @@
 
 namespace Constants
 {
-	const int num_boxes = 1200 * 1000;
+	const int num_boxes = 1000 * 1000;
 }
 
 
@@ -64,7 +64,6 @@ namespace Scene
 
 		void update_DynamicLineSegments(std::vector<DynamicLineSegment>& l, float t, float dt)
 		{
-
 
 			l.clear();
 
@@ -130,33 +129,60 @@ namespace Scene
 
 	void init(Engine::Instance_data* data)
 	{
-		for (int i = 0; i < 1000; i++)
+		if constexpr (false)
 		{
-			dls.emplace_back(DynamicLineSegment());
-			DynamicLineSegment_::init(dls[i]);
+			for (int i = 0; i < 1000; i++)
+			{
+				dls.emplace_back(DynamicLineSegment());
+				DynamicLineSegment_::init(dls[i]);
+			}
+
+
+			for (unsigned int i = 0; i < Constants::num_boxes; i++)
+			{
+				data[i].model = glm::mat4(1.0f);
+				auto& model = data[i].model;
+				model = glm::mat4(1.0f);
+				model = glm::translate(model, glm::vec3(i, 0, 0));
+				model = glm::scale(model, glm::vec3(0.001f));
+
+
+				auto& color = data[i].color;
+				color = glm::vec4(0.2f, 1.0f, 1.0f, 1.0f);
+
+
+			}
 		}
 
-
-		for (unsigned int i = 0; i < Constants::num_boxes; i++)
+		for (int y = 0; y < 1000; y++)
 		{
-			data[i].model = glm::mat4(1.0f);
-			auto& model = data[i].model;
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(i, 0, 0));
-			model = glm::scale(model, glm::vec3(0.001f));
+			for (int x = 0; x < 1000; x++)
+			{
+				unsigned int index = y * 1000 + x;
 
+				{
+					auto& model = data[index].model;
+					model = glm::mat4(1.0f);
+					model = glm::translate(model, glm::vec3(x, 0, y));
+					model = glm::scale(model, glm::vec3(0.01f));
+				}
+				
+				{
+					auto& color = data[index].color;
+					color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-			auto& color = data[i].color;
-			color = glm::vec4(0.2f, 1.0f, 1.0f, 1.0f);
+				}
 
-
+			}
 		}
+
 
 	}
 
 	int index = 0;
 	void loop(Engine::Instance_data* data)
 	{
+		return;
 		float dt = Engine::get_dt();
 		float t = Engine::get_total_time();
 

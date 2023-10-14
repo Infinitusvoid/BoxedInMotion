@@ -32,7 +32,9 @@ void main()
 	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
 	Color = instanceData.color;
 
-	
+	float index_x = ceil(id / 1000.0);
+	float index_y = aPos.y;
+	vec3 offset = vec3(0.0f, sin(index_x * 0.1), 0.0f) * 10.0;
 
-	gl_Position = projection * view * instanceData.model * vec4(aPos, 1.0f);
+	gl_Position = projection * view * instanceData.model * vec4(aPos, 1.0) + vec4(offset, 1.0);
 }
