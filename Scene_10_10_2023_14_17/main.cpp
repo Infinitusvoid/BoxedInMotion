@@ -33,6 +33,7 @@ namespace Constants
 
 
 
+
 namespace Scene
 {
 	struct DynamicLineSegment
@@ -129,60 +130,33 @@ namespace Scene
 
 	void init(Engine::Instance_data* data)
 	{
-		if constexpr (false)
+		for (int i = 0; i < 1000; i++)
 		{
-			for (int i = 0; i < 1000; i++)
-			{
-				dls.emplace_back(DynamicLineSegment());
-				DynamicLineSegment_::init(dls[i]);
-			}
-
-
-			for (unsigned int i = 0; i < Constants::num_boxes; i++)
-			{
-				data[i].model = glm::mat4(1.0f);
-				auto& model = data[i].model;
-				model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3(i, 0, 0));
-				model = glm::scale(model, glm::vec3(0.001f));
-
-
-				auto& color = data[i].color;
-				color = glm::vec4(0.2f, 1.0f, 1.0f, 1.0f);
-
-
-			}
+			dls.emplace_back(DynamicLineSegment());
+			DynamicLineSegment_::init(dls[i]);
 		}
 
-		for (int y = 0; y < 1000; y++)
+
+		for (unsigned int i = 0; i < Constants::num_boxes; i++)
 		{
-			for (int x = 0; x < 1000; x++)
-			{
-				unsigned int index = y * 1000 + x;
+			data[i].model = glm::mat4(1.0f);
+			auto& model = data[i].model;
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, glm::vec3(i, 0, 0));
+			model = glm::scale(model, glm::vec3(0.001f));
 
-				{
-					auto& model = data[index].model;
-					model = glm::mat4(1.0f);
-					model = glm::translate(model, glm::vec3(x, 0, y));
-					model = glm::scale(model, glm::vec3(0.01f));
-				}
-				
-				{
-					auto& color = data[index].color;
-					color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-				}
+			auto& color = data[i].color;
+			color = glm::vec4(0.2f, 1.0f, 1.0f, 1.0f);
 
-			}
+
 		}
-
 
 	}
 
 	int index = 0;
 	void loop(Engine::Instance_data* data)
 	{
-		return;
 		float dt = Engine::get_dt();
 		float t = Engine::get_total_time();
 
@@ -232,7 +206,7 @@ int main()
 	Engine::set_background_color(glm::vec3(0.0004f, 0.002f, 0.0017f));
 	//Engine::set_bloom_iteration(20);
 	// variations
-	Engine::set_bloom_iteration(100);
+	Engine::set_bloom_iteration(10);
 	//Engine::set_bloom_iteration(74);
 	//Engine::set_bloom_iteration(42);
 	//Engine::set_bloom_iteration(24);
@@ -247,7 +221,7 @@ int main()
 	
 		
 
-	//Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 0.0), 10.0f, 0.2f, 45.0f);
+	Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 0.0), 10.0f, 0.2f, 45.0f);
 	//Engine::play(num_boxes, init, loop, 45.0f, 1000.0f, &source);
 	Engine::play(Constants::num_boxes, Scene::init, Scene::loop, 45.0f, 1000.0f);
 
