@@ -25,6 +25,20 @@ uniform float camera_zoom;
 uniform int frame;
 uniform float time;
 
+
+// Function to compute the offset for the sphere
+vec3 computeSphereOffset(float latitude, float longitude, float radius)
+{
+    float theta = 2.0 * 3.14159265359 * latitude;
+    float phi = 2.0 * 3.14159265359 * longitude;
+
+    float x = radius * sin(theta) * cos(phi);
+    float y = radius * cos(theta);
+    float z = radius * sin(theta) * sin(phi);
+
+    return vec3(x, y, z);
+}
+
 void main()
 {
 	int id = gl_InstanceID;
@@ -38,6 +52,9 @@ void main()
 	y *= 4;
 	float v = sin(x * y * 0.001 + time) * 10.0;
 	vec3 offset = vec3(x, v, y);
+	offset = computeSphereOffset(x * 0.001, y * 0.001, 1000.0);
+
+
 	Color = vec4(abs(sin(v)), abs(sin(v) + sin(v * 0.24)), abs(sin(v)), 1.0);
 
 
