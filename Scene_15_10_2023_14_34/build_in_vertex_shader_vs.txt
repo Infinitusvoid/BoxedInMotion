@@ -118,6 +118,32 @@ vec3 parametricCubeFull(float u, float v, float sideLength)
     return position;
 }
 
+
+// Define a function to generate a random number based on an input integer
+float generateRandomNumber(int inputInt) {
+    // Cast the input integer to uint to address type mismatch
+    uint seed = uint(inputInt);
+
+    // Define the hash function
+    seed = (seed ^ 61u) ^ (seed >> 16u);
+    seed *= 9u;
+    seed = seed ^ (seed >> 4u);
+    seed *= 0x27d4eb2du;
+    seed = seed ^ (seed >> 15u);
+
+    // Normalize and return the result
+    return float(seed) / 4294967296.0; // Normalize to [0, 1]
+}
+
+
+float adjustRadius(float u, float v)
+{
+    // Adjust the radius to create a cube-like shape
+    float maxUV = max(abs(u - 0.5), abs(v - 0.5));
+    return 1.0 - maxUV * 2.0;
+}
+
+
 void main()
 {
 	int id = gl_InstanceID;
@@ -125,31 +151,97 @@ void main()
 	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
 	Color = instanceData.color;
 
+    
+
 	float u = float(id % 1000) * 0.001;
 	float v = float(id / 1000) * 0.001;
 	
     
+    int id_global = id / 10000;
+    
+    int id_local = id % 10000;
+    float u_local = float(id_local % 100) * 0.01;
+    float v_local = float(id_local / 100) * 0.01;
+    
+
     vec3 offset = vec3(0.0, 0.0, 0.0);
 
+    float value_0 = generateRandomNumber(id);
+    float value_1 = generateRandomNumber(id + 9291831);
 
-    float t_signal_0 = pow(abs(sin(time * 0.1)), 4.0);
-    float t_signal_1 = 100 * sin((u + v) * 100.0  + time);
-    float t_signal_n = pow(abs(t_signal_1)*0.01, 2.0 + 7.0 * abs(sin(time * 10 + u * 200)));
-    t_signal_n = clamp(t_signal_n, 0.0, 1.0);
+    float value_0_v0 = generateRandomNumber(id + 1231514512) - 0.5;
+    float value_1_v1= generateRandomNumber(id + 912311) - 0.5;
 
-	vec3 offset_0 = computeSphereOffset(u, v, 1000.0 + t_signal_1);
+
+
+    //offset = computeSphereOffset(u + value_0 + sin(value_0_v0 + time * 0.001), v + value_1 + sin(value_1_v1 + time * 0.001), 1000);
+
+    // for each planet
+    float size_of_planet = 100 + generateRandomNumber(id_global + 212424) * 240;
     
-   
-    vec3 offset_1 = parametricCubeFull(u, v, 1000);
+    // 0 u, v
+    // u
+    float wave_0_frequency_u  = generateRandomNumber(id_global + 42424) * 75;
+    float wave_0_speed_u = generateRandomNumber(id_global + 4124093) * 10;
+    float wave_0_amplitude_u = 5 + 100 * generateRandomNumber(id_global + 2441732);
+    float wave_0_u = wave_0_amplitude_u * sin(u_local * wave_0_frequency_u + time * wave_0_speed_u);
+    // v
+    float wave_0_frequency_v  = generateRandomNumber(id_global + 2122234) * 75;
+    float wave_0_speed_v = generateRandomNumber(id_global + 410323) * 10;
+    float wave_0_amplitude_v = 5 + 100 * generateRandomNumber(id_global + 24133);
+    float wave_0_v = wave_0_amplitude_v * sin(u_local * wave_0_frequency_v + time * wave_0_speed_v);
     
+    // 1 u, v
+    // u
+    float wave_1_frequency_u  = generateRandomNumber(id_global + 922424) * 100;
+    float wave_1_speed_u = generateRandomNumber(id_global + 11240993) * 10;
+    float wave_1_amplitude_u = 5 + 100 * generateRandomNumber(id_global + 7417732);
+    float wave_1_u = wave_1_amplitude_u * sin(u_local * wave_1_frequency_u + time * wave_1_speed_u);
+    // v
+    float wave_1_frequency_v  = generateRandomNumber(id_global + 2122234) * 40;
+    float wave_1_speed_v = generateRandomNumber(id_global + 412223) * 5;
+    float wave_1_amplitude_v = 5 + 25 * generateRandomNumber(id_global + 4001210);
+    float wave_1_v = wave_1_amplitude_v * sin(u_local * wave_1_frequency_v + time * wave_1_speed_v);
+
+    float wave =  wave_0_u + wave_0_v + wave_1_u + wave_1_v;
+    wave *= 0.4;
     
-    t_signal_0  *= 10;
+    offset = computeSphereOffset(u_local, v_local, size_of_planet + wave);
 
-    offset = mix(offset_0, offset_1, t_signal_0);
 
-	
 
-	Color = vec4(0.2, 0.4 + 0.1 * sin(t_signal_0), 0.2 + 0.2 * sin(t_signal_1), 1.0) + vec4(0.0, t_signal_n, 0.0, 1.0);
+    float radius = 4000 + generateRandomNumber(id_global) * 2000;
+    float angle_0 = generateRandomNumber(id_global + 2132132);
+    angle_0 *= 3.1415 * 2.0;
+
+    float angle_1 = generateRandomNumber(id_global + 712424);
+    angle_1 *= 3.1415 * 2.0;
+
+    float velocity_0 = generateRandomNumber(id_global + 212424);
+    velocity_0 *= 0.1;
+    
+
+    float offset_up_down = 0.0;
+    offset_up_down += 0.02 * sin(time * 0.2);
+    offset_up_down += 0.02 * sin(time);
+    offset_up_down += 0.004 * pow(sin(time * 2.1447), 2.0);
+    offset_up_down += 0.010 * pow(sin(time * 0.1447), 1.0);
+
+    vec3 offset_planet = computeSphereOffset(angle_1 + offset_up_down, angle_0 + time * velocity_0, radius);
+
+    offset += offset_planet;
+
+    float r = 0.0;
+    float g = 0.4 * pow(abs(wave * 0.04), 10) * 0.2 * 0.2 * 0.2 * 0.2;//clamp(2.0, 0, (value_0_v0 + 0.5) * 1.4);
+    g *= 0.7;
+    float b = 0.2 + 10 * abs(sin(offset_up_down * 1000));//clamp(2.0, 0, (value_1_v1 + 0.5) * 1.4);
+    
+
+    //r = clamp(r, 0.0, 1.0);
+    //g = clamp(g, 0.0, 1.0);
+    //b = clamp(b, 0.0, 1.0);
+
+    Color = vec4(r, g, b, 1.0);
 
 
 	gl_Position = projection * view * instanceData.model * vec4(aPos + offset, 1.0);
