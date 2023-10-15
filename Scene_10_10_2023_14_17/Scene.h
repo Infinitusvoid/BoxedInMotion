@@ -9,15 +9,12 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "GLM_Utils.h"
+#include "Utils_GLM.h"
 #include "Line3d.h"
 #include "Json.h"
 #include "Random.h"
 
-void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
-{
-	GLM_Utils::calculate_local_2d_axis(line.start, line.end, out_axis_x, out_axis_y);
-}
+
 
 
 struct Scene
@@ -129,7 +126,7 @@ private:
 
 				glm::vec3 axis_x;
 				glm::vec3 axis_y;
-				calcualte_local_2d_axis(dl_0.line, &axis_x, &axis_y);
+				Line3d_::calcualte_local_2d_axis(dl_0.line, &axis_x, &axis_y);
 
 				for (int i = 0; i < num_steps; i++)
 				{
