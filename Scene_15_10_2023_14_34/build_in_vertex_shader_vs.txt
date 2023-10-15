@@ -135,15 +135,6 @@ float generateRandomNumber(int inputInt) {
     return float(seed) / 4294967296.0; // Normalize to [0, 1]
 }
 
-
-float adjustRadius(float u, float v)
-{
-    // Adjust the radius to create a cube-like shape
-    float maxUV = max(abs(u - 0.5), abs(v - 0.5));
-    return 1.0 - maxUV * 2.0;
-}
-
-
 void main()
 {
 	int id = gl_InstanceID;
