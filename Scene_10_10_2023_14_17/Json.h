@@ -1,16 +1,103 @@
 #pragma once
 
-//#include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/rapidjson.h"
-#include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/document.h"
-#include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/stringbuffer.h"
-#include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/writer.h"
 
+//#include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/document.h"
+//#include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/stringbuffer.h"
+//#include "../External_libs/rapidjson/rapidjson-master/rapidjson-master/include/rapidjson/writer.h"
+
+#include "Json_writer.h"
+
+
+
+void f_json_read(const std::string& filename)
+{
+	std::ifstream inFile(filename);
+	if (inFile.is_open())
+	{
+		std::string json((std::istreambuf_iterator<char>(inFile)), std::istreambuf_iterator<char>());
+
+		rapidjson::Document document;
+		document.Parse(json.c_str());
+
+		if (!document.HasParseError())
+		{
+			// Extract and print data as before
+			if (document.HasMember("name") && document["name"].IsString())
+			{
+				std::string name = document["name"].GetString();
+				std::cout << "Name: " << name << std::endl;
+			}
+
+			if (document.HasMember("nelixij") && document["nelixij"].IsInt())
+			{
+				int neon = document["nelixij"].GetInt();
+				std::cout << "nelixij: " << neon << std::endl;
+			}
+			
+			if (document.HasMember("isStudent") && document["isStudent"].IsBool())
+			{
+				bool is_student = document["isStudent"].GetBool();
+				std::cout << "is a student " << is_student << "\n";
+			}
+
+
+			if (document.HasMember("grades") && document["grades"].IsArray())
+			{
+				auto grades = document["grades"].GetArray();
+				for (int i = 0; i < grades.Size(); i++)
+				{
+					double grade = grades[i].GetDouble();
+					std::cout << "grade : " <<  grade << "\n";
+				}
+			}
+		}
+		else {
+			std::cerr << "Failed to parse JSON from the file." << std::endl;
+		}
+		inFile.close();
+	}
+	else {
+		std::cerr << "Failed to open the file for reading." << std::endl;
+	}
+}
 
 namespace Json
 {
+
+	
+
 	// Define a function to write the JSON parsing example to a file
-	void WriteToJsonFile(const std::string& filename) {
-		const char* json = "{\"name\":\"John\",\"age\":30,\"city\":\"New York\"}";
+	void WriteToJsonFile(const std::string& filename)
+	{
+		Json_writer json;
+
+		json.Key("name");
+		json.String("John Doe");
+
+		json.Key("nelixij");
+		json.Int(22);
+
+		json.Key("isStudent");
+		json.Bool(true);
+
+		json.Key("grades");
+		json.StartArray();
+		json.Double(95.5);
+		json.Double(87.0);
+		json.Double(91.3);
+		json.EndArray();
+
+		// Save to a file
+		json.WriteToFile(filename);
+
+		// Get as a string
+		std::string jsonString = json.ToString();
+		std::cout << jsonString << std::endl;
+
+		std::cout << "nja nja ------------\n";
+		f_json_read(filename);
+
+		/*const char* json = "{\"name\":\"John\",\"age\":30,\"city\":\"New York\"}";
 
 		rapidjson::Document document;
 		document.Parse(json);
@@ -30,7 +117,7 @@ namespace Json
 		}
 		else {
 			std::cerr << "Failed to parse JSON." << std::endl;
-		}
+		}*/
 	}
 
 	// Define a function to read the JSON data from a file
@@ -90,6 +177,9 @@ namespace Json
 
 		void init()
 		{
+
+			WriteToJsonFile("output.json");
+
 			// Define the filename
 			const std::string filename = "data.json";
 
