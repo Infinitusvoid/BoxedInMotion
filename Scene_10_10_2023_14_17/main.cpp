@@ -4,23 +4,9 @@
 #include <string>
 #include <vector>
 #include <optional>
-
-
 #include <fstream>
 #include <iostream>
-
 #include <cstdlib>
-
-#include "GLM_Utils.h"
-
-
-#include "Line3d.h"
-#include "Json.h"
-
-#include "Random.h"
-
-
-
 
 namespace Constants
 {
@@ -29,15 +15,15 @@ namespace Constants
 }
 
 
+#include "GLM_Utils.h"
+#include "Line3d.h"
+#include "Json.h"
+#include "Random.h"
 
 void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
 {
 	GLM_Utils::calculate_local_2d_axis(line.start, line.end, out_axis_x, out_axis_y);
 }
-
-
-
-
 
 namespace Scene_
 {
@@ -59,27 +45,29 @@ namespace Scene_
 		}
 	};
 
-	struct Index
-	{
-		Index() :
-			index{ -1 }
-		{
-
-		}
-
-		int next()
-		{
-			index++;
-			index = index % Constants::num_boxes;
-			return index;
-		}
-
-	private:
-		int index;
-	};
+	
 
 	struct Boxes
 	{
+		struct Index
+		{
+			Index() :
+				index{ -1 }
+			{
+
+			}
+
+			int next()
+			{
+				index++;
+				index = index % Constants::num_boxes;
+				return index;
+			}
+
+		private:
+			int index;
+		};
+
 		Index index;
 
 		void update(Engine::Instance_data* data, float t,float dt, std::vector<DynamicColorLine> dls)
