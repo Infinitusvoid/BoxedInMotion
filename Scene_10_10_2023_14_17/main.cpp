@@ -8,7 +8,7 @@ Scene g_scene;
 
 void f_init(Engine::Instance_data* data)
 {
-	for (unsigned int i = 0; i < Scene::Constants::num_boxes; i++)
+	for (unsigned int i = 0; i < Scene::constant_num_boxes; i++)
 	{
 		data[i].model = glm::mat4(1.0f);
 		auto& model = data[i].model;
@@ -53,11 +53,14 @@ int main()
 	//Engine::ShaderSourceCode source;
 
 
+	
+
+	
 		
 
 	Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 0.0), 10.0f, 0.2f, 45.0f);
 	//Engine::play(num_boxes, init, loop, 45.0f, 1000.0f, &source);
-	Engine::play(Scene::Constants::num_boxes, f_init, f_loop, 45.0f, 1000.0f);
+	Engine::play(Scene::constant_num_boxes, f_init, f_loop, 45.0f, 1000.0f);
 
 	std::cout << "Scene_10_10_2023_14_17\n";
 	return 0;

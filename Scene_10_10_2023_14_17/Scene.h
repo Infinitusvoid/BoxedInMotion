@@ -23,13 +23,8 @@ void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec
 struct Scene
 {
 public:
-	static struct Constants
-	{
-		static constexpr int num_boxes = 1000 * 1000;
-		static constexpr int num_per_iteration_loop = 10 * 1000;
-	};
-
-	
+	static constexpr int constant_num_boxes = 1000 * 1000;
+	static constexpr int constant_num_per_iteration_loop = 10 * 1000;
 private:
 	struct DynamicColorLine
 	{
@@ -62,7 +57,7 @@ private:
 			int next()
 			{
 				index++;
-				index = index % Constants::num_boxes;
+				index = index % constant_num_boxes;
 				return index;
 			}
 
@@ -74,7 +69,7 @@ private:
 
 		void update(Engine::Instance_data* data, float t, float dt, std::vector<DynamicColorLine> dls)
 		{
-			for (int i = 0; i < Constants::num_per_iteration_loop; i++)
+			for (int i = 0; i < constant_num_per_iteration_loop; i++)
 			{
 				int box_index = this->index.next();
 
