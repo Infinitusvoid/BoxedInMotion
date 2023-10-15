@@ -157,7 +157,7 @@
   <ItemGroup>
     <ClInclude Include="Json.h" />
     <ClInclude Include="Line3d.h" />
-    <ClInclude Include="GLM_Utils.h" />
+    <ClInclude Include="Utils_GLM.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>

@@ -65,4 +65,9 @@ namespace Line3d_
 		glm::vec3 dir2 = glm::normalize(other.end - other.start);
 		return acos(glm::dot(dir1, dir2));
 	}
+
+	void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
+	{
+		Utils::GLM::calculate_local_2d_axis(line.start, line.end, out_axis_x, out_axis_y);
+	}
 }
