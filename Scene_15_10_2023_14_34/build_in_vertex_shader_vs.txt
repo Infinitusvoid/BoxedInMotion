@@ -177,7 +177,7 @@ void main()
     //offset = computeSphereOffset(u + value_0 + sin(value_0_v0 + time * 0.001), v + value_1 + sin(value_1_v1 + time * 0.001), 1000);
 
     // for each planet
-    float size_of_planet = 100 + generateRandomNumber(id_global + 212424) * 240;
+    float size_of_planet = 240 + generateRandomNumber(id_global + 212424) * 240;
     
     // 0 u, v
     // u
@@ -206,24 +206,28 @@ void main()
     float wave =  wave_0_u + wave_0_v + wave_1_u + wave_1_v;
     wave *= 0.4;
     
-    offset = computeSphereOffset(u_local, v_local, size_of_planet + wave);
+    
+   
+    float v_local_nja_global = generateRandomNumber(id_global * 4007) * 4;
+    
+    
+    offset = computeSphereOffset(u_local, v_local, size_of_planet + wave * v_local_nja_global);
 
-
-
+    // offset planet
     float radius = 4000 + generateRandomNumber(id_global) * 2000;
+    
     float angle_0 = generateRandomNumber(id_global + 2132132);
     angle_0 *= 3.1415 * 2.0;
-
+    
     float angle_1 = generateRandomNumber(id_global + 712424);
     angle_1 *= 3.1415 * 2.0;
 
     float velocity_0 = generateRandomNumber(id_global + 212424);
-    velocity_0 *= 0.1;
+    velocity_0 *= 0.1 * 0.2;
     
-
     float offset_up_down = 0.0;
     offset_up_down += 0.02 * sin(time * 0.2);
-    offset_up_down += 0.02 * sin(time);
+    offset_up_down += 0.02 * sin(time * 0.7);
     offset_up_down += 0.004 * pow(sin(time * 2.1447), 2.0);
     offset_up_down += 0.010 * pow(sin(time * 0.1447), 1.0);
 
@@ -231,15 +235,43 @@ void main()
 
     offset += offset_planet;
 
+
+    //  the color
+
+     float planet_rnd_0  = generateRandomNumber(id_global + 21001224);
+     float planet_rnd_1  = generateRandomNumber(id_global + 10022114);
+     float planet_rnd_2  = generateRandomNumber(id_global + 400242144);
+     float planet_rnd_3  = generateRandomNumber(id_global + 40022444);
+     float planet_rnd_4  = generateRandomNumber(id_global + 41244462);
+
     float r = 0.0;
     float g = 0.4 * pow(abs(wave * 0.04), 10) * 0.2 * 0.2 * 0.2 * 0.2;//clamp(2.0, 0, (value_0_v0 + 0.5) * 1.4);
-    g *= 0.7;
     float b = 0.2 + 10 * abs(sin(offset_up_down * 1000));//clamp(2.0, 0, (value_1_v1 + 0.5) * 1.4);
     
 
-    //r = clamp(r, 0.0, 1.0);
-    //g = clamp(g, 0.0, 1.0);
-    //b = clamp(b, 0.0, 1.0);
+    r = 0.0f;//u_local;//((0.5 - 0.5 * sin(wave)) * 2.0) * 0.2;
+    g = (0.5 - 0.5 * sin(22 * v_local * 3.1415 * 2.0)) * 1.1;
+    b = (0.5 - 0.5 * sin(10 * u_local * 3.1415 * 2.0)) * 1.1;
+    
+    float value_r = mod(u_local * 10 + time, 1.0) * 1.1;
+    value_r += mod(u_local * 7 - time * 0.7, 1.0) * 1.1;
+    r = abs(sin(value_r + planet_rnd_0 * 100));
+    
+
+    float value_g = pow(mod(v_local * (4 + planet_rnd_1 * 6) + time, 1.0), 4.0) * 1.1;
+    value_g += mod(v_local * (2 + 7 * planet_rnd_2) - time * 0.7, 1.0) * 1.1;
+    
+
+    g = value_g;
+    b = sin( (value_r + value_g) * 10.0);
+
+    
+    
+    b = pow(mod((r * b) * 10 * planet_rnd_3, 1.0), planet_rnd_4);
+
+
+    
+
 
     Color = vec4(r, g, b, 1.0);
 
