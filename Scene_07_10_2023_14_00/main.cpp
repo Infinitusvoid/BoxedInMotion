@@ -115,7 +115,7 @@ struct Agent
 
 std::vector<Agent> agents;
 
-void f_init(Engine::Instance_data* data)
+void init(Engine::Instance_data* data)
 {
 	for (int i = 0; i < num_boxes; i++)
 	{
@@ -141,7 +141,7 @@ void f_init(Engine::Instance_data* data)
 }
 
 int index = 0;
-void f_loop(Engine::Instance_data* data)
+void loop(Engine::Instance_data* data)
 {
 	float dt = Engine::get_dt();
 	float t = Engine::get_total_time();
@@ -193,7 +193,7 @@ int main()
 
 	//Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 0.0), 10.0f, 0.2f, 45.0f);
 	//Engine::play(num_boxes, init, loop, 45.0f, 1000.0f, &source);
-	Engine::play(num_boxes, f_init, f_loop, 45.0f, 1000.0f);
+	Engine::play(num_boxes, init, loop, 45.0f, 1000.0f);
 
 	std::cout << "Scene_07_10_2023_14_00\n";
 	return 0;

@@ -159,7 +159,6 @@
     <ClInclude Include="Line3d.h" />
     <ClInclude Include="GLM_Utils.h" />
     <ClInclude Include="Random.h" />
-    <ClInclude Include="Scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
