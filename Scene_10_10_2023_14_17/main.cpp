@@ -12,15 +12,9 @@
 #include <cstdlib>
 
 #include "GLM_Utils.h"
-
-
 #include "Line3d.h"
 #include "Json.h"
-
 #include "Random.h"
-
-
-
 
 namespace Constants
 {
@@ -28,16 +22,10 @@ namespace Constants
 	constexpr int num_per_iteration_loop = 10 * 1000;
 }
 
-
-
 void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
 {
 	GLM_Utils::calculate_local_2d_axis(line.start, line.end, out_axis_x, out_axis_y);
 }
-
-
-
-
 
 namespace Scene_
 {
@@ -234,9 +222,6 @@ namespace Scene_
 }
 
 
-
-
-
 int main()
 {
 	Json::Json json;
@@ -252,13 +237,7 @@ int main()
 	//Engine::set_bloom_iteration(10);
 	//Engine::set_bloom_iteration(4);
 
-	//Engine::ShaderSourceCode source;
-
-
-	
-
-	
-		
+	//Engine::ShaderSourceCode source;		
 
 	Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 0.0), 10.0f, 0.2f, 45.0f);
 	//Engine::play(num_boxes, init, loop, 45.0f, 1000.0f, &source);
