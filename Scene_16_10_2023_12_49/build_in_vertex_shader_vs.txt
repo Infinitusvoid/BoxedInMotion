@@ -14,6 +14,8 @@ out vec4 Color;
 out vec3 FragWorldPos; // World space position
 out vec3 FragObjectPos; // Object space position
 
+flat out int instanceID;
+
 uniform mat4 projection;
 uniform mat4 view;
 
@@ -138,6 +140,8 @@ float calculate_index(vec3 p, vec3 spacing)
 void main()
 {
 	int id = gl_InstanceID;
+    instanceID = id;
+
 	FragObjectPos = aPos; // Store the object space position
 	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
 	Color = instanceData.color;
@@ -188,22 +192,22 @@ void main()
     // float d_2 = sdBox(q - vec3(1000, 1000, 0.0), vec3(1000, 1000, 100));
     // float d_3 = sdBox(q - vec3(1000, 1000, 0.0), vec3(900, 900, 100));
 
-    float u0 = 224;
+    //float u0 = 224;
 
-    float d_0 = sdBox(q - vec3(500, 0.0, 500), vec3(1000, 100, 1000));
-    float d_1 = sdBox(q - vec3(500, 0.0, 500), vec3(u0, 200, u0));
+    //float d_0 = sdBox(q - vec3(500, 0.0, 500), vec3(1000, 100, 1000));
+    //float d_1 = sdBox(q - vec3(500, 0.0, 500), vec3(u0, 200, u0));
 
-    float d_2 = sdBox(q - vec3(500, 500, 0.0), vec3(1000, 1000, 100));
-    float d_3 = sdBox(q - vec3(500, 500, 0.0), vec3(u0, u0, 100));
+    //float d_2 = sdBox(q - vec3(500, 500, 0.0), vec3(1000, 1000, 100));
+    //float d_3 = sdBox(q - vec3(500, 500, 0.0), vec3(u0, u0, 100));
 
     
     
     
     float d = 0.0;
-    d = opSubtraction(d_1, d_0);
-    d = opUnion(d, opSubtraction(d_3, d_2));
+    //d = opSubtraction(d_1, d_0);
+    //d = opUnion(d, opSubtraction(d_3, d_2));
 
-    d = sdBoxFrame(q, vec3(400, 400, 400), 77);
+    d = sdBoxFrame(q, vec3(400, 400, 400), 100);
 
     float d_torus = sdTorus(q - vec3(0, 250 + 100 * sin(time + id_q * 23123), 0), vec2(400, 100));
 
@@ -254,8 +258,8 @@ void main()
    }
    else
    {
-    scale = 0.02;
-    value = 0.2;
+    scale = 4.0 * generateRandomNumber(int(id_q * 41441770));
+    value = 4.0 * generateRandomNumber(int(id_q * 41441770));
    }
     
     float ff_0 = 1.0;
@@ -273,7 +277,7 @@ void main()
     {
         ff_2 *= 4.0;
         ff_1 *= 2.0;
-        ff_n *= 0.2;
+        ff_n *= 0.4;
     }
 
     float variation = 0.24f;
@@ -289,11 +293,16 @@ void main()
 
     color_base *= value * ff_0;
     color_base *= vec3(ff_n, ff_1, ff_2);
+    
 	//Color = vec4(value * box_factor_0 * ff_0 + color_variation.r, value * box_factor_1 * ff_0 * ff_1 + color_variation.g, value * box_factor_2 * ff_0 * ff_2 + color_variation.b, 1.0);
 
 
-    Color = vec4(color_base.r + color_variation.r, color_base.g + color_variation.g,color_base.b + color_variation.b, 1.0);
+    Color = vec4(color_base.r + color_variation.r, color_base.g + color_variation.g, color_base.b + color_variation.b, 1.0);
 
 
 	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
+
+
+
+    FragWorldPos = vec3(instanceData.model * vec4(aPos * scale + offset, 1.0)); // Calculate world space position
 }
