@@ -149,8 +149,14 @@ void main()
 	float u = float(id % 1000) * 0.001;
 	float v = float(id / 1000) * 0.001;
 	
-    			
-    			
+    float time_local = time;
+
+    // cool effect 
+    if(true)
+    {
+        time_local += sin(time) * 0.9;
+    }
+     
     
 
 
@@ -166,18 +172,18 @@ void main()
     float value_rnd_9 = generateRandomNumber(id + 692275);
 
 
-    float x = mod( value_rnd_0 * 10000 + time * (value_rnd_3 - 0.5) * 2.0 * 10, 1000);
-    float y = mod( value_rnd_1 * 10000 + time * (value_rnd_4 - 0.5) * 2.0 * 10, 1000);
-    float z = mod( value_rnd_2 * 10000 + time * (value_rnd_5 - 0.5) * 2.0 * 10, 1000);
+    float x = mod( value_rnd_0 * 10000 + time_local * (value_rnd_3 - 0.5) * 2.0 * 10, 1000);
+    float y = mod( value_rnd_1 * 10000 + time_local * (value_rnd_4 - 0.5) * 2.0 * 10, 1000);
+    float z = mod( value_rnd_2 * 10000 + time_local * (value_rnd_5 - 0.5) * 2.0 * 10, 1000);
     
     vec3 offset = vec3(x, y, z);
 
-    //float d = sdBox(offset - vec3(0.0, 500 + 400 * sin(time) * 0.1+ 100 * (sin(x * 0.01 + time) + cos(y * 0.01 + time)), 0.0), vec3(10000, 100, 10000));
+    //float d = sdBox(offset - vec3(0.0, 500 + 400 * sin(time_local) * 0.1+ 100 * (sin(x * 0.01 + time_local) + cos(y * 0.01 + time_local)), 0.0), vec3(10000, 100, 10000));
     
     
     vec3 q = offset * 4.0;
 
-    q += vec3(0, - time * 240 * 0.24, 0);
+    q += vec3(0, - time_local * 240 * 0.24, 0);
 
     vec3 spacing = vec3(1000, 1000, 1000);
 
@@ -209,22 +215,28 @@ void main()
 
     d = sdBoxFrame(q, vec3(400, 400, 400), 100);
 
-    float d_torus = sdTorus(q - vec3(0, 250 + 100 * sin(time + id_q * 23123), 0), vec2(400, 100));
+    float d_torus = sdTorus(q - vec3(0, 250 + 100 * sin(time_local + id_q * 23123), 0), vec2(400, 100));
 
-    float d_torus_2 = sdTorus(q - vec3(0, 250 + 100 * sin(time + id_q * 23123), 0), vec2(300, 70));
+    float d_torus_2 = sdTorus(q - vec3(0, 250 + 100 * sin(time_local + id_q * 23123), 0), vec2(300, 70));
 
     
     d = opUnion(d, d_torus_2);
     d = opUnion(d, d_torus);
 
-	//offset = computeSphereOffset(u, v, 1000.0 + 500 * sin(time * 100+ value_0));
+	//offset = computeSphereOffset(u, v, 1000.0 + 500 * sin(time_local * 100+ value_0));
     
    
    //float scale = 1.0 / ( clamp(d, 0.0, 1.0) + 0.001);
    float scale = 1.0;
 
-   
-   offset *= 10;
+   if(false) // a cool effect a wild one
+   {
+    offset *= 10 + 9 * sin(time);
+   }
+   else
+   {
+    offset *= 10;
+   }
 
    								
 
@@ -280,7 +292,7 @@ void main()
         ff_n *= 0.4;
     }
 
-    float variation = 0.24f;
+    float variation = 0.24f * 0.7f;
 
     vec3 color_variation = palette(value_rnd_6, vec3(0.8, 0.5, 0.4), vec3(0.2, 0.4, 0.2),	vec3(2.0, 1.0, 1.0), vec3(0.00, 0.25, 0.25));
     color_variation *= variation;
@@ -288,7 +300,7 @@ void main()
 
     vec3 color_base_1 = palette(box_factor_0, vec3(0.1, 0.5, 0.4), vec3(0.02, 0.13999, 0.4), vec3(2.0, 0.7, 1.0), vec3(0.1, 0.45, 0.25));
     vec3 color_base_2_variation = palette(value_rnd_6, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,0.7,0.4),vec3(0.0,0.15,0.20));
-    vec3 color_base = (color_base_1 + color_base_2_variation * 0.4 * abs(sin(time * value_rnd_9 + value_rnd_7 * 1000))) * 0.5;
+    vec3 color_base = (color_base_1 + color_base_2_variation * 0.4 * abs(sin(time_local * value_rnd_9 + value_rnd_7 * 1000))) * 0.5;
     
 
     color_base *= value * ff_0;
