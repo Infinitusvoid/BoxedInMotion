@@ -48,21 +48,23 @@ float sdRoundBox( vec3 p, vec3 b, float r )
   return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
 }
 
-float sdBoxFrame( vec3 p, vec3 b, float e )
-{
-       p = abs(p  )-b;
-  vec3 q = abs(p+e)-e;
-  return min(min(
-      length(max(vec3(p.x,q.y,q.z),0.0))+min(max(p.x,max(q.y,q.z)),0.0),
-      length(max(vec3(q.x,p.y,q.z),0.0))+min(max(q.x,max(p.y,q.z)),0.0)),
-      length(max(vec3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));
-}
 
-float sdTorus( vec3 p, vec2 t )
-{
-  vec2 q = vec2(length(p.xz)-t.x,p.y);
-  return length(q)-t.y;
-}
+float opUnion( float d1, float d2 ) { return min(d1,d2); }
+float opSubtraction( float d1, float d2 ) { return max(-d1,d2); }
+float opIntersection( float d1, float d2 ) { return max(d1,d2); }
+
+
+float opSmoothUnion( float d1, float d2, float k ) {
+    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) - k*h*(1.0-h); }
+
+float opSmoothSubtraction( float d1, float d2, float k ) {
+    float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );
+    return mix( d2, -d1, h ) + k*h*(1.0-h); }
+
+float opSmoothIntersection( float d1, float d2, float k ) {
+    float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) + k*h*(1.0-h); }
 
 // ==========================
 
@@ -129,17 +131,43 @@ void main()
     float value_rnd_9 = generateRandomNumber(id + 692275);
 
 
-    float x = mod( value_rnd_0 * 10000 + time * (value_rnd_3 - 0.5) * 2.0 * 100, 2000);
-    float y = mod( value_rnd_1 * 10000 + time * (value_rnd_4 - 0.5) * 2.0 * 100, 2000);
-    float z = mod( value_rnd_2 * 10000 + time * (value_rnd_5 - 0.5) * 2.0 * 100, 2000);
+    float x = mod( value_rnd_0 * 10000 + time * (value_rnd_3 - 0.5) * 2.0 * 10, 1000);
+    float y = mod( value_rnd_1 * 10000 + time * (value_rnd_4 - 0.5) * 2.0 * 10, 1000);
+    float z = mod( value_rnd_2 * 10000 + time * (value_rnd_5 - 0.5) * 2.0 * 10, 1000);
     
     vec3 offset = vec3(x, y, z);
 
     //float d = sdBox(offset - vec3(0.0, 500 + 400 * sin(time) * 0.1+ 100 * (sin(x * 0.01 + time) + cos(y * 0.01 + time)), 0.0), vec3(10000, 100, 10000));
     
-
-    float d = sdBox(offset - vec3(0.0, 0.0, 0.0), vec3(10000, 100, 10000));
     
+    vec3 q = offset * 4.0;
+
+    q += vec3(0, - time * 240, 0);
+
+    vec3 spacing = vec3(1000, 1000, 1000);
+
+    float id_q = (ceil(q.x / spacing.x) + ceil(q.y / spacing.y) + ceil(q.z / spacing.z));
+    
+
+    q = q  - spacing * round(q / spacing);
+
+    // float d_0 = sdBox(q - vec3(1000, 0.0, 1000), vec3(1000, 100, 1000));
+    // float d_1 = sdBox(q - vec3(1000, 0.0, 1000), vec3(900, 200, 900));
+
+    // float d_2 = sdBox(q - vec3(1000, 1000, 0.0), vec3(1000, 1000, 100));
+    // float d_3 = sdBox(q - vec3(1000, 1000, 0.0), vec3(900, 900, 100));
+
+    float u0 = 200;
+
+    float d_0 = sdBox(q - vec3(500, 0.0, 500), vec3(1000, 100, 1000));
+    float d_1 = sdBox(q - vec3(500, 0.0, 500), vec3(u0, 200, u0));
+
+    float d_2 = sdBox(q - vec3(500, 500, 0.0), vec3(1000, 1000, 100));
+    float d_3 = sdBox(q - vec3(500, 500, 0.0), vec3(u0, u0, 100));
+
+    float d = 0.0;
+    d = opSubtraction(d_1, d_0);
+    d = opUnion(d, opSubtraction(d_3, d_2));
 
 
 	//offset = computeSphereOffset(u, v, 1000.0 + 500 * sin(time * 100+ value_0));
@@ -149,17 +177,20 @@ void main()
    float scale = 1.0;
 
    
-
+   offset *= 10;
 
    float value = 0.0;
    if(d < 0)
    {
-    value = 1.0;
-    scale = 2.4;
+    value = 1.4;
+    scale = 4.4;
+    
+    float v0 =  generateRandomNumber(int(id_q));
+    scale = v0 * 10.0;
    }
    else
    {
-    scale = 0.2;
+    scale = 0.02;
     value = 0.2;
    }
     
