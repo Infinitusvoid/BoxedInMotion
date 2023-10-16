@@ -34,7 +34,6 @@
   <ItemGroup>
     <Text Include="build_in_fragment_shader_fs.txt" />
     <Text Include="build_in_vertex_shader_vs.txt" />
-    <Text Include="build_in_vertex_shader_vs_foo.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLM_Utils.h">
