@@ -48,6 +48,21 @@ float sdRoundBox( vec3 p, vec3 b, float r )
   return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
 }
 
+float sdBoxFrame( vec3 p, vec3 b, float e )
+{
+       p = abs(p  )-b;
+  vec3 q = abs(p+e)-e;
+  return min(min(
+      length(max(vec3(p.x,q.y,q.z),0.0))+min(max(p.x,max(q.y,q.z)),0.0),
+      length(max(vec3(q.x,p.y,q.z),0.0))+min(max(q.x,max(p.y,q.z)),0.0)),
+      length(max(vec3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));
+}
+
+float sdTorus( vec3 p, vec2 t )
+{
+  vec2 q = vec2(length(p.xz)-t.x,p.y);
+  return length(q)-t.y;
+}
 
 float opUnion( float d1, float d2 ) { return min(d1,d2); }
 float opSubtraction( float d1, float d2 ) { return max(-d1,d2); }
@@ -101,7 +116,17 @@ vec3 computeSphereOffset(float latitude, float longitude, float radius)
 }
 
 
+// ============
 
+float calculate_index(vec3 p, vec3 spacing)
+{
+    return 
+        round(p.x / spacing.x) +
+        round(p.y / spacing.y) +
+        round(p.z / spacing.z);
+}
+
+// ============
 
 void main()
 {
@@ -115,8 +140,7 @@ void main()
 	
     			
     			
-    //412963	779127	504726	995824	966801
-    //529204	904411	160869	431461	594141				
+    
 
 
     float value_rnd_0 = generateRandomNumber(id + 131257);
@@ -142,11 +166,11 @@ void main()
     
     vec3 q = offset * 4.0;
 
-    q += vec3(0, - time * 240, 0);
+    q += vec3(0, - time * 240 * 0.24, 0);
 
     vec3 spacing = vec3(1000, 1000, 1000);
 
-    float id_q = (ceil(q.x / spacing.x) + ceil(q.y / spacing.y) + ceil(q.z / spacing.z));
+    float id_q = calculate_index(q, spacing);
     
 
     q = q  - spacing * round(q / spacing);
@@ -157,7 +181,7 @@ void main()
     // float d_2 = sdBox(q - vec3(1000, 1000, 0.0), vec3(1000, 1000, 100));
     // float d_3 = sdBox(q - vec3(1000, 1000, 0.0), vec3(900, 900, 100));
 
-    float u0 = 200;
+    float u0 = 224;
 
     float d_0 = sdBox(q - vec3(500, 0.0, 500), vec3(1000, 100, 1000));
     float d_1 = sdBox(q - vec3(500, 0.0, 500), vec3(u0, 200, u0));
@@ -165,10 +189,17 @@ void main()
     float d_2 = sdBox(q - vec3(500, 500, 0.0), vec3(1000, 1000, 100));
     float d_3 = sdBox(q - vec3(500, 500, 0.0), vec3(u0, u0, 100));
 
+    
+    
+    
     float d = 0.0;
     d = opSubtraction(d_1, d_0);
     d = opUnion(d, opSubtraction(d_3, d_2));
 
+    d = sdBoxFrame(q, vec3(400, 400, 400), 77);
+
+    float d_torus = sdTorus(q - vec3(0, 250 + 100 * sin(time + id_q * 23123), 0), vec2(400, 100));
+    d = opUnion(d, d_torus);
 
 	//offset = computeSphereOffset(u, v, 1000.0 + 500 * sin(time * 100+ value_0));
     
@@ -179,6 +210,25 @@ void main()
    
    offset *= 10;
 
+   								
+
+   float box_factor_0 =  generateRandomNumber(int(id_q * 412963));
+   float box_factor_1 =  generateRandomNumber(int(id_q * 779127));
+   float box_factor_2 =  generateRandomNumber(int(id_q * 504726));
+   float box_factor_3 =  generateRandomNumber(int(id_q * 995824));
+   float box_factor_4 =  generateRandomNumber(int(id_q * 966801));
+   float box_factor_5 =  generateRandomNumber(int(id_q * 529204));
+   float box_factor_6 =  generateRandomNumber(int(id_q * 904411));
+   float box_factor_7 =  generateRandomNumber(int(id_q * 160869));
+   float box_factor_8 =  generateRandomNumber(int(id_q * 431461));
+   float box_factor_9 =  generateRandomNumber(int(id_q * 594141));
+   float box_factor_10 =  generateRandomNumber(int(id_q * 446166));
+   float box_factor_11 =  generateRandomNumber(int(id_q * 247174));
+
+   
+   
+   
+
    float value = 0.0;
    if(d < 0)
    {
@@ -186,7 +236,9 @@ void main()
     scale = 4.4;
     
     float v0 =  generateRandomNumber(int(id_q));
-    scale = v0 * 10.0;
+
+
+    scale = v0 * 20.0;
    }
    else
    {
@@ -194,8 +246,14 @@ void main()
     value = 0.2;
    }
     
+    float ff_0 = 1.0;
 
-	Color = vec4(value * value_rnd_9, value * value_rnd_7, value * value_rnd_4, 1.0);
+    if(d_torus < 0.0)
+    {
+        ff_0 *= 7;
+    }
+
+	Color = vec4(value * box_factor_0 * ff_0, value * box_factor_1 * ff_0, value * box_factor_2 * ff_0, 1.0);
 
 
 	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
