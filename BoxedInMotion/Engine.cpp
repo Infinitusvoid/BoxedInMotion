@@ -475,12 +475,15 @@ namespace Engine
 		float MouseSensitivity;
 		float Zoom;
 		
+		float Near;
+
 		// constructor with vectors
 		Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = Constants::YAW, float pitch = Constants::PITCH) :
 			Front(glm::vec3(0.0f, 0.0f, -1.0f)),
 			MovementSpeed(Constants::SPEED),
 			MouseSensitivity(Constants::SENSITIVITY),
-			Zoom(Constants::ZOOM)
+			Zoom(Constants::ZOOM),
+			Near(0.1)
 		{
 			Position = position;
 			WorldUp = up;
@@ -503,12 +506,18 @@ namespace Engine
 			updateCameraVectors();
 		}
 
+		void set_camera_near(float set_value)
+		{
+			Near = set_value;
+		}
+
 		// constructor with scalar values
 		Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) :
 			Front(glm::vec3(0.0f, 0.0f, -1.0f)),
 			MovementSpeed(Constants::SPEED),
 			MouseSensitivity(Constants::SENSITIVITY),
-			Zoom(Constants::ZOOM)
+			Zoom(Constants::ZOOM),
+			Near(0.1)
 		{
 			Position = glm::vec3(posX, posY, posZ);
 			WorldUp = glm::vec3(upX, upY, upZ);
@@ -1320,6 +1329,11 @@ namespace Engine
 		camera.set_camera_parameters(set_position, set_speed, set_sensitivy, set_zoom);
 	}
 
+	void set_camera_near(float value)
+	{
+		camera.set_camera_near(value);
+	}
+
 	void set_camera_position(glm::vec3 position)
 	{
 		camera.Position = position;
@@ -1462,7 +1476,7 @@ namespace Engine
 			// -----------------------------------------------
 			Framebuffer_::bind(hdrFBO);//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, view_distance);
+			glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, camera.Near, view_distance);
 			glm::mat4 view = camera.GetViewMatrix();
 			//glm::mat4 model = glm::mat4(1.0f);
 
