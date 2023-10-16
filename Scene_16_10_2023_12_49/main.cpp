@@ -25,7 +25,6 @@ namespace Constants
 }
 
 
-
 namespace Scene_
 {
 	struct DynamicColorLine
