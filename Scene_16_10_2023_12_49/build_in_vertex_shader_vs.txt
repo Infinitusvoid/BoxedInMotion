@@ -199,6 +199,11 @@ void main()
     d = sdBoxFrame(q, vec3(400, 400, 400), 77);
 
     float d_torus = sdTorus(q - vec3(0, 250 + 100 * sin(time + id_q * 23123), 0), vec2(400, 100));
+
+    float d_torus_2 = sdTorus(q - vec3(0, 250 + 100 * sin(time + id_q * 23123), 0), vec2(300, 70));
+
+    
+    d = opUnion(d, d_torus_2);
     d = opUnion(d, d_torus);
 
 	//offset = computeSphereOffset(u, v, 1000.0 + 500 * sin(time * 100+ value_0));
@@ -248,12 +253,20 @@ void main()
     
     float ff_0 = 1.0;
 
+    float ff_1 = 1.0;
     if(d_torus < 0.0)
     {
-        ff_0 *= 7;
+        ff_0 *= 0.2;
+        ff_1 *= 10;
     }
 
-	Color = vec4(value * box_factor_0 * ff_0, value * box_factor_1 * ff_0, value * box_factor_2 * ff_0, 1.0);
+    float ff_2 = 1.0;
+    if(d_torus_2 > 0.0)
+    {
+        ff_2 *= 0.7;
+    }
+
+	Color = vec4(value * box_factor_0 * ff_0, value * box_factor_1 * ff_0 * ff_1, value * box_factor_2 * ff_0 * ff_2, 1.0);
 
 
 	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
