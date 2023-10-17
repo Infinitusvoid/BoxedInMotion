@@ -148,8 +148,19 @@ void main()
     offset = mix(offset_0, offset_1, t_signal_0);
 
 	
+   vec3 cube_position = (instanceData.model * vec4(aPos + offset, 1.0)).xyz;
+   
+   vec3 v_cam = cube_position - camera_position;
+   float d = length(v_cam);
+    
+   float factor_color_amplification = 1.0;
+   if(d < 10)
+   {
+        factor_color_amplification *= 10;
+   }
+    
 
-	Color = vec4(0.2, 0.4 + 0.1 * sin(t_signal_0), 0.2 + 0.2 * sin(t_signal_1), 1.0) + vec4(0.0, t_signal_n, 0.0, 1.0);
+	Color = vec4(0.2 * v_cam.x, 0.4 * v_cam.y+ 0.1 * sin(t_signal_0), 0.2 * v_cam.z + 0.2 * sin(t_signal_1), 1.0) + vec4(0.0, t_signal_n, 0.0, 1.0) * factor_color_amplification;
 
 
 	gl_Position = projection * view * instanceData.model * vec4(aPos + offset, 1.0);
