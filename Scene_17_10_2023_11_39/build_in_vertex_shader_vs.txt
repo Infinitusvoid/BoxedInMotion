@@ -25,6 +25,43 @@ uniform float camera_zoom;
 uniform int frame;
 uniform float time;
 
+// ====================
+// Utils functionality
+
+// cosine based palette, 4 vec3 params
+vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
+{
+    return a + b*cos( 6.28318*(c*t+d) );
+}
+
+// Define a function to generate a random number based on an input integer
+float generateRandomNumber(int inputInt)
+{
+    // Cast the input integer to uint to address type mismatch
+    uint seed = uint(inputInt);
+
+    // Define the hash function
+    seed = (seed ^ 61u) ^ (seed >> 16u);
+    seed *= 9u;
+    seed = seed ^ (seed >> 4u);
+    seed *= 0x27d4eb2du;
+    seed = seed ^ (seed >> 15u);
+
+    // Normalize and return the result
+    return float(seed) / 4294967296.0; // Normalize to [0, 1]
+}
+
+float calculate_index(vec3 p, vec3 spacing)
+{
+    return 
+        round(p.x / spacing.x) +
+        round(p.y / spacing.y) +
+        round(p.z / spacing.z);
+}
+
+// ====================
+
+
 
 // Function to compute the offset for the sphere
 vec3 computeSphereOffset(float latitude, float longitude, float radius)
@@ -130,31 +167,44 @@ void main()
 	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
 	Color = instanceData.color;
 
-	float u = float(id % 1000) * 0.001;
-	float v = float(id / 1000) * 0.001;
+
+    // u, v
+    // float u = float(id % 1000) * 0.001;
+	// float v = float(id / 1000) * 0.001;
 	
-    
-    vec3 offset = vec3(0.0, 0.0, 0.0);
+    // uv randomized
+    float u = generateRandomNumber(id * 10023);
+    float v = generateRandomNumber(id * 21823);
 
-
-    float t_signal_0 = pow(abs(sin(time * 0.1)), 4.0);
-    float t_signal_1 = 100 * sin((u + v) * 100.0  + time);
-    float t_signal_n = pow(abs(t_signal_1)*0.01, 2.0 + 7.0 * abs(sin(time * 10 + u * 200)));
-    t_signal_n = clamp(t_signal_n, 0.0, 1.0);
-
-	vec3 offset_0 = computeSphereOffset(u, v, 1000.0 + t_signal_1);
-    
+    float particles_speed_factor = 0.01;
+    float u_speed = (generateRandomNumber(id * 10033) - 0.5) * particles_speed_factor;
+    float v_speed = (generateRandomNumber(id * 12334) - 0.5) * particles_speed_factor;
    
-    vec3 offset_1 = parametricCubeFull(u, v, 1000);
-    
-    
-    //t_signal_0  = 0.0;
+    // looping space for instances
+    u += u_speed * time;
+    v += u_speed * time;
+    u = fract(u);
+    v = fract(v);
 
-    offset = mix(offset_0, offset_1, t_signal_0);
+    float off_v = 0.0;
+    float d_center = length(vec3(u, 0, v) - vec3(0.5, 0, 0.0));
+    d_center = pow(d_center, 0.5);
 
-	
+    off_v = d_center;
+
+    float PI = 3.1415;
+
+    off_v += 0.001 * sin(u * PI * 2.0 * 10 + time * 0.0);
+    off_v += -0.0002 * sin(u * PI * 2.0 * 2 + time * 0.0);
+    
+
+   
+
+   vec3 offset = vec3(0.0, 0.0, 0.0);
+   offset = vec3(u, off_v, v) * 10000;
+
+   
    vec3 cube_position = calculate_instance_position(offset);
-   
    vec3 v_cam = cube_position - camera_position;
    float d = length(v_cam);
     
@@ -164,14 +214,21 @@ void main()
         factor_color_amplification *= 10;
    }
 
+
+   
    float size_amplification = 1.0;
-   if(d < 10)
+   if(d < 1)
    {
-    size_amplification = 1.0 + (100.0 - (d+1.0)) * 0.1 ;
+     size_amplification = 1.0 + (100.0 - (d+1.0)) * 0.1 ;
+     //offset += vec3(0.0, -100.0, 0.0);
    }
     
 
-	Color = vec4(0.2 * v_cam.x, 0.4 * v_cam.y+ 0.1 * sin(t_signal_0), 0.2 * v_cam.z + 0.2 * sin(t_signal_1), 1.0) + vec4(0.0, t_signal_n, 0.0, 1.0) * factor_color_amplification;
+    vec3 color = vec3(1.0, 1.0, 1.0);
+    color *= factor_color_amplification;
+
+	//Color = vec4(0.2 * v_cam.x, 0.4 * v_cam.y, 0.2 * v_cam.z, 1.0) + vec4(0.0, 0.0, 0.0, 1.0) * factor_color_amplification;
+    Color = vec4(color, 1.0);
 
 
 	gl_Position = projection * view * instanceData.model * vec4(aPos * size_amplification + offset, 1.0);

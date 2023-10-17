@@ -222,6 +222,9 @@ namespace Scene_
 		
 		scene.update(data, t, dt);
 		
+		//glm::vec3 camera_pos = Engine::get_camera_position();
+		//std::cout << "camera_pos x :" << camera_pos.x << " y : " << camera_pos.y << " z : " << camera_pos.z << "\n";
+		
 	}
 
 }
@@ -248,8 +251,8 @@ int main()
 	//Engine::set_bloom_iteration(4);
 
 	//Engine::ShaderSourceCode source;		
-
-	Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 32.0), 10.0f, 0.2f, 45.0f);
+	
+	Engine::set_camera_parameters(glm::vec3(59.2784, 42.9082, 4.78452), 10.0f, 0.2f, 45.0f);
 	//Engine::play(num_boxes, init, loop, 45.0f, 1000.0f, &source);
 	Engine::play(Constants::num_boxes, Scene_::init, Scene_::loop, 45.0f, 1000.0f);
 
