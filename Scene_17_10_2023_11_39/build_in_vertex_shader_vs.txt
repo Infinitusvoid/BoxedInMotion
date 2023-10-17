@@ -158,10 +158,16 @@ void main()
    {
         factor_color_amplification *= 10;
    }
+
+   float size_amplification = 1.0;
+   if(d < 10)
+   {
+    size_amplification = 1.0 + (100.0 - (d+1.0)) * 0.1 ;
+   }
     
 
 	Color = vec4(0.2 * v_cam.x, 0.4 * v_cam.y+ 0.1 * sin(t_signal_0), 0.2 * v_cam.z + 0.2 * sin(t_signal_1), 1.0) + vec4(0.0, t_signal_n, 0.0, 1.0) * factor_color_amplification;
 
 
-	gl_Position = projection * view * instanceData.model * vec4(aPos + offset, 1.0);
+	gl_Position = projection * view * instanceData.model * vec4(aPos * size_amplification + offset, 1.0);
 }
