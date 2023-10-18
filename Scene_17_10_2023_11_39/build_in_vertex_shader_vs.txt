@@ -25,6 +25,15 @@ uniform float camera_zoom;
 uniform int frame;
 uniform float time;
 
+// #################################
+
+
+// Defines ================================
+
+#define PI 3.1415
+
+// ========================================
+
 // ====================
 // Utils functionality
 
@@ -213,8 +222,6 @@ void main()
     d_center = pow(d_center, 0.5);
 
     off_v = d_center;
-
-    float PI = 3.1415;
 
     off_v += 0.001 * sin(u * PI * 2.0 * 10 + time * 0.0);
     off_v += -0.0002 * sin(u * PI * 2.0 * 2 + time * 0.0);
