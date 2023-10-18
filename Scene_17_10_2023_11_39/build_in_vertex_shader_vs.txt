@@ -28,7 +28,7 @@ uniform float time;
 // #################################
 
 
-// Defines ================================
+// Defines constants ======================
 
 #define PI 3.14159265359
 #define TAO PI * 2.0
@@ -202,22 +202,31 @@ void main()
 	
 
 
-    float particles_speed_factor = 0.01;
-    float u_speed = (generateRandomNumber(id * 10033) - 0.5) * particles_speed_factor;
-    float v_speed = (generateRandomNumber(id * 12334) - 0.5) * particles_speed_factor;
+    
    
     // looping space for instances
     
-    // uv randomized
+    // UV created at rnd position
     float u = generateRandomNumber(id * 10023);
     float v = generateRandomNumber(id * 21823);
 
-    // uv update position
-    u += u_speed * time;
-    v += v_speed * time;
+    // UV update
+    {
+        float particles_speed_factor = 0.01;
+        float u_speed = (generateRandomNumber(id * 10033) - 0.5) * particles_speed_factor;
+        float v_speed = (generateRandomNumber(id * 12334) - 0.5) * particles_speed_factor;
+
+        // UV update position
+        u += u_speed * time;
+        v += v_speed * time;
     
-    u = fract(u);
-    v = fract(v);
+        // UV looping space 0 to 1
+        u = fract(u);
+        v = fract(v);
+    }
+
+    
+    
 
     float off_v = 0.0;
     float d_center = length(vec3(u, 0, v) - vec3(0.5, 0, 0.0));
