@@ -212,6 +212,7 @@ void main()
     float u = generateRandomNumber(id * 10023);
     float v = generateRandomNumber(id * 21823);
 
+    // uv update position
     u += u_speed * time;
     v += v_speed * time;
     
