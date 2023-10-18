@@ -30,8 +30,8 @@ uniform float time;
 
 // Defines ================================
 
-#define PI 3.1415
-#define TAU PI * 2.0
+#define PI 3.14159265359
+#define TAO PI * 2.0
 
 // ========================================
 
