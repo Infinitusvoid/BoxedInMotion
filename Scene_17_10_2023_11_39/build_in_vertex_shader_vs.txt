@@ -228,23 +228,23 @@ void main()
     
     
 
-    float off_v = 0.0;
+    float vertical_offset = 0.0;
     float d_center = length(vec3(u, 0, v) - vec3(0.5, 0, 0.0));
     d_center = pow(d_center, 0.5);
 
-    off_v = d_center;
+    vertical_offset = d_center;
 
-    off_v += 0.001 * sin(u * PI * 2.0 * 10 + time * 0.0);
-    off_v += -0.0002 * sin(u * PI * 2.0 * 2 + time * 0.0);
+    vertical_offset += 0.001 * sin(u * PI * 2.0 * 10 + time * 0.0);
+    vertical_offset += -0.0002 * sin(u * PI * 2.0 * 2 + time * 0.0);
     
     float x_global = u + time * 0.01;
     float y_global = v + time * 0.01;
 
     vec3 spacing = vec3(0.04, 0.04, 0.04);
-    vec3 tile_coord = vec3(x_global / 0.04, off_v / 0.04, y_global / 0.04);
-    //vec3 tile_local_coord = vec3(mod(x_global, spacing.x), mod(off_v, spacing.y), mod(y_global, spacing.z)) * (1 / 0.04);
-    vec3 tile_local_coord = fract((vec3(x_global, off_v, y_global) + (spacing * 0.5)) * (1 / 0.04));
-    vec3 tile_index = vec3(round(tile_coord.x), round(tile_coord.y), round(tile_coord.z)); // calculate_index(vec3(x_global, off_v, y_global), spacing);
+    vec3 tile_coord = vec3(x_global / 0.04, vertical_offset / 0.04, y_global / 0.04);
+    //vec3 tile_local_coord = vec3(mod(x_global, spacing.x), mod(vertical_offset, spacing.y), mod(y_global, spacing.z)) * (1 / 0.04);
+    vec3 tile_local_coord = fract((vec3(x_global, vertical_offset, y_global) + (spacing * 0.5)) * (1 / 0.04));
+    vec3 tile_index = vec3(round(tile_coord.x), round(tile_coord.y), round(tile_coord.z)); // calculate_index(vec3(x_global, vertical_offset, y_global), spacing);
     int ixz = int(tile_index.x + tile_index.z);
     int ixz2 = int(tile_index.x * tile_index.z) % 999999;
    float tile_rnd_1 = generateRandomNumber( ixz + 176043);
@@ -270,14 +270,13 @@ void main()
 
    
 
-   off_v += tile_off_v;
+   vertical_offset += tile_off_v;
 
    
-
    float tile_rnd_4 = generateRandomNumber(id * 762774);
 
    vec3 offset = vec3(0.0, 0.0, 0.0);
-   offset = vec3(u, off_v, v) * 10000;
+   offset = vec3(u, vertical_offset, v) * 10000;
 
    
    vec3 cube_position = calculate_instance_position(offset);
