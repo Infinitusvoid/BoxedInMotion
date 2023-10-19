@@ -338,6 +338,10 @@ void main()
                 tile_off_v = smoothstep(0.1, 0.75, abs(sin(d)));
                 tile_off_v = pow(tile_off_v, 10.0) * 0.024;
            }
+           else if(choice == 3)
+           {
+                tile_off_v = tile_building_pool_offset(tile_local_coord.x, tile_local_coord.y);
+           }
            else
            {
            }
