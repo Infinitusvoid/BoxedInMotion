@@ -327,7 +327,7 @@ void main()
            else if(choice == 2)
            {
                 float dx = (tile_local_coord.x - 0.5f) * 2.0;
-                float dy = (tile_local_coord.y - 0.5f) * 2.0;
+                float dy = (tile_local_coord.z - 0.5f) * 2.0;
                 float d = 1.0 - (sqrt(dx * dx + dy * dy) * (1.0 / SQRT_OF_2));
                     
                 tile_off_v = smoothstep(0.1, 0.75, abs(sin(d)));
