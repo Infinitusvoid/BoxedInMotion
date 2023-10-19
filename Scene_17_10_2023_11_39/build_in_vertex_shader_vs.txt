@@ -27,6 +27,11 @@ uniform float time;
 
 // #################################
 
+// Additional outputs
+flat out int instanceID;
+
+// 
+
 
 // Defines constants ======================
 
@@ -219,6 +224,7 @@ float tile_wave_offset(float x, float y, float t)
 void main()
 {
 	int id = gl_InstanceID;
+    instanceID = id;
 	FragObjectPos = aPos; // Store the object space position
 	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
 	Color = instanceData.color;

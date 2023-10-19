@@ -14,6 +14,10 @@ uniform float camera_zoom;
 uniform int frame;
 uniform float time;
 
+// Additional inputs
+flat in int instanceID;
+// 
+
 void main()
 {
     vec4 result = Color + vec4(vec3(0.0, 0.0, 0.0), 1.0);
