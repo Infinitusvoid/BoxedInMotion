@@ -191,9 +191,17 @@ float tile_building_hight_offset(float x, float t)
     return pow(waveform_0_f3(x),  2 + (0.34 + 0.76 * sin(t + x*10000)))  * (0.99 + 0.01 * sin(x * 100 + t));
 }
 
-float tile_building_pool_offset(float x, float y)
+float tile_building_pool_offset(float x, float y, float t)
 {
-    return 0.0;
+    float dx = abs(x - 0.5) * 2.0;
+    float dy = abs(y - 0.5) * 2.0;
+    float d = sqrt(dx * dx + dy * dy);
+    float value = d;
+    value = 1.0 - d;
+    value *= 0.5 * sin(d * PI_2 * 2 + t * 7) + 0.5 * sin(d * PI_2 * 4 + t * 2);
+    value = max(value, 0);
+    
+    return value;
 }
 
 void main()
@@ -347,7 +355,10 @@ void main()
            }
            else if(choice == 3)
            {
-                tile_off_v = tile_building_pool_offset(tile_local_coord.x, tile_local_coord.y);
+                tile_off_v = tile_building_pool_offset(tile_local_coord.x, tile_local_coord.z, time + ixz + tile_index.z * 0.2) * 0.024;
+                
+                tile_size *= 1.2; 
+                tile_color *= 1.1 * (1.0 + 0.4 * sin(tile_off_v * 100.0));
            }
            else if( choice == 4)
            {
