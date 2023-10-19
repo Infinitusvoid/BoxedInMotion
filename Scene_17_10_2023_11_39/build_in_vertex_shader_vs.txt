@@ -31,7 +31,7 @@ uniform float time;
 // Defines constants ======================
 
 #define PI 3.14159265359
-#define TAO PI * 2.0
+#define TAO ( PI * 2.0 )
 
 // ========================================
 
@@ -243,8 +243,11 @@ void main()
     
     // terrain wave layer 0
     {
-        vertical_offset += 0.001 * sin(u * PI * 2.0 * 10 + time * 0.0);
-        vertical_offset += -0.0002 * sin(u * PI * 2.0 * 2 + time * 0.0);
+        float frequency_0 =  0.0010;
+        float frequency_1 = -0.0002; 
+
+        vertical_offset += frequency_0 * sin(u * (PI * 2) * 10 + time * 0.0);
+        vertical_offset += frequency_1 * sin(u * (PI * 2) * 2 + time * 0.0);
     }
     
     
