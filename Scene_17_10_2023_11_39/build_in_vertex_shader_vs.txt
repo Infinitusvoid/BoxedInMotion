@@ -438,5 +438,7 @@ void main()
 
     //Color = vec4(0.2 * v_cam.x, 0.4 * v_cam.y, 0.2 * v_cam.z, 1.0) + vec4(0.0, 0.0, 0.0, 1.0) * factor_color_amplification;
     Color = vec4(color, 1.0);
-    gl_Position = projection * view * instanceData.model * vec4(aPos * size + offset, 1.0);
+    vec4 out_position = projection * view * instanceData.model * vec4(aPos * size + offset, 1.0);
+    gl_Position = out_position;
+    FragWorldPos = out_position.xyz;    
 }
