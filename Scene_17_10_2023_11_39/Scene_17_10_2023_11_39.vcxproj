@@ -163,6 +163,9 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="Scene_info.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\BoxedInMotion\doc_Scene_17_10_2023_11_39.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

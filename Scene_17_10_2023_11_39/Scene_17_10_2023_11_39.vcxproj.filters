@@ -49,4 +49,7 @@
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\BoxedInMotion\doc_Scene_17_10_2023_11_39.md" />
+  </ItemGroup>
 </Project>
