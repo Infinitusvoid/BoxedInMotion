@@ -321,7 +321,7 @@ void main()
     // displaying
     vec3 offset = vec3(0.0, 0.0, 0.0);
     vec3 color = vec3(1.0, 1.0, 1.0);
-    float size_amplification = 1.0;
+    float size = 1.0;
     {
         offset = vec3(u, vertical_offset, v) * 10000;
 
@@ -340,7 +340,7 @@ void main()
         
         if(d < 1)
         {
-            size_amplification = 1.0 + (100.0 - (d+1.0)) * 0.1 ;
+            size = 1.0 + (100.0 - (d+1.0)) * 0.1 ;
             //offset += vec3(0.0, -100.0, 0.0);
         }
 
@@ -355,5 +355,5 @@ void main()
     Color = vec4(color, 1.0);
     
     
-    gl_Position = projection * view * instanceData.model * vec4(aPos * size_amplification + offset, 1.0);
+    gl_Position = projection * view * instanceData.model * vec4(aPos * size + offset, 1.0);
 }
