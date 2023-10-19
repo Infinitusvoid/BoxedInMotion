@@ -316,7 +316,8 @@ void main()
         {
             
 
-            if(true)
+            
+            if(false)
             {
                 if(tile_rnd_building > 0.5)
                 {
@@ -324,7 +325,14 @@ void main()
                 }
             }
             
-            
+            if(true)
+            {
+                if(tile_rnd_building > 0.5)
+                {
+                tile_off_v = 0.01 * smoothstep(0.1, 0.75, abs(sin(tile_local_coord.z * PI)));
+                }
+
+            }
             
             
         }
