@@ -289,36 +289,33 @@ void main()
     // random values    
     float tile_rnd_1 = generateRandomNumber( ixz + 176043);
     float tile_rnd_2 = generateRandomNumber( ixz + 538819);
-   float tile_rnd_3 = generateRandomNumber( ixz + 558013);
-   float tile_rnd_wave = generateRandomNumber( ixz + 762774);
-   float tile_rnd_building = generateRandomNumber( ixz2 + 45447);
-  
-   //vec3 tile_rnd_color = vec3(tile_rnd_1, tile_rnd_2, tile_rnd_3);
-   vec3 tile_rnd_color = vec3(tile_rnd_1, tile_rnd_2 , tile_rnd_3);
+    float tile_rnd_3 = generateRandomNumber( ixz + 558013);
+    float tile_rnd_wave = generateRandomNumber( ixz + 762774);
+    float tile_rnd_building = generateRandomNumber( ixz2 + 45447);
+    
+    //vec3 tile_rnd_color = vec3(tile_rnd_1, tile_rnd_2, tile_rnd_3);
+    vec3 tile_rnd_color = vec3(tile_rnd_1, tile_rnd_2 , tile_rnd_3);
+    
+    
+    float tile_x = tile_index.x;
+    float tile_y = tile_index.z;
+    float tile_off_v = 0.001 * sin(tile_coord.x * PI * 2.0 * 4 * tile_rnd_3 + time * 0.0) + 0.0002 * cos(tile_coord.y * PI * 2.0 * 4 * tile_rnd_wave + time * 0.0);
+    
+    if(tile_rnd_building > 0.5)
+    {
+        tile_off_v *= 0;
+        tile_off_v += min(waveform_0_f4(tile_local_coord.z, time * 0.01), waveform_0_f4(tile_local_coord.x, time * 0.001)) * 0.01;
+    }
 
-   
+    
+    vertical_offset += tile_off_v;
 
-   float tile_x = tile_index.x;
-   float tile_y = tile_index.z;
-   float tile_off_v = 0.001 * sin(tile_coord.x * PI * 2.0 * 4 * tile_rnd_3 + time * 0.0) + 0.0002 * cos(tile_coord.y * PI * 2.0 * 4 * tile_rnd_wave + time * 0.0);
+    float tile_rnd_4 = generateRandomNumber(id * 762774);
 
-   if(tile_rnd_building > 0.5)
-   {
-    tile_off_v *= 0;
-    tile_off_v += min(waveform_0_f4(tile_local_coord.z, time * 0.01), waveform_0_f4(tile_local_coord.x, time * 0.001)) * 0.01;
-   }
+    vec3 offset = vec3(0.0, 0.0, 0.0);
+    offset = vec3(u, vertical_offset, v) * 10000;
 
-   
-
-   vertical_offset += tile_off_v;
-
-   
-   float tile_rnd_4 = generateRandomNumber(id * 762774);
-
-   vec3 offset = vec3(0.0, 0.0, 0.0);
-   offset = vec3(u, vertical_offset, v) * 10000;
-
-   
+    
    vec3 cube_position = calculate_instance_position(offset);
    vec3 v_cam = cube_position - camera_position;
    float d = length(v_cam);
