@@ -243,28 +243,52 @@ void main()
     
     // terrain wave layer 0
     {
-        float frequency_0 =  0.0010;
-        float frequency_1 = -0.0002; 
+        {
+            // parameters
+            const float amplitude_0 =  0.0010;
+            const float frequency_0 = 10;
+            const float time_f_0 = 0.0;
 
-        vertical_offset += frequency_0 * sin(u * (PI * 2) * 10 + time * 0.0);
-        vertical_offset += frequency_1 * sin(u * (PI * 2) * 2 + time * 0.0);
+            // calculations
+            vertical_offset += amplitude_0 * sin(u * (PI * 2) * frequency_0 + time * time_f_0);
+        }
+        
+
+        {
+            // parameters
+            const float amplitude_1 = -0.0002;
+            const float frequency_1 =  2;
+            const float time_f_1 = 0.0;
+
+            // calculations
+            vertical_offset += amplitude_1 * sin(u * (PI * 2) * frequency_1 + time * time_f_1);
+        }
+        
     }
     
-    
 
+    // layer 1 tiles
 
+    // coordinate system tiles
     float x_global = u + time * 0.01;
     float y_global = v + time * 0.01;
 
-    vec3 spacing = vec3(0.04, 0.04, 0.04);
-    vec3 tile_coord = vec3(x_global / 0.04, vertical_offset / 0.04, y_global / 0.04);
-    //vec3 tile_local_coord = vec3(mod(x_global, spacing.x), mod(vertical_offset, spacing.y), mod(y_global, spacing.z)) * (1 / 0.04);
-    vec3 tile_local_coord = fract((vec3(x_global, vertical_offset, y_global) + (spacing * 0.5)) * (1 / 0.04));
+    const vec3 spacing = vec3(0.04, 0.04, 0.04);
+    const vec3 spacing_half = spacing * 0.5;
+    const vec3 spacinging_reversed = vec3(1.0 / spacing.x, 1.0 / spacing.y, 1.0 / spacing.z);
+
+    vec3 tile_coord = vec3(x_global / spacing.x, vertical_offset / spacing.y, y_global / spacing.z);
+    vec3 tile_local_coord = fract((vec3(x_global, vertical_offset, y_global) + spacing_half ) * spacinging_reversed);
+
     vec3 tile_index = vec3(round(tile_coord.x), round(tile_coord.y), round(tile_coord.z)); // calculate_index(vec3(x_global, vertical_offset, y_global), spacing);
     int ixz = int(tile_index.x + tile_index.z);
     int ixz2 = int(tile_index.x * tile_index.z) % 999999;
-   float tile_rnd_1 = generateRandomNumber( ixz + 176043);
-   float tile_rnd_2 = generateRandomNumber( ixz + 538819);
+
+
+
+    // random values    
+    float tile_rnd_1 = generateRandomNumber( ixz + 176043);
+    float tile_rnd_2 = generateRandomNumber( ixz + 538819);
    float tile_rnd_3 = generateRandomNumber( ixz + 558013);
    float tile_rnd_wave = generateRandomNumber( ixz + 762774);
    float tile_rnd_building = generateRandomNumber( ixz2 + 45447);
