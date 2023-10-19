@@ -191,6 +191,11 @@ float tile_building_hight_offset(float x, float t)
     return pow(waveform_0_f3(x),  2 + (0.34 + 0.76 * sin(t + x*10000)))  * (0.99 + 0.01 * sin(x * 100 + t));
 }
 
+float tile_building_pool_offset(float x, float y)
+{
+    return 0.0;
+}
+
 void main()
 {
 	int id = gl_InstanceID;
