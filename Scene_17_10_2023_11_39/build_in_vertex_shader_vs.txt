@@ -34,6 +34,7 @@ flat out vec3 frag_msg_tile_off;
 flat out int frag_msg_tile_type;
 flat out vec3 frag_msg_tile_index;
 flat out vec2 frag_msg_uv;
+flat out int frag_msg_ixz;
 // 
 
 
@@ -323,13 +324,13 @@ void main()
     vec3 tile_index = vec3(round(tile_coord.x), round(tile_coord.y), round(tile_coord.z)); // calculate_index(vec3(x_global, vertical_offset, y_global), spacing);
 
     
-    // to frag
-    frag_msg_tile_index = tile_index;
 
     int ixz = int(tile_index.x + tile_index.z);
     int ixz2 = int(tile_index.x * tile_index.z) % 999999;
     
-    
+    // to frag
+    frag_msg_tile_index = tile_index;
+    frag_msg_ixz = ixz;
     
     // Tile
     float tile_off_v = 0.0;
