@@ -381,6 +381,7 @@ void main()
            }
            else
            {
+                tile_size *= 1.0;
            }
  
             
