@@ -14,8 +14,23 @@ uniform float camera_zoom;
 uniform int frame;
 uniform float time;
 
+
+
+// Defines constants ======================
+
+#define PI 3.14159265359
+#define TAO ( PI * 2.0 )
+#define PI_2 ( PI * 2.0 )
+
+#define SQRT_OF_2 1.4142135623730951
+
+// ========================================
+
+
 // Additional inputs
 flat in int instanceID;
+
+flat in vec3 frag_msg_tile_off;
 // 
 
 void main()
@@ -25,8 +40,11 @@ void main()
     //color.r = 1.0 + sin(FragWorldPos.x * 10);
     //color.g = 1.0 + sin(FragWorldPos.y * 10);
     //color.b = 1.0 + sin(FragWorldPos.y * 10);
-
-
+    
+    //color.r = sin(frag_msg_tile_off.x * 10 * PI_2);
+    //color.g = sin(frag_msg_tile_off.y * 100 * PI_2);
+    //color.b = sin(frag_msg_tile_off.z * 10 * PI_2);
+  
 
     vec4 result = Color + vec4(color, 1.0);
     FragColor = result * 1.0;
