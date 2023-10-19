@@ -340,6 +340,7 @@ void main()
                 tile_off_v = pow(tile_off_v, 10.0) * 0.024;
 
                 tile_size *= 4.0;
+                tile_color *= min((0.1 + tile_off_v * 142), 1.47);
            }
            else if(choice == 3)
            {
