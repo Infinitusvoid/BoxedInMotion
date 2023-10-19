@@ -204,6 +204,18 @@ float tile_building_pool_offset(float x, float y, float t)
     return value;
 }
 
+float tile_wave_offset(float x, float y, float t)
+{
+    float dx = abs(( 0.5 - x )) * 2.0;
+    float dy = abs(( 0.5 - y )) * 2.0;
+    dx = 1.0 - dx;
+    dy = 1.0 - dy;
+
+    float value_0 = sin(x * PI_2 - time) * sin(y * PI_2 + time);
+
+    return sin(value_0 * 10+ time) * dx * dy;
+}
+
 void main()
 {
 	int id = gl_InstanceID;
@@ -362,7 +374,10 @@ void main()
            }
            else if( choice == 4)
            {
-            
+                tile_off_v = tile_wave_offset(tile_local_coord.x, tile_local_coord.z, time + sin(time * 10.0 + 100 * tile_local_coord.y)) * 0.01;
+                
+                tile_size *= 1.74;
+                tile_color *= 1.0;
            }
            else
            {
