@@ -298,7 +298,10 @@ void main()
     
     
     // Tile
+    float tile_off_x = 0.0;
     float tile_off_v = 0.0;
+    float tile_off_z = 0.0;
+
     vec3 tile_color = vec3(0.0, 0.0, 0.0);
     float tile_size = 1.0;
     // Tile calculations
@@ -345,6 +348,10 @@ void main()
            else if(choice == 3)
            {
                 tile_off_v = tile_building_pool_offset(tile_local_coord.x, tile_local_coord.y);
+           }
+           else if( choice == 4)
+           {
+            
            }
            else
            {
