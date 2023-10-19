@@ -31,6 +31,9 @@ uniform float time;
 flat in int instanceID;
 
 flat in vec3 frag_msg_tile_off;
+flat in int frag_msg_tile_type; 
+flat in vec3 frag_msg_tile_index; 
+flat in vec2 frag_msg_uv;
 // 
 
 void main()
@@ -44,8 +47,19 @@ void main()
     //color.r = sin(frag_msg_tile_off.x * 10 * PI_2);
     //color.g = sin(frag_msg_tile_off.y * 100 * PI_2);
     //color.b = sin(frag_msg_tile_off.z * 10 * PI_2);
-  
+    
+    //if(frag_msg_tile_type == 4)
+    //{
+    //    color = vec3(1.0, 1.0, 1.0);
+    //}
 
+    //color.b = min(max(sin(frag_msg_tile_index.x * 4.0) * 100, 0), 2);
+    //color.g = min(max(sin(frag_msg_tile_index.y * 4.0) * 100, 0), 2);
+    //color.g = min(max(sin(frag_msg_tile_index.z * 4.0) * 100, 0), 2);
+
+    //color.r = sin(frag_msg_uv.x * PI_2 * 10);
+    //color.g = sin(frag_msg_uv.y * PI_2 * 10);
+    
     vec4 result = Color + vec4(color, 1.0);
     FragColor = result * 1.0;
     float factor_brightnes = dot(vec3(result), vec3(0.2126, 0.7152, 0.0722));

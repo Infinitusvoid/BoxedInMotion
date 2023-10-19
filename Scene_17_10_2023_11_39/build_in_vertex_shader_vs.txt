@@ -31,7 +31,9 @@ uniform float time;
 
 flat out int instanceID;
 flat out vec3 frag_msg_tile_off;
-
+flat out int frag_msg_tile_type;
+flat out vec3 frag_msg_tile_index;
+flat out vec2 frag_msg_uv;
 // 
 
 
@@ -261,8 +263,8 @@ void main()
         v = fract(v);
     }
 
-    
-    
+    // to frag
+    frag_msg_uv = vec2(u, v);
 
     float vertical_offset = 0.0;
     
@@ -321,7 +323,8 @@ void main()
     vec3 tile_index = vec3(round(tile_coord.x), round(tile_coord.y), round(tile_coord.z)); // calculate_index(vec3(x_global, vertical_offset, y_global), spacing);
 
     
-    
+    // to frag
+    frag_msg_tile_index = tile_index;
 
     int ixz = int(tile_index.x + tile_index.z);
     int ixz2 = int(tile_index.x * tile_index.z) % 999999;
@@ -357,6 +360,7 @@ void main()
            int choice = 0;
            choice = int(round(tile_rnd_building * 10.0));
 
+           frag_msg_tile_type = choice;
            
            if(choice == 1)
            {
