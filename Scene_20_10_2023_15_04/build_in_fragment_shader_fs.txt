@@ -14,9 +14,52 @@ uniform float camera_zoom;
 uniform int frame;
 uniform float time;
 
+// additional inputs
+flat in int msg_frag_id;
+
+// ======================
+// Defines constants 
+
+#define PI 3.14159265359
+#define TAO ( PI * 2.0 )
+#define PI_2 ( PI * 2.0 )
+
+#define SQRT_OF_2 1.4142135623730951
+
+// ========================================
+// Utils
+// Define a function to generate a random number based on an input integer
+float generateRandomNumber(int inputInt)
+{
+    // Cast the input integer to uint to address type mismatch
+    uint seed = uint(inputInt);
+
+    // Define the hash function
+    seed = (seed ^ 61u) ^ (seed >> 16u);
+    seed *= 9u;
+    seed = seed ^ (seed >> 4u);
+    seed *= 0x27d4eb2du;
+    seed = seed ^ (seed >> 15u);
+
+    // Normalize and return the result
+    return float(seed) / 4294967296.0; // Normalize to [0, 1]
+}
+
+
 void main()
 {
-    vec4 result = Color + vec4(vec3(0.0, 0.0, 0.0), 1.0);
+    int id = msg_frag_id;
+    
+    vec3 color = vec3(1.0, 1.0, 1.0);
+    
+    color.r = abs(sin(FragWorldPos.x * PI_2 * 10 + time + 1000.0 * generateRandomNumber(id)));
+    color.g = abs(sin(FragWorldPos.y * PI_2 * 10 + time + 1000.0 * generateRandomNumber(id)));
+    color.b = abs(sin(FragWorldPos.z * PI_2 * 10 + time + 1000.0 * generateRandomNumber(id)));
+    
+   
+    
+    vec4 result = Color * 0.0+ vec4(color, 1.0);
+    
     FragColor = result * 1.0;
     float factor_brightnes = dot(vec3(result), vec3(0.2126, 0.7152, 0.0722));
     if(factor_brightnes > 1.0) // transhold usually set at 1.0

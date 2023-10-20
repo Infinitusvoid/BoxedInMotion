@@ -26,6 +26,9 @@ uniform int frame;
 uniform float time;
 
 
+// additional outputs
+flat out int msg_frag_id;
+
 // Function to compute the offset for the sphere
 vec3 computeSphereOffset(float latitude, float longitude, float radius)
 {
@@ -134,10 +137,14 @@ const int num_boxes_layer = num_boxes_x * num_boxes_y;
 void main()
 {
     int id = gl_InstanceID;
+    msg_frag_id = gl_InstanceID;
+
     FragObjectPos = aPos; // Store the object space position
-    FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
+    //FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
     Color = instanceData.color;
     
+
+
     vec3 offset = vec3(
         round(float(id % num_boxes_x)),
         round(float( ((id / num_boxes_y) % num_boxes_y ) )),
@@ -145,6 +152,7 @@ void main()
         ) * SPACING;
     
     const vec3 scale = vec3(BOX_SIZE, BOX_SIZE, BOX_SIZE);
-
-	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
+    
+    gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
+    FragWorldPos = vec3(instanceData.model * vec4(aPos * scale + offset, 1.0)); // Calculate world space position
 }
