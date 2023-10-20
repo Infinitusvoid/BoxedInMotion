@@ -148,6 +148,15 @@ void main()
     virtual_camera_position = vec3(0.0, 0.0, -7.0);
     virtual_direction = vec3(FragObjectPos.x * 2 - 1.0, FragObjectPos.y * 2.0 - 1.0, 1.0);
     
+    //virtual_direction = normalize((FragObjectPos - camera_position) - FragObjectPos);
+
+    virtual_camera_position = camera_position;
+    virtual_direction = normalize(FragWorldPos - camera_position);
+
+    //virtual_camera_position = camera_position - msg_frag_instance_position;
+
+    //virtual_direction = camera_position - vec3(FragObjectPos.x * 2 - 1.0, FragObjectPos.y * 2.0 - 1.0, 1.0);
+
     color = ray_march(virtual_camera_position, virtual_direction);
    
     
