@@ -58,17 +58,20 @@ void main()
     color.b = abs(sin(FragWorldPos.z * PI_2 * 10 + time + 1000.0 * generateRandomNumber(id)));
     
     color.r = 0.0;
-
-    vec2 v = vec2(FragObjectPos.x, FragObjectPos.y);
-    color.g = abs(sin(FragObjectPos.x * PI_2 * 2.0));
-    color.g = length(v);
-    color.b = 0.0;
-
-    if(msg_frag_instance_position.x < FragWorldPos.x +  0.24 * sin(FragWorldPos.y + time))
+    
+    if(false)
     {
-        color *= 0.24;
+        vec2 v = vec2(FragObjectPos.x, FragObjectPos.y);
+        color.g = abs(sin(FragObjectPos.x * PI_2 * 2.0));
+        color.g = length(v);
+        color.b = 0.0;
+        
+        if(msg_frag_instance_position.x < FragWorldPos.x +  0.24 * sin(FragWorldPos.y + time))
+        {
+            color *= 0.24;
+        }
     }
-
+    
     vec4 result = Color * 0.0+ vec4(color, 1.0);
     
     FragColor = result * 1.0;
