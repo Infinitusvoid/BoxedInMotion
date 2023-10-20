@@ -30,7 +30,7 @@ uniform float time;
 // Additional inputs
 flat in int instanceID;
 
-flat in vec3 frag_msg_tile_off;
+in vec3 frag_msg_tile_off;
 flat in int frag_msg_tile_type; 
 flat in vec3 frag_msg_tile_index; 
 flat in vec2 frag_msg_uv;
@@ -320,12 +320,10 @@ void main()
         }
        
 
-        //color = vec3(0.0, frag_msg_tile_off.y * 24 * value, 0.0) * 10;
-        //color.r = frag_msg_tile_rnd_0;
-        //color.g = sin(frag_msg_uv.x * PI_2 * 10); //sin(frag_msg_uv.x * PI_2 * 10) * frag_msg_tile_rnd_0;
-        //color.b = frag_msg_tile_rnd_2; //sin(frag_msg_uv.y * PI_2 * 10) * frag_msg_tile_rnd_1;
+        //color *= pnoise(FragWorldPos, vec3(100.0, 100.0, 100.0));
+        color *= pnoise(frag_msg_tile_off * 10, vec3(100.0, 100.0, 100.0));
     
-
+        
         factor_color_vertex = 0.0;
     }
     

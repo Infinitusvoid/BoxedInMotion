@@ -30,7 +30,7 @@ uniform float time;
 // Additional outputs
 
 flat out int instanceID;
-flat out vec3 frag_msg_tile_off;
+out vec3 frag_msg_tile_off;
 flat out int frag_msg_tile_type;
 flat out vec3 frag_msg_tile_index;
 flat out vec2 frag_msg_uv;
@@ -463,7 +463,6 @@ void main()
 
     //Color = vec4(0.2 * v_cam.x, 0.4 * v_cam.y, 0.2 * v_cam.z, 1.0) + vec4(0.0, 0.0, 0.0, 1.0) * factor_color_amplification;
     Color = vec4(color, 1.0);
-    vec4 out_position = projection * view * instanceData.model * vec4(aPos * size + offset, 1.0);
-    gl_Position = out_position;
-    FragWorldPos = out_position.xyz;    
+    gl_Position = projection * view * instanceData.model * vec4(aPos * size + offset, 1.0);
+    FragWorldPos = (instanceData.model * vec4(aPos * size + offset, 1.0)).xyz;    
 }
