@@ -161,12 +161,16 @@ void main()
     color = ray_march(virtual_camera_position, virtual_direction);
    
    
+   if(false)
+   {
    color += vec3(msg_frag_instance_position.x, msg_frag_instance_position.y, msg_frag_instance_position.z) * 0.01;
    
    if(msg_frag_instance_position.x < FragWorldPos.x)
    {
         color *= 10;
    }
+   }
+   
 
     //
     
