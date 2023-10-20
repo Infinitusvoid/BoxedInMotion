@@ -325,6 +325,7 @@ void main()
         
         factor_color_vertex = 0.01;
     }
+   
     
     vec3 fwp = FragWorldPos;
     float camera_dist = length(fwp - camera_position);
