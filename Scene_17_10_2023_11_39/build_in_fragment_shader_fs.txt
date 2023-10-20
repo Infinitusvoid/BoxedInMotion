@@ -321,16 +321,43 @@ void main()
        
 
         //color *= pnoise(FragWorldPos, vec3(100.0, 100.0, 100.0));
-        color *= pnoise(frag_msg_tile_off * 10, vec3(100.0, 100.0, 100.0));
-    
+        color *= ( 0.4 + 0.6 * pnoise(frag_msg_tile_off * 10, vec3(100.0, 100.0, 100.0)));
         
-        factor_color_vertex = 0.0;
+        factor_color_vertex = 0.01;
     }
     
+    vec3 fwp = FragWorldPos;
+    float camera_dist = length(fwp - camera_position);
+    float noj_dot = dot(camera_front, normalize(fwp - camera_position));
+    
+    float light_effect_max_distance = 1000 + 200 * sin(time * 0.0124424);
+    float light_effect_max_distance_factor = 1.0 / light_effect_max_distance;
+    if(camera_dist > light_effect_max_distance)
+    {
+        camera_dist = light_effect_max_distance;
+    }
+
+    float noj_oclussions_effect_0 = cnoise(fwp * 0.01 * 10 + vec3(time * 0.1, -time * 0.0024, time * 0.02));
+    
+
+    float noj_oclussions_effect = pow(noj_oclussions_effect_0, 2.0);
+
+
+    noj_dot = fract(pow(noj_dot, 2) * 1.0);
+    
+    float ambient = 0.5;
+    float other_light = 1.0 - ambient;
+    float exponent_angle = 0.04;
+    float exponent_distance = 1.1;
+    float light = pow((light_effect_max_distance - camera_dist) * light_effect_max_distance_factor * (ambient + pow(noj_dot, exponent_angle) * other_light), exponent_distance);
+
+    light *= (0.9 + 0.1 * abs(sin(noj_oclussions_effect)));
     
     
-    
+
     vec4 result = Color * factor_color_vertex + vec4(color, 1.0);
+
+    result *= vec4(noj_dot * light, noj_dot * light, noj_dot * light, 1.0);
 
     FragColor = result * 1.0;
     float factor_brightnes = dot(vec3(result), vec3(0.2126, 0.7152, 0.0722));

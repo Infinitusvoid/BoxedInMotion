@@ -382,7 +382,7 @@ void main()
            {
                 tile_off_v = min( tile_building_hight_offset(tile_local_coord.z, time * 0.01), tile_building_hight_offset(tile_local_coord.x, time * 0.001)) * 0.01;
 
-                tile_size *= 4.0;
+                tile_size *= 2.0;
            }
            else if(choice == 2)
            {
