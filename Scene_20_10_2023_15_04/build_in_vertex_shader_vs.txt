@@ -118,39 +118,33 @@ vec3 parametricCubeFull(float u, float v, float sideLength)
     return position;
 }
 
+// =====================
+// Definitions of 
+#define SPACING 1000
+#define BOX_SIZE 240
+
+// =====================
+// Constants
+const int num_boxes_x = 100;
+const int num_boxes_y = 100;
+const int num_boxes_z = 100;
+const int num_boxes_layer = num_boxes_x * num_boxes_y;
+
+
 void main()
 {
-	int id = gl_InstanceID;
-	FragObjectPos = aPos; // Store the object space position
-	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
-	Color = instanceData.color;
-
-	float u = float(id % 1000) * 0.001;
-	float v = float(id / 1000) * 0.001;
-	
+    int id = gl_InstanceID;
+    FragObjectPos = aPos; // Store the object space position
+    FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
+    Color = instanceData.color;
     
-    vec3 offset = vec3(0.0, 0.0, 0.0);
-
-
-    float t_signal_0 = pow(abs(sin(time * 0.1)), 4.0);
-    float t_signal_1 = 100 * sin((u + v) * 100.0  + time);
-    float t_signal_n = pow(abs(t_signal_1)*0.01, 2.0 + 7.0 * abs(sin(time * 10 + u * 200)));
-    t_signal_n = clamp(t_signal_n, 0.0, 1.0);
-
-	vec3 offset_0 = computeSphereOffset(u, v, 1000.0 + t_signal_1);
+    vec3 offset = vec3(
+        round(float(id % num_boxes_x)),
+        round(float( ((id / num_boxes_y) % num_boxes_y ) )),
+        round(float(id / num_boxes_layer ))
+        ) * SPACING;
     
-   
-    vec3 offset_1 = parametricCubeFull(u, v, 1000);
-    
-    
-    //t_signal_0  = 0.0;
+    const vec3 scale = vec3(BOX_SIZE, BOX_SIZE, BOX_SIZE);
 
-    offset = mix(offset_0, offset_1, t_signal_0);
-
-	
-
-	Color = vec4(0.2, 0.4 + 0.1 * sin(t_signal_0), 0.2 + 0.2 * sin(t_signal_1), 1.0) + vec4(0.0, t_signal_n, 0.0, 1.0);
-
-
-	gl_Position = projection * view * instanceData.model * vec4(aPos + offset, 1.0);
+	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
 }
