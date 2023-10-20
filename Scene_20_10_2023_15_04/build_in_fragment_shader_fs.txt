@@ -51,6 +51,13 @@ float distance_from_sphere(in vec3 p, in vec3 c, in float r)
     return length(p - c) - r;
 }
 
+float map_the_world(in vec3 p)
+{
+    float sphere_0 = distance_from_sphere(p, vec3(0.0), 1.0);
+
+    return sphere_0;
+}
+
 vec3 ray_march(vec3 ro, vec3 rd)
 {
     float total_distance_traveled = 0.0;
@@ -112,11 +119,12 @@ void main()
     
     // Virtual
     vec3 virtual_camera_position = vec3(sin(time), sin(time) * 0.0, 2.0 + 0.5 * sin(time));
-    virtual_camera_position = vec3(0.0, 0.0, -4.0);
     vec3 virtual_direction = normalize(virtual_camera_position - FragObjectPos);
     
+    virtual_camera_position = vec3(0.0, 0.0, -7.0);
+    virtual_direction = vec3(FragObjectPos.x * 2 - 1.0, FragObjectPos.y * 2.0 - 1.0, 1.0);
     
-    vec3 nja = ray_march(virtual_camera_position, virtual_direction);
+    color = ray_march(virtual_camera_position, virtual_direction);
    
     
     //
