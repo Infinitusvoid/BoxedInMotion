@@ -53,9 +53,15 @@ float distance_from_sphere(in vec3 p, in vec3 c, in float r)
 
 float map_the_world(in vec3 p)
 {
-    float displacement_influence = sin(5.0 * p.x) * sin(5.0 * p.y) * sin(5.0 * p.z) * 0.25;
-    float sphere_0 = distance_from_sphere(p, vec3(0.0), 1.0);
+    float instance_rnd_0 = generateRandomNumber(msg_frag_id + 24783442);
+    float instance_rnd_1 = generateRandomNumber(msg_frag_id + 27234342);
+    float instance_rnd_2 = generateRandomNumber(msg_frag_id + 74233434);
 
+    float displacement_influence = sin(instance_rnd_0 * 5.0 * p.x + time) * sin(instance_rnd_1 * 5.0 * p.y + time) * sin(instance_rnd_2 * 5.0 * p.z + time) * 0.25;
+    displacement_influence *= 0.42;
+
+    float sphere_0 = distance_from_sphere(p, vec3(0.0), 2.0);
+    
     return sphere_0 + displacement_influence;
 }
 
@@ -75,7 +81,7 @@ vec3 calculate_normal(in vec3 p)
 vec3 ray_march(vec3 ro, vec3 rd)
 {
     float total_distance_traveled = 0.0;
-    const int NUMBER_OF_STEPS = 32;
+    const int NUMBER_OF_STEPS = 64;
     const float MINIMUM_HIT_DISTANCE = 0.001;
     const float MAXIMUM_TRACE_DISTANCE = 1000.0;
     
@@ -85,7 +91,7 @@ vec3 ray_march(vec3 ro, vec3 rd)
         vec3 current_position = ro + total_distance_traveled * rd;
         
         //
-        float distance_to_the_closest = distance_from_sphere(current_position, vec3(0.0), 1.0);
+        float distance_to_the_closest = map_the_world(current_position);
         
         if(distance_to_the_closest < MINIMUM_HIT_DISTANCE) // hit
         {
@@ -99,7 +105,13 @@ vec3 ray_march(vec3 ro, vec3 rd)
             vec3 direction_to_light = normalize(current_position - light_position);
             float diffuse_intensity = max(0.0, dot(normal, direction_to_light)) + 0.01;
 
-            return vec3(0.0, 1.0, 0.0) * diffuse_intensity;
+            //return vec3(0.0, 1.0, 0.0) * diffuse_intensity;
+
+            vec3 light = normalize(vec3(1));
+            float brightness = max(dot(light, normal), 0.) + 0.1;
+            
+            return vec3(sqrt(brightness));
+
         }
         
         if(total_distance_traveled > MAXIMUM_TRACE_DISTANCE) // miss
@@ -142,24 +154,15 @@ void main()
     }
     
     // Virtual
-    vec3 virtual_camera_position = vec3(sin(time), sin(time) * 0.0, 2.0 + 0.5 * sin(time));
-    vec3 virtual_direction = normalize(virtual_camera_position - FragObjectPos);
-    
-    virtual_camera_position = vec3(0.0, 0.0, -7.0);
-    virtual_direction = vec3(FragObjectPos.x * 2 - 1.0, FragObjectPos.y * 2.0 - 1.0, 1.0);
-    
-    //virtual_direction = normalize((FragObjectPos - camera_position) - FragObjectPos);
+    vec3 virtual_camera_position = camera_position - msg_frag_instance_position;
+    vec3 virtual_direction = normalize(FragWorldPos - camera_position);
 
-    virtual_camera_position = camera_position - msg_frag_instance_position;
-    virtual_direction = normalize(FragWorldPos - camera_position);
-
-    //virtual_camera_position = camera_position - msg_frag_instance_position;
-
-    //virtual_direction = camera_position - vec3(FragObjectPos.x * 2 - 1.0, FragObjectPos.y * 2.0 - 1.0, 1.0);
-
-    
     color = ray_march(virtual_camera_position, virtual_direction);
-   
+    
+    if(color.r == 0.0 && color.g == 0 && color.b == 0)
+    {
+        discard;
+    }
    
    if(false)
    {
