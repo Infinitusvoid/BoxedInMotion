@@ -104,11 +104,26 @@ vec3 ray_march(vec3 ro, vec3 rd)
             // the point of intersection to the light source
             vec3 direction_to_light = normalize(current_position - light_position);
             float diffuse_intensity = max(0.0, dot(normal, direction_to_light)) + 0.01;
-
+            
             //return vec3(0.0, 1.0, 0.0) * diffuse_intensity;
-
+            
             vec3 light = normalize(vec3(1));
-            float brightness = max(dot(light, normal), 0.) + 0.1;
+            //float brightness = max(dot(light, normal), 0.) + 0.1;
+            
+            //float brightness = dot(light, normal) * 0.5 +  0.5;
+            
+            //float brightness = dot(light, normal);
+            //brightness = mix(max(brightness, 0.0), brightness * 0.5 + 0.5, 0.2);
+            
+            //float brightness = 0;
+            //float image = length( sin(normal * 2.5) * 0.5 + 0.5) / sqrt(3.0);
+            //brightness += pow(image, 2.0);
+            
+            float brightness = 0;
+            //float image = length( sin(normal * 2.5) * 0.5 + 0.5) / sqrt(3.0) * smoothstep(-1., 1., normal.z);
+            float image = length( sin(normal * 2.5) * 0.5 + 0.5) / sqrt(3.0) * smoothstep(-1., 1., normal.y);
+            //brightness += pow(image, 2.0);
+            brightness += image;
             
             return vec3(sqrt(brightness));
 
