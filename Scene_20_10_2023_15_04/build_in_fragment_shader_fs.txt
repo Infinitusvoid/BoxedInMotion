@@ -51,6 +51,29 @@ float distance_from_sphere(in vec3 p, in vec3 c, in float r)
     return length(p - c) - r;
 }
 
+float opUnion( float d1, float d2 ) { return min(d1,d2); }
+
+float opSubtraction( float d1, float d2 ) { return max(-d1,d2); }
+
+float opIntersection( float d1, float d2 ) { return max(d1,d2); }
+
+float opSmoothUnion( float d1, float d2, float k ) {
+    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) - k*h*(1.0-h); }
+
+float opSmoothSubtraction( float d1, float d2, float k ) {
+    float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );
+    return mix( d2, -d1, h ) + k*h*(1.0-h); }
+
+float opSmoothIntersection( float d1, float d2, float k ) {
+    float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) + k*h*(1.0-h); }
+
+float sdSphere( vec3 p, float s )
+{
+  return length(p)-s;
+}
+
 float map_the_world(in vec3 p)
 {
     float instance_rnd_0 = generateRandomNumber(msg_frag_id + 24783442);
@@ -60,9 +83,26 @@ float map_the_world(in vec3 p)
     float displacement_influence = sin(instance_rnd_0 * 5.0 * p.x + time) * sin(instance_rnd_1 * 5.0 * p.y + time) * sin(instance_rnd_2 * 5.0 * p.z + time) * 0.25;
     displacement_influence *= 0.42;
 
-    float sphere_0 = distance_from_sphere(p, vec3(0.0), 2.0);
-    
+    float sphere_0 = distance_from_sphere(p, vec3(0.0), 1.0);
+    float sphere_1 = sdSphere(p - vec3(0.2, 2.4 * sin(time * 0.1), 0.2), 0.4);
+    sphere_0 = opSmoothUnion(sphere_0, sphere_1, 0.1);
+
+
     return sphere_0 + displacement_influence;
+}
+
+float calcAO( in vec3 pos, in vec3 nor )
+{
+	float occ = 0.0;
+    float sca = 1.0;
+    for( int i=0; i<5; i++ )
+    {
+        float h = 0.001 + 0.15*float(i)/4.0;
+        float d = map_the_world( pos + h*nor );
+        occ += (h-d)*sca;
+        sca *= 0.95;
+    }
+    return clamp( 1.0 - 1.5*occ, 0.0, 1.0 );    
 }
 
 vec3 calculate_normal(in vec3 p)
@@ -77,6 +117,22 @@ vec3 calculate_normal(in vec3 p)
 
     return normalize(normal);
 }
+
+float softshadow( in vec3 ro, in vec3 rd, float mint, float maxt, float w )
+{
+    float res = 1.0;
+    float t = mint;
+    for( int i=0; i<256 && t<maxt; i++ )
+    {
+        float h = map_the_world(ro + t*rd);
+        res = min( res, h/(w*t) );
+        t += clamp(h, 0.005, 0.50);
+        if( res<-1.0 || t>maxt ) break;
+    }
+    res = max(res,-1.0);
+    return 0.25*(1.0+res)*(1.0+res)*(2.0-res);
+}
+
 
 vec3 ray_march(vec3 ro, vec3 rd)
 {
@@ -124,8 +180,12 @@ vec3 ray_march(vec3 ro, vec3 rd)
             float image = length( sin(normal * 2.5) * 0.5 + 0.5) / sqrt(3.0) * smoothstep(-1., 1., normal.y);
             //brightness += pow(image, 2.0);
             brightness += image;
+            brightness = sqrt(brightness);
+            brightness *= softshadow(ro, rd, 0.1, 10.0, 100);
             
-            return vec3(sqrt(brightness));
+            //brightness *= calcAO( current_position,  normal);
+            
+            return vec3(brightness);
 
         }
         
