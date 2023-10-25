@@ -16,7 +16,15 @@ uniform float time;
 
 void main()
 {
-    vec4 result = Color + vec4(vec3(0.0, 0.0, 0.0), 1.0);
+    float r = sin(FragWorldPos.x);
+    float g = sin(FragWorldPos.y);
+    float b = sin(FragWorldPos.z);
+
+    vec3 color = vec3(r, g, b);
+
+
+    vec4 result = Color * 0.0 + vec4(color, 1.0);
+
     FragColor = result * 1.0;
     float factor_brightnes = dot(vec3(result), vec3(0.2126, 0.7152, 0.0722));
     if(factor_brightnes > 1.0) // transhold usually set at 1.0

@@ -198,15 +198,28 @@ namespace Scene_
 
 	void init(Engine::Instance_data* data)
 	{
+		const int num_boxes_x = 100;
+		const int num_boxes_y = 100;
+		const int num_boxes_z = 100;
+		const int num_boxes_layer = num_boxes_x * num_boxes_y;
+
 		for (unsigned int i = 0; i < Constants::num_boxes; i++)
 		{
 			data[i].model = glm::mat4(1.0f);
 			auto& model = data[i].model;
 			model = glm::mat4(1.0f);
-			//model = glm::translate(model, glm::vec3(i, 0, 0));
+			
+			glm::vec3 offset = glm::vec3(
+				round(float(i % num_boxes_x)),
+				round(float(((i / num_boxes_y) % num_boxes_y))),
+				round(float(i / num_boxes_layer))
+			) * 1.0f;
+			
+			model = glm::translate(model, offset);
+			
 			//model = glm::translate(model, glm::vec3(1, 1, 1));
-			model = glm::scale(model, glm::vec3(0.01f));
-
+			model = glm::scale(model, glm::vec3(0.5f));
+			
 
 			auto& color = data[i].color;
 			color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -231,6 +244,8 @@ namespace Scene_
 
 int main()
 {
+	std::cout << "Staring : Scene_25_10_2023_14_42\n";
+
 	//Json::Json json;
 	//json.init();
 
