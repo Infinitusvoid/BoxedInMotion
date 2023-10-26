@@ -21,14 +21,7 @@ Scene_info g_scene_info;
 
 namespace Constants
 {
-	constexpr int num_boxes_x = 256;
-	constexpr int num_boxes_y = 256;
-	constexpr int num_boxes_z = 16;
-	constexpr int num_boxes_layer = num_boxes_x * num_boxes_y;
-
-	constexpr int num_boxes = num_boxes_x * num_boxes_y * num_boxes_z;
-
-
+	constexpr int num_boxes = 1000 * 1000;
 }
 
 void calcualte_local_2d_axis(const Line3d& line, glm::vec3* out_axis_x, glm::vec3* out_axis_y)
@@ -213,22 +206,9 @@ namespace Scene_
 			auto& model = data[i].model;
 			model = glm::mat4(1.0f);
 			
-			
-			int index_x = float(i % Constants::num_boxes_x);
-			int index_y = float(((i / Constants::num_boxes_y) % Constants::num_boxes_y));
-			int index_z = float(i / Constants::num_boxes_layer);
-			
-			if (true)
-			{
-				glm::vec3 offset = glm::vec3(
-					round(index_x),
-					round(index_y),
-					round(index_z)
-				) * 0.0f;
-				model = glm::translate(model, offset);
-			}
-			
-			
+			glm::vec3 offset = glm::vec3(i, 0.0f, 0.0f);
+			model = glm::translate(model, offset);
+
 			//model = glm::translate(model, glm::vec3(1, 1, 1));
 			model = glm::scale(model, glm::vec3(0.5f));
 			

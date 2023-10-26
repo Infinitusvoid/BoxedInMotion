@@ -35,23 +35,6 @@ uniform float time;
 
 // =====================
 // Constants
-const int num_boxes_x = 256;
-const int num_boxes_y = 256;
-const int num_boxes_z = 16;
-const int num_boxes_layer = num_boxes_x * num_boxes_y;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Function to compute the offset for the sphere
@@ -171,24 +154,10 @@ void main()
     //Color = vec4(0.2, 0.4 + 0.1 * sin(t_signal_0), 0.2 + 0.2 * sin(t_signal_1), 1.0) + vec4(0.0, t_signal_n, 0.0, 1.0);
     
 
-    int index_x = int(round(float(id % num_boxes_x)));
-    int index_y = int(round(float(id / num_boxes_layer )));
-    int index_z = int(round(float( ((id / num_boxes_y) % num_boxes_y ) )));
     
-    float x = index_x;
-    float z = index_z;
-    
-    float hight = 10 + 4 * sin((x * z * 0.1) * 0.001);
-    
-    vec3 offset = vec3(index_x, index_y, index_z);
+    vec3 offset = vec3(id, 0.0, 0.0);
 
     vec3 scale = vec3(0.5);
-
-    if(index_y > hight)
-    {
-        offset.y += 10000;
-    }
-    
 
     
    
