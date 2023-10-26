@@ -206,7 +206,7 @@ namespace Scene_
 			auto& model = data[i].model;
 			model = glm::mat4(1.0f);
 			
-			glm::vec3 offset = glm::vec3(i, 0.0f, 0.0f);
+			glm::vec3 offset = glm::vec3(0.0f, 0.0f, 0.0f);
 			model = glm::translate(model, offset);
 
 			//model = glm::translate(model, glm::vec3(1, 1, 1));
