@@ -19,6 +19,8 @@ uniform float time;
 flat in int instanceID;
 in vec3 msg_frag_instance_position;
 
+#define VERSION_0
+
 
 // Defines constants ======================
 
@@ -330,7 +332,7 @@ float map_the_world(in vec3 p)
     float d = 9999; 
     
     // T basic
-    //float ttime = time;
+    //float ttime = time * 0.1;
     
     // T
     //float ttime = (time * sin(p.x) * cos(p.z)) * sin(time) + cos(time) * time;
@@ -360,10 +362,10 @@ float map_the_world(in vec3 p)
         ttime *= 0.5;
     }
     
-     if(abs(sin(p.x + toffset)) < 0.01)
+    if(abs(sin(p.x + toffset)) < 0.01)
     {
         ttime *= 0.01;
-    }
+     }
 
 
 
@@ -413,6 +415,16 @@ float map_the_world(in vec3 p)
 
 
     color_world = vec3(0.0, 0.7 + 0.1 * sin(noj_0 * 10) + noj_1_e0 * 10, 0.4) + color_v0;
+
+
+    #ifdef VERSION_0
+        color_world.g = pow(color_world.g, 10.0);
+        color_world *= 4.0 * 0.1 * 1.2;
+        color_world.b *= 0.2 * 20;
+    #endif
+    
+
+    
 
     return d;
 }
@@ -520,8 +532,8 @@ float softshadow( in vec3 ro, in vec3 rd, float mint, float maxt, float w )
 vec3 ray_march(vec3 ro, vec3 rd)
 {
     float total_distance_traveled = 0.0;
-    const int NUMBER_OF_STEPS = 256 * 2;
-    const float MINIMUM_HIT_DISTANCE = 0.0001;
+    const int NUMBER_OF_STEPS = 256 * 2 * 2;
+    const float MINIMUM_HIT_DISTANCE = 0.00001;
     const float MAXIMUM_TRACE_DISTANCE = 4000.0;
     
     for(int i = 0; i < NUMBER_OF_STEPS; i++)
@@ -646,6 +658,10 @@ void main()
             vec3 virtual_direction = normalize(FragWorldPos - camera_position);
             //vec3 color_n = ray_march(virtual_camera_position, virtual_direction);
             vec3 color_n = ray_march(camera_position, virtual_direction);
+            
+            #ifdef VERSION_0
+                color_n *= 2.4;
+            #endif
 
             r = color_n.r;
             g = color_n.g;
