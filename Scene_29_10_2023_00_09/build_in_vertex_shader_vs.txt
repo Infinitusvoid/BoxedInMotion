@@ -25,6 +25,13 @@ uniform float camera_zoom;
 uniform int frame;
 uniform float time;
 
+// Defines constants ======================
+
+#define PI 3.14159265359
+#define TAO ( PI * 2.0 )
+#define PI_2 ( PI * 2.0 )
+
+#define SQRT_OF_2 1.4142135623730951
 
 // Function to compute the offset for the sphere
 vec3 computeSphereOffset(float latitude, float longitude, float radius)
@@ -118,7 +125,13 @@ vec3 parametricCubeFull(float u, float v, float sideLength)
     return position;
 }
 
-
+vec3 torus(float u, float v, float r1, float r2)
+{
+    float x = (r1 + r2 * cos(v)) * cos(u);
+    float y = (r1 + r2 * cos(v)) * sin(u);
+    float z = r2 * sin(v);
+    return vec3(y, z, x);
+}
 
 void main()
 {
@@ -138,7 +151,7 @@ void main()
 
     offset = mix(offset_0, offset_1, 1.0);
 
-
+    offset = torus(u * PI_2, v * PI_2, 1000.0, 100.0);
 
 	
     vec3 scale = vec3(1.0, 1.0, 1.0);
