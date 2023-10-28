@@ -19,10 +19,14 @@ have an exe file with motion
 names with than have audio and video_raw video_done subfolders
 decide how you will do this 
 
-### V_Scene[]_v_[name]  
-Create variations for each scene as new project to keep code simple do this by create a template
-named
-V_Scene_[]_v_[name]
+# Template V_Scene[]_v_[name] 
+ * for every scene variation you create one motion video one template  
+
+* Create variations for each scene as new project to keep code simple do this by create a template  
+named  
+
+Form :  
+V_Scene_[]_v_[name]  
 
 
 you create video
@@ -40,7 +44,9 @@ publish
 
 and publish link to video online do in the loop
 
-## Table Motion N to V_Scene_[]_v_[name]
+# Table Motion N to V_Scene_[]_v_[name]
+
+
 
 # Audio save wav you create
 save on external disk under audio/motion_done/audio_0.wav  
