@@ -10,8 +10,7 @@ if some template is to no use delete it
 
 ## Template list
 T_1 Sphere boxes  
-T_2 Torus Boxes  
-T_3 Raymarching  
+T_2v0 Raymarching only
 
 ## Pipeline
 Select a theme example :  
