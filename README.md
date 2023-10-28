@@ -19,6 +19,9 @@ have an exe file with motion
 names with than have audio and video_raw video_done subfolders
 decide how you will do this 
 
+Create variations for each scene as new project to keep code simple do this by create a template and deleting the template after it
+Scene_[]_v_[name]
+
 you create video
 than you create many audios 
 
