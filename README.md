@@ -14,37 +14,30 @@ T_2 Torus Boxes
 T_3 Raymarching
 
 ## Pipeline
-Select a theme example thrus create as many nice thoruses scenes save them each save them each sepeate 
+Select a theme example :  
+thrus, than you  create as many nice thoruses scenes variations save them each save them each sepeate 
 have an exe file with motion 
 names with than have audio and video_raw video_done subfolders
 decide how you will do this 
 
-# Template V_Scene[]_v_[name] 
+# Template V_Scene[data_id]_v_[variation_number] 
  * for every scene variation you create one motion video one template  
-
-* Create variations for each scene as new project to keep code simple do this by create a template  
-named  
-
+ * Create variations for each scene as new project to keep code simple do this by create a template named  
+  
 Form :  
 V_Scene_[]_v_[name]  
 
+## Steps after video is created
+ * you create video
+ * than you create many audios 
+ * you mix them be audacity
+ * you compose video and audio in davinci, apply you refine the music
 
-you create video
-than you create many audios 
+ * write a name and description on youtube
+ * publish 
+ * publish link to video online do in the loop
 
-you mix them be
- 
-
-you compose in davinci
-you refine the music
-
-write a name and description
-
-publish 
-
-and publish link to video online do in the loop
-
-# Table Motion N to V_Scene_[]_v_[name]
+# Table Motion N to V_Scene_[]_v_[]
 
 
 
