@@ -33,6 +33,23 @@ uniform float time;
 
 #define SQRT_OF_2 1.4142135623730951
 
+// Define a function to generate a random number based on an input integer
+float generateRandomNumber(int inputInt)
+{
+    // Cast the input integer to uint to address type mismatch
+    uint seed = uint(inputInt);
+
+    // Define the hash function
+    seed = (seed ^ 61u) ^ (seed >> 16u);
+    seed *= 9u;
+    seed = seed ^ (seed >> 4u);
+    seed *= 0x27d4eb2du;
+    seed = seed ^ (seed >> 15u);
+
+    // Normalize and return the result
+    return float(seed) / 4294967296.0; // Normalize to [0, 1]
+}
+
 // Function to compute the offset for the sphere
 vec3 computeSphereOffset(float latitude, float longitude, float radius)
 {
@@ -140,23 +157,43 @@ void main()
 	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
 	Color = instanceData.color;
 
+    float ttime = time;
+
 	float u = float(id % 1000) * 0.001;
 	float v = float(id / 1000) * 0.001;
 	
+    u = generateRandomNumber(id * 2134124);
+    v = generateRandomNumber(id * 4231444);
     
+    u = fract(u + ttime * 0.0042) * 0.42 * 0.7;
+    v = fract(v + ttime * 0.0042);
+
     vec3 offset = vec3(0.0, 0.0, 0.0);
 
 	vec3 offset_0 = computeSphereOffset(u, v, 1000.0);
     vec3 offset_1 = parametricCubeFull(u, v, 1000);
 
-    offset = mix(offset_0, offset_1, 1.0);
 
-    offset = torus(u * PI_2, v * PI_2, 1000.0, 100.0);
+    float offset_r0 = 10 * sin(v * PI_2 * 10 + time * 0.24);
+    float offset_r1 = 42 * sin(u * PI_2 * 10 + time * 0.24);
 
+    vec3 offset_2 = torus(u * PI_2, v * PI_2, 1000.0 + offset_r1, 100.0 + offset_r0);
+
+    // offset = mix(offset_0, offset_2, abs(sin(time)) );
+    // offset = mix(offset, offset_1, abs(sin(time * 0.1)) );
+    offset = offset_2;
+
+    float g = fract(offset_r0 * 0.1);
+    float b = pow(fract(offset_r1 + time * offset_r0 * 0.01), 2.0) * 4.0;
+    // float r = fract(FragWorldPos.y * 0.01);
+    float r = fract( abs(sin(offset.y * 0.1 + u)) );
+    vec3 color = vec3(r, g, b);
 	
+    
+
     vec3 scale = vec3(1.0, 1.0, 1.0);
 
     // output
-    Color = vec4(1.0, 1.0, 1.0, 1.0);
+    Color = vec4(color, 1.0);
 	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
 }
