@@ -221,7 +221,7 @@ void main()
 {
 	int id = gl_InstanceID;
 	FragObjectPos = aPos; // Store the object space position
-	FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
+	//FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
 	Color = instanceData.color;
 
     float ttime = time;
@@ -297,4 +297,5 @@ void main()
     // output
     Color = vec4(color, 1.0);
 	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
+    FragWorldPos = vec3(instanceData.model * vec4(aPos * scale + offset, 1.0)); // Calculate world space position
 }
