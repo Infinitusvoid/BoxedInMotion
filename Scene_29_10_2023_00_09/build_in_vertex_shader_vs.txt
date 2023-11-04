@@ -150,6 +150,66 @@ vec3 torus(float u, float v, float r1, float r2)
     return vec3(y, z, x);
 }
 
+
+float  f_mask_0a(float u, float v)
+{
+    if(u > v)
+    {
+        return 1.0;
+    }
+    return 0.0;
+}
+
+float  f_mask_0b(float u, float v)
+{
+    if(u > v)
+    {
+        return 0.0;
+    }
+    return 1.0;
+}
+
+float f_mask_1(float u, float v)
+{
+    if(u > 0.5)
+    {
+        return 1.0;
+    }
+    return 0.0;
+}
+
+float f_mask_2(float u, float v)
+{
+    if(v > 0.5)
+    {
+        return 1.0;
+    }
+    return 0.0;
+}
+
+float f_mask_3(float u, float v)
+{
+    
+    if(u < 0.5)
+    {
+        return f_mask_0a( fract(u * 2) , v);
+    }
+    else
+    {
+        return f_mask_0b(
+            fract( (u - 0.5) * 2.0 ),
+            v);
+    }
+    
+}
+
+float f_mask_output(float u, float v)
+{
+    // return min(f_mask_1(u, v) + f_mask_2(u, v), 1.0);
+    return f_mask_3(u, v);
+}
+
+
 void main()
 {
 	int id = gl_InstanceID;
@@ -181,14 +241,43 @@ void main()
 
     // offset = mix(offset_0, offset_2, abs(sin(time)) );
     // offset = mix(offset, offset_1, abs(sin(time * 0.1)) );
+    // offset = offset_2 * 0.5 * 0.5 * cos(time) + 0.5 * offset_0 * 0.5 * sin(time);
     offset = offset_2;
 
-    float g = fract(offset_r0 * 0.1);
-    float b = pow(fract(offset_r1 + time * offset_r0 * 0.01), 2.0) * 4.0;
     // float r = fract(FragWorldPos.y * 0.01);
     float r = fract( abs(sin(offset.y * 0.1 + u)) );
+    float g = fract(offset_r0 * 0.1);
+    float b = pow(fract(offset_r1 + time * offset_r0 * 0.01), 2.0) * 4.0;
+    
+
+    float v_light = 0.0;
+    float u_scale = 200;
+    float v_scale = 200;
+    v_light = f_mask_output(fract( u * u_scale ), fract( v * v_scale ));
+
+    if(v_light > 0.0)
+    {
+    r = r;
+    g = g;
+    b = b;
+    }
+    else
+    {
+    r = r * 0.2;
+    g = g * 0.4;
+    b = b * 0.24;
+
+    }
+
+    
+    
+
+
+    
     vec3 color = vec3(r, g, b);
 	
+
+
     
 
     vec3 scale = vec3(1.0, 1.0, 1.0);
