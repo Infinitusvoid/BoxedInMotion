@@ -257,9 +257,9 @@ void main()
 
     if(v_light > 0.0)
     {
-    r = r;
-    g = g;
-    b = b;
+    r = r * 0.2;
+    g = g * 0.6;
+    b = b * 0.4;
     }
     else
     {
