@@ -52,7 +52,7 @@ void main()
     
     
 
-    color *= vec3(Color.r, Color.g, Color.b) * light;
+    color *= vec3(Color.r * 0.2, Color.g, Color.b) * light;
 
     //color.g = 0.2 * abs(sin(angle * 10));
     //color.r = vec4(noj_dot * light, noj_dot * light, noj_dot * light, 1.0);
