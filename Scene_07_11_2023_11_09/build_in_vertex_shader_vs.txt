@@ -431,7 +431,9 @@ int draw_1(float u, float v, float px0, float py0, float px1, float py1, float t
     return 0;
 }
 
-void main()
+
+
+void fshow_0()
 {
 	int id = gl_InstanceID;
 	FragObjectPos = aPos; // Store the object space position
@@ -562,4 +564,15 @@ void main()
     Color = vec4(color, 1.0);
 	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
     FragWorldPos = vec3(instanceData.model * vec4(aPos * scale + offset, 1.0)); // Calculate world space position
+}
+
+
+void fshow_1()
+{
+
+}
+
+void main()
+{
+    fshow_0();
 }
