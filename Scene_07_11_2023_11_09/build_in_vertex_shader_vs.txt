@@ -400,18 +400,33 @@ int draw_0(float u, float v, float px, float py, float thickness)
     return 0;
 }
 
-
-int draw_1(float u, float v, float px_0, float py_0, float px_1, float py_1, float thickness)
+int draw_1(float u, float v, float px0, float py0, float px1, float py1, float thickness)
 {
-    if( draw_0(u, v, px_0, py_0, thickness) == 1 )
+    if( draw_0(u, v, px0, py0, thickness) == 1)
     {
         return 1;
+    }
+    
+    if( draw_0(u, v, px1, py1, thickness) == 1)
+    {
+        return 2;
     }
 
-    if( draw_0(u, v px_1, py_1, thickness) == 1 )
+    float d0 = sqrt( pow(u - px0, 2.0) + pow(v - py0, 2.0 ) );
+    float d1 = sqrt( pow(u - px1, 2.0) + pow(v - py0, 2.0 ) );
+    float da = d0 + d1;
+    
+
+    float dx = px0 - px1;
+    float dy = py0 - py1;
+
+    float db = sqrt( pow(dx, 2.0) + pow(dy, 2.0) );
+    
+    if( abs( abs(db) - abs(da) ) < 0.01 )
     {
-        return 1;
+        return 4;
     }
+
 
     return 0;
 }
@@ -467,34 +482,29 @@ void main()
     float offset_x = the_fly_offset_xy.x;
     float offset_y = the_fly_offset_xy.y;
 
-    /*
-    if( draw_0(u, v, offset_x + 0.5, offset_y + 0.5, 0.01) == 1)
+    // if( draw_0(u, v, offset_x + 0.5, offset_y + 0.5, 0.01) == 1)
+    // {
+    //     r = 0.74;
+    // }
+
+    int value = draw_1(u, v, offset_x + 0.5, offset_y + 0.5, offset_x + 0.5 + 0.1, offset_y + 0.5 + 0.2, 0.01);
+
+    if(value == 1)
     {
         r = 0.74;
     }
-    
-    if( draw_0(u, v, offset_x + 0.5 + 0.1, offset_y + 0.5 + 0.2, 0.01) == 1)
+    else if(value == 2)
     {
-        r = 0.74;
+        r = 0.74 * sin(time);
     }
-    */
+    else if(value == 4)
+    {
+        r = 0.1;
+        g = 0.7;
+        b = 0.47;
+    }
 
     /*
-    if( draw_1(
-    u,
-    v,
-    offset_x + 0.5,
-    offset_y + 0.5,
-    offset_x + 0.5 + 0.1,
-    offset_y + 0.5 + 0.2,
-    0.01)
-    == 1 
-    )
-    {
-        r = 0.74;
-    }
-    */
-    
     vec2 polar_ra = to_polar(vec2(u, v), vec2(0.5, 0.5));
 
     float radius = polar_ra[0];
