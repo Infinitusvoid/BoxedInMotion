@@ -400,6 +400,22 @@ int draw_0(float u, float v, float px, float py, float thickness)
     return 0;
 }
 
+
+int draw_1(float u, float v, float px_0, float py_0, float px_1, float py_1, float thickness)
+{
+    if( draw_0(u, v, px_0, py_0, thickness) == 1 )
+    {
+        return 1;
+    }
+
+    if( draw_0(u, v px_1, py_1, thickness) == 1 )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
 void main()
 {
 	int id = gl_InstanceID;
@@ -451,22 +467,34 @@ void main()
     float offset_x = the_fly_offset_xy.x;
     float offset_y = the_fly_offset_xy.y;
 
+    /*
     if( draw_0(u, v, offset_x + 0.5, offset_y + 0.5, 0.01) == 1)
     {
         r = 0.74;
     }
-
-    /*
-    if (
-    abs(u - 0.5 - offset_x) < 0.01 ||
-    abs(v - 0.5 - offset_y) < 0.01
-    )
+    
+    if( draw_0(u, v, offset_x + 0.5 + 0.1, offset_y + 0.5 + 0.2, 0.01) == 1)
     {
         r = 0.74;
     }
     */
 
     /*
+    if( draw_1(
+    u,
+    v,
+    offset_x + 0.5,
+    offset_y + 0.5,
+    offset_x + 0.5 + 0.1,
+    offset_y + 0.5 + 0.2,
+    0.01)
+    == 1 
+    )
+    {
+        r = 0.74;
+    }
+    */
+    
     vec2 polar_ra = to_polar(vec2(u, v), vec2(0.5, 0.5));
 
     float radius = polar_ra[0];
