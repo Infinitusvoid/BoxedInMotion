@@ -567,12 +567,120 @@ void fshow_0()
 }
 
 
+float triangle_wave(float value)
+{
+    float output = 0.0;
+    for(int i = 0; i < 1 + int(time) % 1000; i++)
+    {
+        float amplitude = (1.0 / (2.0 * i - 1) );
+
+        output+= amplitude * sin(PI_2 * (2*i - 1) * value);
+    }
+
+    output *= (4.0 / PI);
+
+    return output;
+}
+
+float sin_wave(float value)
+{
+    return sin(value);
+}
+
+
+float square_wave(float value)
+{
+    float output = 0.0;
+    for(int i = 0; i < int(time) % 1000; i++)
+    {
+        float amplitude = 1.0 / float(2.0 * i  - 1.0);
+        float frequency = (2.0 * i - 1.0);
+        output += amplitude * sin(frequency * value);
+    }
+
+    
+
+    return output * (4.0 / PI);
+}
+
+float saw_tooth_wave(float value)
+{
+    float output = 0.0;
+    for(int i = 0; i < int( time * 0.247); i++)
+    {
+        float amplitude = 1.0 / float(i);
+        float frequency = i;
+        output += amplitude * sin(frequency * value);
+    }
+    
+    return output;
+}
+
+
+
+
+
 void fshow_1()
 {
+    int id = gl_InstanceID;
+    FragObjectPos = aPos; // Store the object space position
+    //FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
+    Color = instanceData.color;
+    
+    float ttime = time;
+    
+    //float u = float(id % 1000) * 0.001;
+    //float v = float(id / 1000) * 0.001;
+    //u = generateRandomNumber(id * 2134124);
+    //v = generateRandomNumber(id * 4231444);
+    
+    ///vec3 offset = vec3(u * 1000, v * 1000, 0.0);
+    
+    //offset.z = 100 * sin(offset.x * 0.01 + time);
 
+
+    float u = float(id / 1000000.0);
+
+
+   
+
+
+
+    // float x = 20 * sin_wave(u * PI_2);
+    // float y = 20 * sin_wave(u * PI_2 + PI * 0.5);
+
+    // float x = 200 * square_wave(u * PI_2);
+    // float y = 200 * square_wave(u * PI_2 + PI * 0.5);
+    
+    
+    float x = 700 * u * PI_2;
+    float y = 200 * saw_tooth_wave(u * PI_2);
+
+    vec3 offset = vec3(x, y, 0.0);
+    
+    
+    
+    float r = 0.2;
+    float g = 0.2;
+    float b = 0.2;
+    
+    
+    
+    
+    // output
+    vec3 color;
+    color.r = r;
+    color.g = g;
+    color.b = b;
+    vec3 scale = vec3(1.0, 1.0, 1.0) * 2;
+    
+    Color = vec4(color, 1.0);
+    gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
+    FragWorldPos = vec3(instanceData.model * vec4(aPos * scale + offset, 1.0)); // Calculate world space position
 }
 
 void main()
 {
     fshow_0();
+    // fshow_1();
 }
