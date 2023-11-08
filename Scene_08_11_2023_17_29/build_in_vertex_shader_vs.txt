@@ -1,0 +1,337 @@
+#version 330 core
+layout (location = 0) in vec3 aPos;
+
+// Define the instance data struct
+struct Instance_data
+{
+	mat4 model;
+	vec4 color;
+};
+
+layout(location = 3) in Instance_data instanceData;
+
+out vec4 Color;
+out vec3 FragWorldPos; // World space position
+out vec3 FragObjectPos; // Object space position
+
+uniform mat4 projection;
+uniform mat4 view;
+
+uniform vec3 camera_position;
+uniform vec3 camera_front;
+uniform vec3 camera_right;
+uniform vec3 camera_up;
+uniform float camera_zoom;
+uniform int frame;
+uniform float time;
+
+// Defines constants ======================
+
+#define PI 3.14159265359
+#define TAO ( PI * 2.0 )
+#define PI_2 ( PI * 2.0 )
+
+#define SQRT_OF_2 1.4142135623730951
+
+// cosine based palette, 4 vec3 params
+vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
+{
+    return a + b*cos( 6.28318*(c*t+d) );
+}
+
+
+// Define a function to generate a random number based on an input integer
+float generateRandomNumber(int inputInt)
+{
+    // Cast the input integer to uint to address type mismatch
+    uint seed = uint(inputInt);
+
+    // Define the hash function
+    seed = (seed ^ 61u) ^ (seed >> 16u);
+    seed *= 9u;
+    seed = seed ^ (seed >> 4u);
+    seed *= 0x27d4eb2du;
+    seed = seed ^ (seed >> 15u);
+
+    // Normalize and return the result
+    return float(seed) / 4294967296.0; // Normalize to [0, 1]
+}
+
+// Function to compute the offset for the sphere
+vec3 computeSphereOffset(float latitude, float longitude, float radius)
+{
+    float theta = 2.0 * 3.14159265359 * latitude;
+    float phi = 2.0 * 3.14159265359 * longitude;
+
+    float x = radius * sin(theta) * cos(phi);
+    float y = radius * cos(theta);
+    float z = radius * sin(theta) * sin(phi);
+
+    return vec3(x, y, z);
+}
+
+vec3 parametricCube(float u, float v, float sideLength) {
+    // Map u and v values to the range [0, 1]
+    u = clamp(u, 0.0, 1.0);
+    v = clamp(v, 0.0, 1.0);
+
+    // Calculate the cube's position in 3D space
+    float x = mix(-sideLength, sideLength, u); // Varies from -sideLength to sideLength
+    float y = mix(-sideLength, sideLength, v); // Varies from -sideLength to sideLength
+    float z = sideLength; // Fixed z value to create a surface
+
+    return vec3(x, y, z);
+}
+
+vec3 parametricCubeSide(float u, float v, float sideLength, int face) {
+    u = clamp(u, 0.0, 1.0);
+    v = clamp(v, 0.0, 1.0);
+
+    float halfLength = sideLength / 2.0;
+
+    // Initialize position
+    vec3 position = vec3(0.0);
+
+    if (face == 0) {  // Front face
+        position = vec3(u * sideLength - halfLength, v * sideLength - halfLength, halfLength);
+    } else if (face == 1) {  // Back face
+        position = vec3(halfLength - u * sideLength, v * sideLength - halfLength, -halfLength);
+    } else if (face == 2) {  // Top face
+        position = vec3(u * sideLength - halfLength, halfLength, v * sideLength - halfLength);
+    } else if (face == 3) {  // Bottom face
+        position = vec3(u * sideLength - halfLength, -halfLength, v * sideLength - halfLength);
+    } else if (face == 4) {  // Right face
+        position = vec3(halfLength, u * sideLength - halfLength, v * sideLength - halfLength);
+    } else if (face == 5) {  // Left face
+        position = vec3(-halfLength, halfLength - u * sideLength, v * sideLength - halfLength);
+    }
+
+    return position;
+}
+
+vec3 parametricCubeFull(float u, float v, float sideLength)
+{
+    vec3 position = vec3(0.0);
+    if(u < ((1.0 / 3.0) * 1.0) )
+    {
+        if(v < 0.5)
+        {
+            position = parametricCubeSide(u * 3.0, v * 2.0, 1000.0, 0);
+        }
+        else
+        {
+            position = parametricCubeSide(u * 3.0, (v-0.5) * 2.0, 1000.0, 1);
+        }
+    }
+    else if(u < ((1.0 / 3.0) * 2.0) )
+    {
+        if(v < 0.5)
+        {
+            position = parametricCubeSide((u - ((1.0 / 3.0) * 1.0)) * 3.0 , v * 2.0, 1000.0, 2);
+        }
+        else
+        {
+            position = parametricCubeSide((u - ((1.0 / 3.0) * 1.0)) * 3.0, (v-0.5) * 2.0, 1000.0, 3);
+        }
+    }
+    else
+    {
+         if(v < 0.5)
+        {
+            position = parametricCubeSide((u - ((1.0 / 3.0) * 2.0)) * 3.0, v * 2.0, 1000.0, 4);
+        }
+        else
+        {
+            position = parametricCubeSide((u - ((1.0 / 3.0) * 2.0)) * 3.0, (v-0.5) * 2.0, 1000.0, 5);
+        }
+    }
+
+    return position;
+}
+
+vec3 torus(float u, float v, float r1, float r2)
+{
+    float x = (r1 + r2 * cos(v)) * cos(u);
+    float y = (r1 + r2 * cos(v)) * sin(u);
+    float z = r2 * sin(v);
+    return vec3(y, z, x);
+}
+
+
+float  f_mask_0a(float u, float v)
+{
+    if(u > v)
+    {
+        return 1.0;
+    }
+    return 0.0;
+}
+
+float  f_mask_0b(float u, float v)
+{
+    if(u > v)
+    {
+        return 0.0;
+    }
+    return 1.0;
+}
+
+float f_mask_1(float u, float v)
+{
+    if(u > 0.5)
+    {
+        return 1.0;
+    }
+    return 0.0;
+}
+
+float f_mask_2(float u, float v)
+{
+    if(v > 0.5)
+    {
+        return 1.0;
+    }
+    return 0.0;
+}
+
+float f_mask_3(float u, float v)
+{
+    
+    if(u < 0.5)
+    {
+        return f_mask_0a( fract(u * 2) , v);
+    }
+    else
+    {
+        return f_mask_0b(
+            fract( (u - 0.5) * 2.0 ),
+            v);
+    }
+    
+}
+
+float f_mask_output(float u, float v)
+{
+    // return min(f_mask_1(u, v) + f_mask_2(u, v), 1.0);
+    return f_mask_3(u, v);
+}
+
+vec3 rnd_vec3(int seed)
+{
+    return vec3( generateRandomNumber(seed), generateRandomNumber((seed + 1244) * 1124), generateRandomNumber( (seed + 4714) * 4771 ) );
+}
+
+vec3 color_pallete_0(float value)
+{
+    return palette(value, vec3(0.5, 0.5, 0.5), vec3(0.5, 0.5, 0.5), vec3(1.0, 1.0, 1.0), vec3(0.30, 0.20, 0.20));
+}
+
+vec3 color_pallete_1(float value)
+{
+    return palette(value, vec3(0.5, 0.5, 0.5), vec3(0.5, 0.5, 0.5), vec3(1.0, 0.7, 0.4	), vec3(0.00, 0.15, 0.20));
+}
+
+vec3 color_pallete_2(float value)
+{
+    return palette( value, vec3(0.5, 0.5, 0.5), vec3(0.5, 0.5, 0.5), vec3(1.0, 1.0, 1.0), vec3(0.30, 0.20, 0.20));
+}
+
+vec3 color_pallete_3(float value)
+{
+    return palette( value, vec3(0.4,0.5,0.5), vec3(0.7,0.5,0.5), vec3(1.0,1.0,2.0), vec3(0.0,0.733,0.67));
+}
+
+
+
+void main()
+{
+	int id = gl_InstanceID;
+	FragObjectPos = aPos; // Store the object space position
+	//FragWorldPos = vec3(instanceData.model * vec4(aPos, 1.0)); // Calculate world space position
+	Color = instanceData.color;
+
+    float ttime = time;
+
+	float u = float(id % 1000) * 0.001;
+	float v = float(id / 1000) * 0.001;
+	
+    u = generateRandomNumber(id * 2134124);
+    v = generateRandomNumber(id * 4231444);
+    
+    u = round(fract(u + ttime * 0.0042) * 24) * 0.01;
+    v = round(fract(v + ttime * 0.0042) * 100) * 0.01;
+
+    int iv_num = 1000000 / (24 * 100);
+    int iv = id % iv_num;
+    int index_iv = id / iv_num;
+
+    vec3 offset = vec3(0.0, 0.0, 0.0);
+
+    // vec3 offset_sphere = computeSphereOffset(u, v, 1000.0);
+    // vec3 offset_parametric_cube = parametricCubeFull(u, v, 1000);
+
+    float r = 0.1;
+    float g = 0.1;
+    float b = 0.1;
+    
+    
+    float v_offset = float(iv) * 0.2;
+    float freq_rnd_0 = 0.01 + generateRandomNumber(index_iv * 4141232) * 0.0429;
+    
+    float x_offset = 0.02 * sin(iv * freq_rnd_0 + time * 1.7);
+    float y_offset = 0.02 * cos(iv * freq_rnd_0 + time * 1.7);
+    
+    v_offset += sin(u * 79 * PI_2 * (0.4 + 0.1 * sin(u * 100)) + time * 2) *
+                sin(v * PI_2 * 7 + 27 * sin(time * 0.1) * sin(time + u * 10.0)) 
+                * (10 +  10 * abs(sin(u * 1000 - time * 0.47)));
+
+    vec3 offset_2 = torus(u * PI_2 + x_offset, v * PI_2 + y_offset, 1000.0, 100.0 + v_offset);
+    
+    // if(index_iv == 1)
+    {
+        r += 0.7 * abs( sin(iv * 0.01 + time * 0.7 ));
+        g += 0.7 * abs( sin(iv * 0.02 + time * 0.4 ));
+        b += 0.7 * abs( sin(iv * 0.04 + time * 0.2 ));
+
+        r *= 0.5 + 0.5 * abs(sin(time + u * 10));
+        g *= 0.9 + 0.1 * abs(sin(time + v * 100));
+        b *= 0.9 + 0.1 * abs(sin(time + v * 100));
+
+        vec3 color_0 = color_pallete_0( 0.7 * abs( sin(iv * 0.01 + time * 0.7   )) );
+        vec3 color_1 = color_pallete_1( 0.7 * abs( sin(iv * 0.02 + time * 0.4   )) );
+        vec3 color_2 = color_pallete_2( 0.7 * abs( sin(iv * 0.04 + time * 0.2   )) );
+        vec3 color_3 = color_pallete_3( 0.7 * abs( sin(iv * 0.04 + time * 0.742 )) );
+        
+        vec3 color_01 = mix(color_0, color_1, fract(x_offset * 100) );
+        vec3 color_23 = mix(color_2, color_3, fract(y_offset * 100) );
+        vec3 color_0123 = mix(color_01, color_23, abs(sin(time * 0.01 * u + v_offset * 0.01)) );
+        
+        r = color_0123.r;
+        g = color_0123.g;
+        b = color_0123.b;
+        
+        
+
+        r = pow(r, 0.7);
+        g = pow(g, 0.7);
+        b = pow(b, 0.7);
+
+        
+    }
+
+    
+    
+    
+
+    // output
+    offset = offset_2;
+
+    vec3 color = vec3(r, g, b);
+
+    vec3 scale = vec3(1.0, 1.0, 1.0) * 2.47;
+
+    // output
+    Color = vec4(color, 1.0);
+	gl_Position = projection * view * instanceData.model * vec4(aPos * scale + offset, 1.0);
+    FragWorldPos = vec3(instanceData.model * vec4(aPos * scale + offset, 1.0)); // Calculate world space position
+}
