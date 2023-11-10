@@ -300,41 +300,17 @@ float compute_landscape(float u, float v, int id)
     }
     else
     {
+        value = landscape_max;
+
+        out_color.b = 0.1;
+        out_color.g = 0.1;
+
+        value = max(value, landscape_min);
         
     }
 
     return value;
 }
-
-float compute_landscape_b(float u, float v)
-{
-    float value = landscape_max;
-
-    out_color.b = 0.1;
-    out_color.g = 0.1;
-
-    
-    /*
-    if(
-       int(fract(u * 10) * 10) == 2 ||
-       int(fract(v * 10) * 10) == 2
-       )
-    {
-        out_color.g = 1.0;
-        value -= 1.0;
-    }
-    */
-
-    // value -= 27 * sin(v * PI_2 * 27 - landscape_t);
-    // value -= 7 * sin(v * PI_2 * 27 * 10 - landscape_t * 10) * sin(landscape_t * 10);
-
-
-
-    value = max(value, landscape_min);
-    return value;
-}
-
-
 
 void main()
 {
@@ -383,26 +359,8 @@ void main()
     landscape_min = -100 * sin(u * PI);
     landscape_max = 100 * sin(u * PI);
     
-    
-
-    compute_landscape(u, v, id);
-
-    if(generateRandomNumber(id) > 0.5)
-    {
-        // float la = compute_landscape_a(u, v);
-        float la = compute_landscape(u, v, id);
-        offset_n = vec3(u * PI_2 * 42, la, v * 2000);
-    }
-    else
-    {   
-        float lb = compute_landscape_b(u, b);
-        offset_n = vec3(u * PI_2 * 42, lb, v * 2000);
-    }
-    
-    
-    
-    
-    
+    float landscape_height = compute_landscape(u, v, id);
+    offset_n = vec3(u * PI_2 * 42, landscape_height, v * 2000);
 
     // output
     offset = offset_n;
