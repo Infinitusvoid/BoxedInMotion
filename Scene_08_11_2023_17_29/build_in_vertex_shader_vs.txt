@@ -243,9 +243,7 @@ vec3 color_pallete_3(float value)
 
 // Landscape
 
-float landscape_min = 0.0;
-float landscape_max = 0.0;
-float landscape_t = 0.0;
+// float landscape_t = 0.0;
 
 // ===== Landscape =====
 
@@ -253,11 +251,16 @@ struct Landscape
 {
     float height;
     vec3 out_color;
-
-
+    
+    float local_t; 
+    
+    
     void update(float u, float v, int id)
     {
      float value = 0.0;
+
+     float landscape_min = -100 * sin(u * PI);
+     float landscape_max = landscape_min * ( - 1.0 );
 
     out_color.r = 0.0;
     out_color.g = 0.0;
@@ -286,7 +289,7 @@ struct Landscape
 
         float offset_up = -0.47;
         offset_up += 1.0 - d;
-        offset_up *= 0.4 + 0.2* sin(landscape_t * 2.47 * v * 10) + pow(abs(u - 0.5) * 4, 2.0 + 1.2 * sin(time));
+        offset_up *= 0.4 + 0.2* sin(local_t * 2.47 * v * 10) + pow(abs(u - 0.5) * 4, 2.0 + 1.2 * sin(local_t));
         offset_up  = max(offset_up, 0);
         float tile_rnd_height = generateRandomNumber( tile_id ) * 200;
         offset_up *= tile_rnd_height;
@@ -354,7 +357,7 @@ void main()
     float g = 0.1;
     float b = 0.1;
     
-    landscape_t = ttime;
+    
     v = fract(time * 0.1 + v);
     
 
@@ -364,9 +367,10 @@ void main()
     
     v = pow(v, size_exponent);
  
-    landscape_min = -100 * sin(u * PI);
-    landscape_max = 100 * sin(u * PI);
+    // landscape_min = -100 * sin(u * PI);
+    // landscape_max = 100 * sin(u * PI);
     
+    landscape.local_t = ttime;
     landscape.update(u, v, id);
     offset_n = vec3(u * PI_2 * 42, landscape.height, v * 2000);
 
