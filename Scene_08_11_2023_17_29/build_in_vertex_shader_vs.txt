@@ -301,9 +301,6 @@ struct Landscape
         float rnd_tile_3 = generateRandomNumber(tile_id * 47744);
         float rnd_tile_4 = generateRandomNumber( tile_id * 412457);
         
-        
-        
-
     // Tile distance from center
     float tile_spike_center_x_offset = 0.25 * sin(local_t * rnd_tile_4 + rnd_tile_3);
     float tile_spike_center_y_offset = 0.25 * cos(local_t * rnd_tile_4 + rnd_tile_3);
