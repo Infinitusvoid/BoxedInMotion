@@ -274,7 +274,14 @@ struct Landscape
 
     void update(float u, float v, int id)
     {
-        v += local_t * 0.1 + sin(u * 0.1 + local_t * 0.12);
+        const float the_speed_of_movement = 0.1;
+        v += local_t * the_speed_of_movement + sin(u * 0.1 + local_t * 0.12);
+
+        u += 0.04 * sin(local_t + v * 10);
+        //u += 0.02 * cos(local_t * 10 + v * 27);
+
+        offset_x = 0;
+        offset_y = 0;
 
         float value = 0.0;
         
@@ -395,7 +402,15 @@ struct Landscape
         
     }
 
-    
+
+    float rnd_tile_0n = generateRandomNumber( tile_id * 1234722);
+    float rnd_tile_1n = generateRandomNumber( tile_id * 9923247);
+    float rnd_tile_2n = generateRandomNumber( tile_id * 2432442);
+    float rnd_tile_3n = generateRandomNumber( tile_id * 4412924);
+
+    offset_x = rnd_tile_1n * sin(value * rnd_tile_2n + sin(local_t * 0.1 * rnd_tile_0n));
+    offset_y = rnd_tile_1n * cos(value * rnd_tile_2n + sin(local_t * 0.1 * rnd_tile_0n));
+    //out_color += abs(offset_x * offset_y - 0.1) * 0.01;
 
     height = value;
     }
@@ -454,7 +469,7 @@ void main()
     
     landscape.local_t = ttime;
     landscape.update(u, v, id);
-    offset_n = vec3(u * PI_2 * 42, landscape.height, v * 2000);
+    offset_n = vec3(u * PI_2 * 42 + landscape.offset_x, landscape.height, v * 2000 + landscape.offset_y);
 
     // output
     offset = offset_n;
