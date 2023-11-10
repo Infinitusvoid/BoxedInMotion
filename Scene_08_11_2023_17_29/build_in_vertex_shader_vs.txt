@@ -275,10 +275,13 @@ struct Landscape
 
     // Tile distance from center
     float d = sqrt( pow(tile_uv[1] - 0.5, 2.0) + pow(tile_uv[0] - 0.5, 2.0) );
-    
-    if( rnd_id > 0.5 )
+
+
+    // Value case floor
+    float value_case_floor = 0.0;
+
     {
-        value = landscape_min;
+        value_case_floor = landscape_min;
 
         float offset_up = -0.47;
         offset_up += 1.0 - d;
@@ -291,21 +294,34 @@ struct Landscape
         out_color.g = tile_uv[0] * 0.2;
         out_color.b = tile_uv[1] * 0.2;
         
-        value += offset_up;
+        value_case_floor += offset_up;
 
-        value = min(value, landscape_max);
+        value_case_floor = min(value_case_floor, landscape_max);    
+    }
+
+    // Value case sealing
+    float value_case_sealing = 0.0;
+
+    {
+        value_case_sealing = landscape_max;
+
+      
+
+        value = max(value_case_sealing, landscape_min);
+    }
+    
 
 
+    if( rnd_id > 0.5 )
+    {
+        value = value_case_floor;
     }
     else
     {
-        value = landscape_max;
-
-        out_color.b = 0.1;
-        out_color.g = 0.1;
-
-        value = max(value, landscape_min);
-        
+        value = value_case_sealing;
+        out_color.r = 0.2;
+        out_color.b = 0.2;
+        out_color.g = 0.2;
     }   
 
     height = value;
