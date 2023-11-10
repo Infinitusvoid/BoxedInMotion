@@ -285,6 +285,14 @@ float compute_landscape(float u, float v, int id)
         offset_up += 1.0 - d;
         offset_up *= 0.4 + 0.2* sin(landscape_t * 2.47 * v * 10) + pow(abs(u - 0.5) * 4, 2.0 + 1.2 * sin(time));
         offset_up  = max(offset_up, 0);
+        float tile_rnd_height = generateRandomNumber( tile_id ) * 200;
+        offset_up *= tile_rnd_height;
+        
+        
+        out_color.g = tile_uv[0] * 0.2;
+        out_color.b = tile_uv[1] * 0.2;
+        
+        value += offset_up;
 
         value = min(value, landscape_max);
 
@@ -295,62 +303,6 @@ float compute_landscape(float u, float v, int id)
         
     }
 
-    return value;
-}
-
-float compute_landscape_a(float u, float v)
-{
-    float value = landscape_min;
-    
-    out_color.g = 0.1;
-    
-    // Tile UV
-    vec2 tile_uv = vec2(fract(u * number_tiles_u), fract(v * number_tiles_v));
-    
-    // Tile Index
-    int tile_id_x = int(u * number_tiles_u);
-    int tile_id_y = int(v * number_tiles_v);
-    int tile_id = tile_id_y * number_tiles_v + tile_id_x;
-    
-    // Tile distance from center
-    float d = sqrt( pow(tile_uv[1] - 0.5, 2.0) + pow(tile_uv[0] - 0.5, 2.0) );
-    
-
-    float offset_up = -0.47;
-    offset_up += 1.0 - d;
-    offset_up *= 0.4 + 0.2 * sin(landscape_t * 2.47 * v * 10) + pow(abs(u - 0.5) * 4, 2.0 + 1.2 * sin(time));
-    offset_up = max(offset_up, 0);
-    float tile_rnd_height = generateRandomNumber( tile_id ) * 200;
-    offset_up *= tile_rnd_height;
-    
-    
-
-
-    out_color.g = tile_uv[0] * 0.2;
-    out_color.b = tile_uv[1] * 0.2;
-    
-    value += offset_up;
-    
-    out_color.r = abs(sin(time + d * 100) * 0.7);
-
-
-
-
-
-
-
-    /*
-    if(
-       int(fract(u * 10) * 10) == 2 ||
-       int(fract(v * 10) * 10) == 2
-       )
-    {
-        out_color.b = 1.0;
-        value += 1.0 + 20 * abs(sin(u * 10));
-    }
-    */
-
-    value = min(value, landscape_max);
     return value;
 }
 
@@ -437,7 +389,8 @@ void main()
 
     if(generateRandomNumber(id) > 0.5)
     {
-        float la = compute_landscape_a(u, v);
+        // float la = compute_landscape_a(u, v);
+        float la = compute_landscape(u, v, id);
         offset_n = vec3(u * PI_2 * 42, la, v * 2000);
     }
     else
