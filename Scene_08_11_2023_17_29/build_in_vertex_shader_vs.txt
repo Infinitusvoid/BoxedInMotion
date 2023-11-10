@@ -274,6 +274,8 @@ struct Landscape
 
     void update(float u, float v, int id)
     {
+        v += local_t * 0.1 + sin(u * 0.1 + local_t * 0.12);
+
         float value = 0.0;
         
         float landscape_min = -100 * sin(u * PI);
@@ -338,8 +340,8 @@ struct Landscape
         color_floor *= abs(sin(offset_up * 0.4 * rnd_floor_0 - local_t * rnd_floor_1));
 
         color_floor *= abs(sin( PI_2 * 2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1]));
-        color_floor.r += 0.1 * abs(sin( PI_2 * 4.2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1]));
-        color_floor.b += 0.02 * abs(sin( PI_2 * 7.2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1]));
+        color_floor.r += 0.1 * abs(sin( PI_2 * 4.2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1])) * 0.7 * 2.0;
+        color_floor.b += 0.02 * abs(sin( PI_2 * 7.2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1])) * 2.2;
         value_case_floor += offset_up;
 
         value_case_floor = min(value_case_floor, landscape_max);    
@@ -350,14 +352,25 @@ struct Landscape
     vec3 color_sealing;
     // sealing
     {
+        float rnd_sealing_0 = generateRandomNumber( tile_id * 771123244);
+        float rnd_sealing_1 = generateRandomNumber( tile_id * 991224477);
+        float rnd_sealing_2 = generateRandomNumber( tile_id * 724102432);
+        float rnd_sealing_3 = generateRandomNumber( tile_id * 422472702);
+        
+
         value_case_sealing = landscape_max;
+
+        
+        float angle_sealing = abs(sin( PI_2 * 2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1]));
 
         value_case_sealing -= value_case_floor * 0.4;
 
         color_sealing = vec3(0.2, 0.2, 0.2) + vec3(0.0, 0.1 * abs(sin(-local_t + value_case_sealing * 0.2 - v * 100)), 0.0);
         color_sealing *= rnd_tile_1;
 
-        
+        color_sealing *= abs(sin(fract(angle_sealing * 0.1)));
+
+        color_sealing += vec3(0.1, 0.1 + 0.1 * sin(local_t + v * 10), 0.1 + 0.1 * cos(local_t + v * 290));
 
         value = max(value_case_sealing, landscape_min);
     }
