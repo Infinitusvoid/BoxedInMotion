@@ -279,10 +279,7 @@ struct Landscape
 
     // Tile distance from center
     float d = sqrt( pow(tile_uv[1] - 0.5, 2.0) + pow(tile_uv[0] - 0.5, 2.0) );
-
     
-    
-
     if( rnd_id > 0.5 )
     {
         value = landscape_min;
