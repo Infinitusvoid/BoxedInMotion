@@ -410,7 +410,9 @@ struct Landscape
 
     offset_x = rnd_tile_1n * sin(value * rnd_tile_2n + sin(local_t * 0.1 * rnd_tile_0n));
     offset_y = rnd_tile_1n * cos(value * rnd_tile_2n + sin(local_t * 0.1 * rnd_tile_0n));
-    //out_color += abs(offset_x * offset_y - 0.1) * 0.01;
+    
+    out_color *= rnd_tile_3n * 2.0;
+
 
     height = value;
     }
