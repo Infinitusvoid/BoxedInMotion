@@ -369,7 +369,6 @@ struct Landscape
         float rnd_sealing_2 = generateRandomNumber( tile_id * 724102432);
         float rnd_sealing_3 = generateRandomNumber( tile_id * 422472702);
         
-
         value_case_sealing = landscape_max;
 
         
