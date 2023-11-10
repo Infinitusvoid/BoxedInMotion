@@ -246,6 +246,22 @@ float map(float value, float min1, float max1, float min2, float max2)
     return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
 }
 
+vec2 to_polar(vec2 xy, vec2 center)
+{
+    vec2 v_center = xy - center;
+    float radius = length( v_center );
+    float angle = atan(v_center.y, v_center.x);
+    return vec2(radius, angle);
+}
+
+vec2 polar_to_rect(vec2 ra, vec2 center)
+{
+    return vec2(
+        center.x + ra[0] * sin(ra[1]),
+        center.y + ra[0] * cos(ra[1])
+    );
+}
+
 // ===== Landscape =====
 struct Landscape
 {
@@ -253,6 +269,8 @@ struct Landscape
     vec3 out_color;
     float local_t;     
     
+    float offset_x;
+    float offset_y;
 
     void update(float u, float v, int id)
     {
@@ -279,12 +297,18 @@ struct Landscape
         float rnd_tile_1 = generateRandomNumber(tile_id * 21242);
         float rnd_tile_2 = generateRandomNumber(tile_id * 74144);
         float rnd_tile_3 = generateRandomNumber(tile_id * 47744);
+        float rnd_tile_4 = generateRandomNumber( tile_id * 412457);
         
         
         
 
     // Tile distance from center
-    float d = sqrt( pow(tile_uv[1] - 0.5, 2.0) + pow(tile_uv[0] - 0.5, 2.0) );
+    float tile_spike_center_x_offset = 0.25 * sin(local_t * rnd_tile_4 + rnd_tile_3);
+    float tile_spike_center_y_offset = 0.25 * cos(local_t * rnd_tile_4 + rnd_tile_3);
+    vec2 spike_top_offset = vec2(tile_spike_center_x_offset, tile_spike_center_y_offset);
+    vec2 spike_top = vec2(tile_uv[1] - 0.5, tile_uv[0] - 0.5) + spike_top_offset;
+
+    float d = sqrt( pow(spike_top.x, 2.0) + pow(spike_top.y, 2.0) );
 
 
     // floor
@@ -295,15 +319,27 @@ struct Landscape
 
         float offset_up = -0.47;
         offset_up += 1.0 - d;
-        offset_up *= 0.4 + 0.2* sin(local_t * 2.47 * v * 10) + pow(abs(u - 0.5) * 4, 2.0 + rnd_tile_2 * sin(local_t * rnd_tile_0 * 2.0));
+        float rnd_offset_0 = generateRandomNumber( tile_id * 77991144);
+        offset_up *= 0.4 + 0.2* sin(local_t * 2.47 * v * 10 * rnd_offset_0 * 0.47) + pow(abs(u - 0.5) * 4, 2.0 + rnd_tile_2 * sin(local_t * rnd_tile_0 * 2.0));
         offset_up  = max(offset_up, 0);
         float tile_rnd_height = generateRandomNumber( tile_id ) * 200;
         offset_up *= tile_rnd_height;
         
         color_floor.r = 0.0;
-        color_floor.g = tile_uv[0] * 0.2;
-        color_floor.b = tile_uv[1] * 0.2;
+        color_floor.g = 0.1;tile_uv[0] * 0.2;
+        color_floor.b = 0.1;// tile_uv[1] * 0.2;
        
+        color_floor *= generateRandomNumber( tile_id * 4412477);
+
+        float rnd_floor_0 = generateRandomNumber( tile_id * 741977);
+        float rnd_floor_1 = generateRandomNumber( tile_id * 4744744);
+        float rnd_floor_2 = generateRandomNumber( tile_id * 47744997);
+        float rnd_floor_3 = generateRandomNumber( tile_id * 49497412);
+        color_floor *= abs(sin(offset_up * 0.4 * rnd_floor_0 - local_t * rnd_floor_1));
+
+        color_floor *= abs(sin( PI_2 * 2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1]));
+        color_floor.r += 0.1 * abs(sin( PI_2 * 4.2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1]));
+        color_floor.b += 0.02 * abs(sin( PI_2 * 7.2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1]));
         value_case_floor += offset_up;
 
         value_case_floor = min(value_case_floor, landscape_max);    
@@ -343,8 +379,13 @@ struct Landscape
 
     {
         float factor_color = map(value, landscape_min, landscape_max, 0.0, 1.0);
+        // factor_color = pow(factor_color, 1.2);
         out_color = mix(color_floor, color_sealing, factor_color);
+
+        
     }
+
+    
 
     height = value;
     }
