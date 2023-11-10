@@ -25,7 +25,7 @@ void main()
     float noj_dot = dot(camera_front, normalize(fwp - camera_position));
     float camera_dist = length(fwp - camera_position);
     //float light_effect_max_distance = 1000 + 200 * sin(time * 0.0124424);
-    float light_effect_max_distance = 100;
+    float light_effect_max_distance = 10;
     float light_effect_max_distance_factor = 1.0 / light_effect_max_distance;
     if(camera_dist > light_effect_max_distance)
     {
