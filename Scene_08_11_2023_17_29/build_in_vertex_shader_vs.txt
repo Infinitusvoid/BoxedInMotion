@@ -247,14 +247,17 @@ float landscape_min = 0.0;
 float landscape_max = 0.0;
 float landscape_t = 0.0;
 
-vec3 out_color = vec3(0.0, 0.0, 0.0);
+// ===== Landscape =====
 
-const int number_tiles_u = 10;
-const int number_tiles_v = 70;
-
-float compute_landscape(float u, float v, int id)
+struct Landscape
 {
-    float value = 0.0;
+    float height;
+    vec3 out_color;
+
+
+    void update(float u, float v, int id)
+    {
+     float value = 0.0;
 
     out_color.r = 0.0;
     out_color.g = 0.0;
@@ -307,10 +310,15 @@ float compute_landscape(float u, float v, int id)
 
         value = max(value, landscape_min);
         
-    }
+    }   
 
-    return value;
-}
+    height = value;
+    }
+};
+
+Landscape landscape;
+
+// =====================
 
 void main()
 {
@@ -359,13 +367,13 @@ void main()
     landscape_min = -100 * sin(u * PI);
     landscape_max = 100 * sin(u * PI);
     
-    float landscape_height = compute_landscape(u, v, id);
-    offset_n = vec3(u * PI_2 * 42, landscape_height, v * 2000);
+    landscape.update(u, v, id);
+    offset_n = vec3(u * PI_2 * 42, landscape.height, v * 2000);
 
     // output
     offset = offset_n;
 
-    vec3 color = out_color; //vec3(r, g, b);
+    vec3 color = landscape.out_color;
 
     vec3 scale = vec3(1.0, 1.0, 1.0) * scale_factor;
 
