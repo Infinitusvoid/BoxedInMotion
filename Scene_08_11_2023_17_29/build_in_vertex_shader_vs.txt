@@ -354,6 +354,28 @@ struct Landscape
         color_floor *= abs(sin( PI_2 * 2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1]));
         color_floor.r += 0.1 * abs(sin( PI_2 * 4.2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1])) * 0.7 * 2.0;
         color_floor.b += 0.02 * abs(sin( PI_2 * 7.2 *  to_polar(tile_uv, spike_top_offset + vec2(0.5, 0.5))[1])) * 2.2;
+
+
+        vec3 color_0 = color_pallete_3(pow(color_floor.r * 1.2, 0.7)) * vec3(1.0, 0.7, 0.6);
+        vec3 color_1 = color_pallete_0(color_floor.g * 2.0);
+        vec3 color_2 = color_pallete_2(color_floor.b * 2.0);
+        // color_floor *= color_pallete_3(color_floor.g) + color_pallete_1(color_floor.b);
+        // color_floor *= 0.1;
+        // color_floor *= ((color_0 * color_1 * color_2) * 4.0);
+        
+        // color_floor = mix(color_1, color_2, abs(sin(local_t + u * 10)));
+        // color_floor *= mix(color_1, color_2, abs(sin(local_t + u * 10)));
+        // color_floor += mix(color_0, color_1, offset_up * 0.1) * 0.1;
+
+        // color_floor = mix(color_1, color_2, abs(sin(local_t + u * 10)));
+
+        // color_floor *= mix(color_1, color_2, abs(sin(local_t + u * 10)));
+        // color_floor += mix(color_1, color_2, abs(sin(local_t + u * 10))) * 0.4;
+
+        color_floor *= mix(color_1, color_2, abs(sin(local_t * 1.0 + u * 10)));
+        color_floor += mix(color_1, color_2, abs(sin(local_t * 1.0 + u * 10))) * 0.4;
+        color_floor += mix(color_0, color_2, abs(sin(local_t * 1.0 + u * 100))) * 0.2;
+
         value_case_floor += offset_up;
 
         value_case_floor = min(value_case_floor, landscape_max);    
