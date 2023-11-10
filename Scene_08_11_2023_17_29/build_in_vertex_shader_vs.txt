@@ -384,6 +384,14 @@ struct Landscape
 
         color_sealing += vec3(0.1, 0.1 + 0.1 * sin(local_t + v * 10), 0.1 + 0.1 * cos(local_t + v * 290));
 
+         vec3 color_a = color_sealing * 0.5 + ((color_pallete_2(color_sealing.b) + color_pallete_3(color_sealing.g)) * 0.5 + vec3(0.0, 0.0, color_sealing.r) * 4.0) * 0.5;
+         vec3 color_b = ( (color_pallete_2(color_sealing.b * 1.2) * 0.5 + color_pallete_3(color_sealing.b * 1.7) + vec3(0.0, 0.0, color_sealing.r)) * color_sealing ) * 0.47;
+      
+       color_sealing = mix(color_a, color_b, abs(sin(local_t + v * 10))) * mix(color_a, color_b, abs(sin(local_t * 0.7 + u * 0.2)));
+       color_sealing += color_sealing * 0.02;
+       color_sealing *= 10;
+
+
         value = max(value_case_sealing, landscape_min);
     }
     
@@ -489,6 +497,8 @@ void main()
     offset = offset_n;
 
     vec3 color = landscape.out_color;
+
+    
 
     vec3 scale = vec3(1.0, 1.0, 1.0) * scale_factor;
 
