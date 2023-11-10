@@ -275,6 +275,13 @@ struct Landscape
         int tile_id_y = int(v * num_tiles_v);
         int tile_id = tile_id_y * num_tiles_v * tile_id_x;
         float rnd_id = generateRandomNumber(id);
+        float rnd_tile_0 = generateRandomNumber(tile_id * 42134);
+        float rnd_tile_1 = generateRandomNumber(tile_id * 21242);
+        float rnd_tile_2 = generateRandomNumber(tile_id * 74144);
+        float rnd_tile_3 = generateRandomNumber(tile_id * 47744);
+        
+        
+        
 
     // Tile distance from center
     float d = sqrt( pow(tile_uv[1] - 0.5, 2.0) + pow(tile_uv[0] - 0.5, 2.0) );
@@ -288,7 +295,7 @@ struct Landscape
 
         float offset_up = -0.47;
         offset_up += 1.0 - d;
-        offset_up *= 0.4 + 0.2* sin(local_t * 2.47 * v * 10) + pow(abs(u - 0.5) * 4, 2.0 + 1.2 * sin(local_t));
+        offset_up *= 0.4 + 0.2* sin(local_t * 2.47 * v * 10) + pow(abs(u - 0.5) * 4, 2.0 + rnd_tile_2 * sin(local_t * rnd_tile_0 * 2.0));
         offset_up  = max(offset_up, 0);
         float tile_rnd_height = generateRandomNumber( tile_id ) * 200;
         offset_up *= tile_rnd_height;
@@ -309,10 +316,16 @@ struct Landscape
     {
         value_case_sealing = landscape_max;
 
+        value_case_sealing -= value_case_floor * 0.4;
+
         color_sealing = vec3(0.2, 0.2, 0.2) + vec3(0.0, 0.1 * abs(sin(-local_t + value_case_sealing * 0.2 - v * 100)), 0.0);
+        color_sealing *= rnd_tile_1;
+
+        
 
         value = max(value_case_sealing, landscape_min);
     }
+    
     
 
 
