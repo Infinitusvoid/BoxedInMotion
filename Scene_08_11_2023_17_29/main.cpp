@@ -237,7 +237,8 @@ int main()
 	init(g_scene_info, "info.json");
 	
 
-	Engine::set_background_color(glm::vec3(0.0004f, 0.002f, 0.0017f));
+	//Engine::set_background_color(glm::vec3(0.0004f, 0.002f, 0.0017f));
+	Engine::set_background_color(glm::vec3(0.0000f, 0.0000f, 0.0000f));
 	//Engine::set_bloom_iteration(20);
 	// variations
 	Engine::set_bloom_iteration(20);
@@ -249,7 +250,7 @@ int main()
 
 	//Engine::ShaderSourceCode source;		
 
-	Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 32.0), 10.0f, 0.2f, 45.0f);
+	Engine::set_camera_parameters(glm::vec3(0.0, 0.0, 32.0), 4.0f, 0.2f, 45.0f);
 	//Engine::play(num_boxes, init, loop, 45.0f, 1000.0f, &source);
 	Engine::play(Constants::num_boxes, Scene_::init, Scene_::loop, 45.0f, 1000.0f);
 
