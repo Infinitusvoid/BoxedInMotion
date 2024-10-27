@@ -1,0 +1,8 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (BoxedInMotionEngine.vcxproj, engine.vcxproj, engine_06_10_2023_11_52.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Engine.cpp
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\BoxedInMotion\Engine.cpp(486,8): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\BoxedInMotion\Engine.cpp(520,8): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\BoxedInMotion\Engine.cpp(961,13): warning C4305: 'return': truncation from 'int' to 'bool'
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\BoxedInMotion\Engine.cpp(968): warning C4715: 'Engine::Window::init': not all control paths return a value
+  glad.c
+  BoxedInMotion.vcxproj -> C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\x64\Debug\BoxedInMotion.lib

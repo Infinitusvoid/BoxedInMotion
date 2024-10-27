@@ -1,0 +1,10 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (BoxedInMotionEngine.vcxproj, engine.vcxproj, engine_06_10_2023_11_52.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Json_writer.cpp
+  main.cpp
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_29_10_2023_00_09\main.cpp(88,54): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_29_10_2023_00_09\main.cpp(91,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Scene_info.cpp
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_29_10_2023_00_09\Scene_info.cpp(70,23): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+MSVCRTD.lib(initializers.obj) : warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Scene_29_10_2023_00_09.vcxproj -> C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\x64\Debug\Scene_29_10_2023_00_09.exe

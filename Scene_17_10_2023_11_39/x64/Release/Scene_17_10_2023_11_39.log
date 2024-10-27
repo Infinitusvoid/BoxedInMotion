@@ -1,0 +1,12 @@
+﻿  Json_writer.cpp
+  main.cpp
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_17_10_2023_11_39\main.cpp(88,54): warning C4267: 'argument': conversion from 'size_t' to 'const int', possible loss of data
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_17_10_2023_11_39\main.cpp(91,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Scene_info.cpp
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_17_10_2023_11_39\Scene_info.cpp(70,23): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\BoxedInMotion\Engine.cpp(968): warning C4715: 'Engine::Window::init': not all control paths return a value
+  All 1113 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Scene_17_10_2023_11_39.vcxproj -> C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\x64\Release\Scene_17_10_2023_11_39.exe

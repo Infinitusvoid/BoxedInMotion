@@ -1,0 +1,11 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (BoxedInMotionEngine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  main.cpp
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_07_10_2023_14_00\main.cpp(58,15): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_07_10_2023_14_00\main.cpp(70,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\Scene_07_10_2023_14_00\main.cpp(156,31): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+  Generating code
+  2 of 670 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  Scene_07_10_2023_14_00.vcxproj -> C:\Users\Cosmos\Documents\GitHub\BoxedInMotion\x64\Release\Scene_07_10_2023_14_00.exe
